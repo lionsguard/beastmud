@@ -13,6 +13,8 @@ namespace Beast
 {
 	public class Game
 	{
+		public static Game Current { get; private set; }
+
 		[Import(typeof(IRepository), AllowDefault = true)]
 		public IRepository Repository { get; set; }
 
@@ -23,12 +25,12 @@ namespace Beast
 		private IEnumerable<ILogger> Loggers { get; set; }
 
 		public bool IsRunning { get; private set; }
-
 		public GameTime GameTime { get; private set; }
+		public World World { get; private set; }
 
 		private readonly GameSettings _settings;
 		private readonly GameClock _clock;
-		
+
 		private List<IModule> _modules = new List<IModule>();
 
 		public Game(GameSettings settings)
@@ -36,6 +38,8 @@ namespace Beast
 			_settings = settings;
 			_clock = new GameClock();
 			GameTime = new GameTime();
+
+			Current = this;
 		}
 
 		#region Start and Stop
@@ -85,15 +89,19 @@ namespace Beast
 
 			// Crypto services
 			Cryptography.Initialize(_settings.CryptoKeyProvider);
-			Log.Info("Initialized cryptography service");
+			Log.Info("Initialized the cryptography service.");
 
 			// Connection manager
 			ConnectionManager.Initialize(_settings.ConnectionTimeout);
-			Log.Info("Initialized connection manager");
+			Log.Info("Initialized the connection manager.");
 
 			// Command manager
+			CommandManager.Initialize();
+			Log.Info("Initialized the command manager.");
 
 			// Game World
+			World = new World();
+			Log.Info("Initialized the game world.");
 
 
 			// ====================================================================================
@@ -124,10 +132,8 @@ namespace Beast
 			// Update the game time.
 			GameTime.Update(_clock.TotalGameTime);
 
-			// Clean up any old connections.
-			ConnectionManager.Update(GameTime);
-
 			// Process input from the network.
+			ConnectionManager.CheckInput(); // Handle dead connections and new commands.
 
 			// Process module updates.
 			foreach (var module in _modules)
@@ -136,33 +142,35 @@ namespace Beast
 			}
 
 			// Process output to clients.
+			ConnectionManager.Flush(); // Send all queued output to the connections.
 		}
 		#endregion
 
-		#region ExecuteCommand
-		public CommandMessage ExecuteCommand(string connectionId, IDictionary<string, object> args, IConnectionFactory connectionFactory)
-		{
-			var command = new Command(args);
-			IConnection connection = null;
+		//#region ExecuteCommand
+		//public bool ExecuteCommand(string connectionId, IDictionary<string, object> args, IConnectionFactory connectionFactory)
+		//{
+		//    var command = new Command(args);
+		//    IConnection connection = null;
 
-			// If command is auth command then create a new connection.
-			if (AuthenticationModule.IsAuthenticationCommand(command.Name))
-			{
-				connection = ConnectionManager.Create(connectionFactory);
-			}
+		//    // If command is auth command then create a new connection.
+		//    if (AuthenticationModule.IsAuthenticationCommand(command.Name))
+		//    {
+		//        connection = ConnectionManager.Create(connectionFactory);
+		//    }
 
-			if (connection == null)
-			{
-				// A connection must exist for the specified connectionId.
-				connection = ConnectionManager.Find(connectionId);
-				if (connection == null)
-				{
-					return new CommandMessage(command).Invalidate(CommonResources.LoginRequired);
-				}
-			}
+		//    if (connection == null)
+		//    {
+		//        // A connection must exist for the specified connectionId.
+		//        connection = ConnectionManager.Find(connectionId);
+		//        if (connection == null)
+		//        {
+		//            return false;
+		//        }
+		//    }
 
-			return CommandManager.Execute(command, connection);
-		}
-		#endregion
+		//    connection.EnqueueCommand(command);
+		//    return true;
+		//}
+		//#endregion
 	}
 }

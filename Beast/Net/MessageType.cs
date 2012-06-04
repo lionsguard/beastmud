@@ -5,5 +5,6 @@
 		Command,
 		Property,
 		Event,
+		Notification,
 	}
 }

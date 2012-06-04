@@ -1,0 +1,44 @@
+﻿{
+	"Name":"movement",
+	"Summary":"Information on moving around in the world.",
+	"Description":"Movement is the act of going from one place or location to another. An exit must exist between places in order to move in the desired direction.",
+	"Synopsis":[
+		"move <direction>",
+		"north (n) - moves your character north",
+		"south (s) - moves your character south",
+		"east (e) - moves your character east",
+		"west (w) - moves your character west",
+		"northeast (ne) - moves your character northeast",
+		"northwest (nw) - moves your character northwest",
+		"southeast (se) - moves your character southeast",
+		"southwest (sw) - moves your character southwest",
+		"up - moves your character up",
+		"down - moves your character down",
+		"enter - causes your character to enter a special object or place"
+	],
+	"Aliases":[
+		"move",
+		"north",
+		"n",
+		"south",
+		"s",
+		"east",
+		"e",
+		"west",
+		"w",
+		"northeast",
+		"ne",
+		"northwest",
+		"nw",
+		"southeast",
+		"se",
+		"southwest",
+		"sw",
+		"up",
+		"down",
+		"enter"
+	],
+	"Arguments":[
+		"direction"
+	]
+}

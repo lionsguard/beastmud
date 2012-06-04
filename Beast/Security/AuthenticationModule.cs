@@ -8,13 +8,16 @@ namespace Beast.Security
 	[ExportMetadata("Priority", ModulePriority.High)]
 	public class AuthenticationModule : IModule
 	{
-		public const string LoginCommandName = "login";
-		public const string CreateUserCommandName = "createuser";
+		public static CommandDefinition LoginCommand { get; private set; }
+		public static CommandDefinition CreateUserCommand { get; private set; }
 
 		public void Initialize()
 		{
-			CommandManager.Add(LoginCommandName, HandleLoginCommand);
-			CommandManager.Add(CreateUserCommandName, HandleCreateUserCommand);
+			LoginCommand = Game.Current.Repository.GetCommandDefinition("login");
+			CreateUserCommand = Game.Current.Repository.GetCommandDefinition("createuser");
+
+			CommandManager.Add(LoginCommand, HandleLoginCommand);
+			CommandManager.Add(CreateUserCommand, HandleCreateUserCommand);
 		}
 
 		public void Update(GameTime gameTime)
@@ -31,7 +34,7 @@ namespace Beast.Security
 
 		public static bool IsAuthenticationCommand(string commandName)
 		{
-			return string.Compare(LoginCommandName, commandName, true) == 0 || string.Compare(CreateUserCommandName, commandName, true) == 0;
+			return string.Compare(LoginCommand, commandName, true) == 0 || string.Compare(CreateUserCommand, commandName, true) == 0;
 		}
 	}
 }

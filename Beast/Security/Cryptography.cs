@@ -21,11 +21,15 @@ namespace Beast.Security
 
 		private static ICryptoKeyProvider _keyProvider;
 
-		public static void Initialize(ICryptoKeyProvider keyProvider)
+		internal static void Initialize(ICryptoKeyProvider keyProvider)
 		{
 			_keyProvider = keyProvider;
 		}
 
+		/// <summary>
+		/// Creates a base 64 encoded string from a random salt value.
+		/// </summary>
+		/// <returns>A base 64 encoded salt string.</returns>
 		public static string CreateSalt()
 		{
 			var crypto = new RNGCryptoServiceProvider();
@@ -39,6 +43,12 @@ namespace Beast.Security
 			return Convert.ToBase64String(data);
 		}
 
+		/// <summary>
+		/// Computes a hash from the specified plainText and salt values.
+		/// </summary>
+		/// <param name="plainText">The text to hash.</param>
+		/// <param name="salt">The salt value used to hash.</param>
+		/// <returns>A computed base 64 encoded hashed string.</returns>
 		public static string ComputeHash(string plainText, string salt)
 		{
 			var saltBytes = Convert.FromBase64String(salt);

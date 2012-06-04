@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using Beast;
+using Beast.Net;
+using Beast.Text;
 
 namespace BeastMUD
 {
@@ -14,9 +17,17 @@ namespace BeastMUD
 			{
 				var game = new Game(new GameSettings
 				                    	{
-											FileRepositoryPath = Directory.GetCurrentDirectory() + "\\content"
+				                    		FileRepositoryPath = Directory.GetCurrentDirectory() + "\\data"
 				                    	});
 				game.Start();
+
+				var listener = new SocketListener();
+				listener.Start(new IPEndPoint(IPAddress.Any, 4500), new TextMessageFormatter(), c =>
+				                                                                                    {
+				                                                                                        Console.WriteLine("New connection received from {0}", c.Id);
+																										c.Write(new NotificationMessage{Category = 6, Text = "Welcome to Beast MUD"});
+				                                                                                    });
+
 				while (game.IsRunning)
 				{
 					var input = Console.ReadLine();
