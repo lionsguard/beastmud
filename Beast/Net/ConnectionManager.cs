@@ -106,7 +106,7 @@ namespace Beast.Net
 				// If the connection has a character instance, read the deltas and write them to the connection.
 				if (connection.Character != null)
 				{
-					connection.Write(connection.Character.DequeueDeltas().ToArray());
+					connection.Write(connection.Character.DequeueMessages().ToArray());
 				}
 
 				// Flush the current connection, causing all queued messages to be written.

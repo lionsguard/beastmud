@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Beast.Commands
 {
-	public class CommandDefinition : IEqualityComparer<string>, IComparer<string>, IEquatable<string>
+	public class CommandDefinition
 	{
 		public string Name { get; set; }
 		public string Summary { get; set; }
@@ -15,6 +14,7 @@ namespace Beast.Commands
 
 		public CommandDefinition()
 		{
+			Name = string.Empty;
 			Aliases = new List<string>();
 			Arguments = new List<string>();
 		}
@@ -27,22 +27,6 @@ namespace Beast.Commands
 			Description = description;
 			Aliases = aliases ?? new List<string>();
 			Arguments = arguments ?? new List<string>();
-		}
-
-		public int Compare(string x, string y)
-		{
-			var comp = string.Compare(x, y, true);
-			if (comp == 0)
-				return comp;
-
-			return Aliases.Select(n => n.ToLower()).Any(n => string.Compare(n, y, true) == 0) ? 0 : -1;
-		}
-
-		public bool Equals(string other)
-		{
-			if (other == null)
-				other = string.Empty;
-			return Aliases.Select(n => n.ToLower()).Contains(other.ToLower());
 		}
 
 		public override bool Equals(object obj)
@@ -59,7 +43,7 @@ namespace Beast.Commands
 
 		public override int GetHashCode()
 		{
-			return Name.GetHashCode();
+			return Aliases.Aggregate(0, (current, alias) => current ^ alias.GetHashCode());
 		}
 
 		public static implicit operator string(CommandDefinition def)
@@ -69,20 +53,7 @@ namespace Beast.Commands
 
 		public static implicit operator CommandDefinition(string name)
 		{
-			return new CommandDefinition {Aliases = new List<string>{name}};
-		}
-
-		public bool Equals(string x, string y)
-		{
-			if (x.ToLower() == y.ToLower())
-				return true;
-
-			return Aliases.Select(n => n.ToLower()).Contains(y.ToLower());
-		}
-
-		public int GetHashCode(string obj)
-		{
-			return obj.GetHashCode();
+			return new CommandDefinition {Name = name, Aliases = new List<string>{name}};
 		}
 	}
 }

@@ -70,6 +70,78 @@ namespace Beast {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The arguments supplied with the command were invalid. Use the &apos;{0}&apos; command in the following manner: {1}.
+        /// </summary>
+        internal static string CommandInvalidArgumentsFormat {
+            get {
+                return ResourceManager.GetString("CommandInvalidArgumentsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The direction &apos;{0}&apos; was not a valid direction or alias..
+        /// </summary>
+        internal static string DirectionNotFoundFormat {
+            get {
+                return ResourceManager.GetString("DirectionNotFoundFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ALIASES.
+        /// </summary>
+        internal static string HelpAliases {
+            get {
+                return ResourceManager.GetString("HelpAliases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DESCRIPTION.
+        /// </summary>
+        internal static string HelpDescription {
+            get {
+                return ResourceManager.GetString("HelpDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a command in which you need help information..
+        /// </summary>
+        internal static string HelpInvalidArgument {
+            get {
+                return ResourceManager.GetString("HelpInvalidArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NAME.
+        /// </summary>
+        internal static string HelpName {
+            get {
+                return ResourceManager.GetString("HelpName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help information could not located for the command &apos;{0}&apos;. Please check the spelling of the command and try again..
+        /// </summary>
+        internal static string HelpNotFoundFormat {
+            get {
+                return ResourceManager.GetString("HelpNotFoundFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SYNOPSIS.
+        /// </summary>
+        internal static string HelpSynopsis {
+            get {
+                return ResourceManager.GetString("HelpSynopsis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The command &apos;{0}&apos; is not a valid or recognized command. Please check the spelling of the command and try again..
         /// </summary>
         internal static string InvalidCommandFormat {

@@ -26,7 +26,7 @@ namespace Beast.Commands
 		/// <returns>An instance of CommandDefinition if found; otherwise null.</returns>
 		public static CommandDefinition GetDefinition(string commandName)
 		{
-			return Commands.Keys.FirstOrDefault(c => c == commandName);
+			return Commands.Keys.FirstOrDefault(c => c.Aliases.Contains(commandName.ToLower()));
 		}
 
 		/// <summary>
@@ -66,6 +66,23 @@ namespace Beast.Commands
 			}
 
 			connection.Write(response);
+		}
+
+		/// <summary>
+		/// Writes an error to the connection containing details about the command and the required arguments.
+		/// </summary>
+		/// <param name="connection">The IConnection executing the command.</param>
+		/// <param name="command">The Command in question.</param>
+		public static void InvalidArguments(IConnection connection, Command command)
+		{
+			var def = GetDefinition(command.Name);
+			if (def == null)
+			{
+				connection.Write(NotificationMessage.Error(string.Format(CommonResources.InvalidCommandFormat, command.Name)));
+				return;
+			}
+
+			connection.Write(NotificationMessage.Error(string.Format(CommonResources.CommandInvalidArgumentsFormat, command.Name.ToUpper(), string.Join(", ", def.Synopsis))));
 		}
 	}
 }

@@ -84,7 +84,7 @@ namespace Beast.Commands
 		public bool TryGetValue<T>(string key, out T value)
 		{
 			object objValue;
-			if (!TryGetValue(key, out objValue))
+			if (!base.TryGetValue(key, out objValue))
 			{
 				value = default(T);
 				return false;

@@ -13,14 +13,29 @@ namespace Beast.Text
 			switch (msg.Type)
 			{
 				case MessageType.Command:
-					break;
+					return FormatCommand((CommandMessage) msg);
 				case MessageType.Property:
-					break;
+					return FormatProperty((PropertyDeltaMessage) msg);
 				case MessageType.Event:
-					break;
+					return FormatEvent((EventDeltaMessage) msg);
 				case MessageType.Notification:
 					return FormatNotification((NotificationMessage) msg);
 			}
+			return string.Empty;
+		}
+
+		protected virtual string FormatCommand(CommandMessage msg)
+		{
+			return string.Empty;
+		}
+
+		protected virtual string FormatProperty(PropertyDeltaMessage msg)
+		{
+			return string.Empty;
+		}
+
+		protected virtual string FormatEvent(EventDeltaMessage msg)
+		{
 			return string.Empty;
 		}
 
@@ -29,23 +44,26 @@ namespace Beast.Text
 			var txt = new AnsiText(msg.Text);
 			switch (msg.Category)
 			{
-				case 1: // error
+				case NotificationCategories.Error:
 					txt.Color(AnsiColor.Red).Bold();
 					break;
-				case 2: // name
+				case NotificationCategories.Name:
 					txt.Color(AnsiColor.Yellow).Bold();
 					break;
-				case 3: // description
+				case NotificationCategories.Description:
 					txt.Color(AnsiColor.Cyan);
 					break;
-				case 4: // positive
+				case NotificationCategories.Positive:
 					txt.Color(AnsiColor.Green);
 					break;
-				case 5: // negative
+				case NotificationCategories.Negative:
 					txt.Color(AnsiColor.Red);
 					break;
-				case 6: // heading
+				case NotificationCategories.Heading:
 					txt.Color(AnsiColor.Yellow);
+					break;
+				case NotificationCategories.Location:
+					txt.Color(AnsiColor.Green);
 					break;
 			}
 			return txt.ToString();

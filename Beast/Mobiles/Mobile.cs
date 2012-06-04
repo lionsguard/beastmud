@@ -5,16 +5,15 @@ namespace Beast.Mobiles
 {
 	public abstract class Mobile : GameObject
 	{
-		public virtual void EnqueueDelta(DeltaMessage delta)
-		{
-		}
-		public virtual void EnqueueDeltas(IEnumerable<DeltaMessage> deltas)
+		public Unit Position { get; set; }
+
+		public virtual void EnqueueMessages(params IMessage[] messages)
 		{
 		}
 
-		public virtual IEnumerable<DeltaMessage> DequeueDeltas()
+		public virtual IEnumerable<IMessage> DequeueMessages()
 		{
-			return new DeltaMessage[0];
+			return new IMessage[0];
 		}
 	}
 }

@@ -60,7 +60,10 @@
     <Compile Include="DateTimeEx.cs" />
     <Compile Include="Diagnostics\TraceLogger.cs" />
     <Compile Include="Dice.cs" />
+    <Compile Include="Direction.cs" />
+    <Compile Include="DirectionExtensions.cs" />
     <Compile Include="EventManager.cs" />
+    <Compile Include="ExitCollection.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameSettings.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="IO\FileRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IUpdatable.cs" />
+    <Compile Include="KnownDirection.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogType.cs" />
     <Compile Include="MersenneTwister.cs" />
@@ -82,18 +86,20 @@
     <Compile Include="Net\ConnectionBase.cs" />
     <Compile Include="Net\ConnectionManager.cs" />
     <Compile Include="Net\DeltaMessage.cs" />
-    <Compile Include="Net\EventDelta.cs" />
+    <Compile Include="Net\EventDeltaMessage.cs" />
     <Compile Include="Net\IConnection.cs" />
     <Compile Include="Net\IConnectionFactory.cs" />
     <Compile Include="Net\IMessage.cs" />
     <Compile Include="Net\IMessageFormatter.cs" />
     <Compile Include="Net\Message.cs" />
     <Compile Include="Net\MessageType.cs" />
-    <Compile Include="Net\PropertyDelta.cs" />
+    <Compile Include="Net\NotificationCategories.cs" />
+    <Compile Include="Net\PropertyDeltaMessage.cs" />
     <Compile Include="Net\SocketConnection.cs" />
     <Compile Include="Net\SocketConnectionFactory.cs" />
     <Compile Include="Net\SocketListener.cs" />
     <Compile Include="Net\NotificationMessage.cs" />
+    <Compile Include="Place.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameClock.cs" />
     <Compile Include="PropertyCollection.cs" />
@@ -104,7 +110,11 @@
     <Compile Include="Security\DefaultCryptKeyProvider.cs" />
     <Compile Include="Security\EncryptionAlgorithm.cs" />
     <Compile Include="Security\ICryptoKeyProvider.cs" />
+    <Compile Include="Terrain.cs" />
+    <Compile Include="TerrainCollection.cs" />
+    <Compile Include="Unit.cs" />
     <Compile Include="ValueConverter.cs" />
+    <Compile Include="WalkTypes.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

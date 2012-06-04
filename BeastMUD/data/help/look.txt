@@ -13,6 +13,6 @@
 	],
 	"Arguments":[
 		"direction",
-		"object"
+		"name"
 	]
 }

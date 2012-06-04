@@ -7,33 +7,29 @@ namespace Beast.Mobiles
 	public abstract class Character : Mobile
 	{
 		#region Deltas
-		private readonly Queue<DeltaMessage> _deltas = new Queue<DeltaMessage>();
-		public override void EnqueueDelta(DeltaMessage delta)
-		{
-			lock (_deltas)
-			{
-				_deltas.Enqueue(delta);
-			}
-		}
+		private readonly Queue<IMessage> _messages = new Queue<IMessage>();
 
-		public override void EnqueueDeltas(IEnumerable<DeltaMessage> deltas)
+		public override void EnqueueMessages(params IMessage[] messages)
 		{
-			lock (_deltas)
+			if (messages == null || messages.Length == 0)
+				return;
+
+			lock (_messages)
 			{
-				foreach (var delta in deltas)
+				foreach (var message in messages)
 				{
-					_deltas.Enqueue(delta);
+					_messages.Enqueue(message);
 				}
 			}
 		}
 
-		public override IEnumerable<DeltaMessage> DequeueDeltas()
+		public override IEnumerable<IMessage> DequeueMessages()
 		{
-			lock (_deltas)
+			lock (_messages)
 			{
-				while (_deltas.Count > 0)
+				while (_messages.Count > 0)
 				{
-					yield return _deltas.Dequeue();
+					yield return _messages.Dequeue();
 				}
 			}
 		}
