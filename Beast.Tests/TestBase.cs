@@ -21,11 +21,7 @@ namespace Beast.Tests
 		{
 			TestContextLogger.TestContext = context;
 
-			_game = new Game(new GameSettings
-								{
-									FileRepositoryPath = @"C:\Projects\lionsguard\github\beastmud\BeastMUD\bin\Debug\data",
-									ModuleTypes = new[] { typeof(TestContextLogger)}
-								});
+			_game = Game.Current;
 			_game.Start();
 
 			Connection = ConnectionManager.Create(new TestContextConnectionFactory(context));

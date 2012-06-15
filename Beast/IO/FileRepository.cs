@@ -1,21 +1,22 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using Beast.Commands;
+using Beast.Configuration;
+using Beast.Data;
 using Newtonsoft.Json;
 
 namespace Beast.IO
 {
 	public class FileRepository : IRepository
 	{
+		public static readonly ConfigurationProperty ConfigKeyPath = new ConfigurationProperty("path", typeof(string));
+
 		public const string FileExt = ".txt";
 		public const string HelpDirectory = "help";
 
 		public string DirectoryPath { get; set; }
-
-		public FileRepository(string path)
-		{
-			DirectoryPath = path;
-		}
 
 		public override string ToString()
 		{
@@ -37,6 +38,11 @@ namespace Beast.IO
 		}
 
 		#region CommandDefinition
+
+		public void Initialize()
+		{
+		}
+
 		public CommandDefinition GetCommandDefinition(string name)
 		{
 			return Load<CommandDefinition>(HelpDirectory, name);
@@ -46,6 +52,37 @@ namespace Beast.IO
 		{
 			Save(HelpDirectory, definition.Name, definition);
 		}
+
+		public IEnumerable<Zone> GetZones()
+		{
+			throw new NotImplementedException();
+		}
+
+		public Zone GetZone(string id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SaveZone(Zone zone)
+		{
+			throw new NotImplementedException();
+		}
+
+		public RepositoryElement ToConfig()
+		{
+			var config = new RepositoryElement
+			             	{
+								Type = GetType().AssemblyQualifiedName
+			             	};
+			config[ConfigKeyPath] = DirectoryPath;
+			return config;
+		}
+
+		public void FromConfig(RepositoryElement config)
+		{
+			DirectoryPath = (string)config[ConfigKeyPath];
+		}
+
 		#endregion
 	}
 }

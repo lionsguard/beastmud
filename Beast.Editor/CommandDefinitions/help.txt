@@ -1,0 +1,14 @@
+﻿{
+	"Name":"help",
+	"Summary":"Provides help about commands within the game.",
+	"Description":"Use to provide help and syntax descriptions for commands.",
+	"Synopsis":[
+		"help <command>"
+	],
+	"Aliases":[
+		"help"
+	],
+	"Arguments":[
+		"command"
+	]
+}

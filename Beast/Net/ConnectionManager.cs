@@ -19,7 +19,7 @@ namespace Beast.Net
 
 		static ConnectionManager()
 		{
-			Timeout = GameSettings.DefaultConnectionTimeout;
+			Timeout = Game.DefaultConnectionTimeout;
 		}
 
 		/// <summary>

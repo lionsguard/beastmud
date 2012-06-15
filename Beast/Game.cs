@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.IO;
+using System.Configuration;
 using System.Linq;
 using Beast.Commands;
+using Beast.Configuration;
+using Beast.Data;
 using Beast.IO;
 using Beast.Net;
 using Beast.Security;
@@ -13,7 +15,28 @@ namespace Beast
 {
 	public class Game
 	{
-		public static Game Current { get; private set; }
+		public static readonly TimeSpan DefaultGameStepInterval = TimeSpan.FromSeconds(5);
+		public static readonly TimeSpan DefaultConnectionTimeout = TimeSpan.FromMinutes(15);
+
+		#region Current
+		private static readonly object InitLock = new object();
+		private static Game _current;
+		public static Game Current
+		{
+			get
+			{
+				if (_current == null)
+				{
+					lock (InitLock)
+					{
+						if (_current == null)
+							_current = new Game();
+					}
+				}
+				return _current;
+			}
+		}
+		#endregion
 
 		[Import(typeof(IRepository), AllowDefault = true)]
 		public IRepository Repository { get; set; }
@@ -28,95 +51,150 @@ namespace Beast
 		public GameTime GameTime { get; private set; }
 		public World World { get; private set; }
 
-		private readonly GameSettings _settings;
-		private readonly GameClock _clock;
+		public BeastSection Config { get; private set; }
+
+		private GameClock _clock;
 
 		private List<IModule> _modules = new List<IModule>();
 
-		public Game(GameSettings settings)
+		private Game()
 		{
-			_settings = settings;
-			_clock = new GameClock();
-			GameTime = new GameTime();
-
-			Current = this;
 		}
 
 		#region Start and Stop
 		public void Start()
 		{
+			Start(new BeastSection{Repository = new RepositoryElement{Type = typeof(FileRepository).AssemblyQualifiedName}});
+		}
+
+		public void Start(string configFilePath)
+		{
+			Start(BeastSection.Load(configFilePath));
+		}
+
+		public void Start(BeastSection config)
+		{
 			if (IsRunning)
 				return;
 
 			// ====================================================================================
-			// LOAD MODULES FROM EXTERNAL SOURCES
+			// LOAD CONFIGURATION
 			// ====================================================================================
-			var catalog = new AggregateCatalog();
-			catalog.Catalogs.Add(new AssemblyCatalog(typeof(Game).Assembly));
-
-			if (!string.IsNullOrEmpty(_settings.ModulesDirectory) && Directory.Exists(_settings.ModulesDirectory))
-				catalog.Catalogs.Add(new DirectoryCatalog(_settings.ModulesDirectory));
-
-			if (_settings.ModuleTypes != null)
-				catalog.Catalogs.Add(new TypeCatalog(_settings.ModuleTypes));
-
-			var container = new CompositionContainer(catalog);
-			container.ComposeParts(this);
-
-			// ====================================================================================
-			// INITIALIZE LOGGING
-			// ====================================================================================
-			Log.Initialize(Loggers);
+			if (config == null)
+			{
+				throw new ConfigurationErrorsException();
+			}
+			Config = config;
 
 			// ====================================================================================
 			// INITIALIZE STARTUP VARIABLES
 			// ====================================================================================
 			// Signal that the game is running.
 			IsRunning = true;
+			_clock = new GameClock();
+			GameTime = new GameTime();
 
-			// ====================================================================================
-			// INITIALIZE BASIC SYSTEMS
-			// ====================================================================================
-			// Data repository
-			if (Repository == null)
+			try
 			{
-				var path = _settings.FileRepositoryPath;
-				if (string.IsNullOrEmpty(path))
-					path = Directory.GetCurrentDirectory();
-				Repository = new FileRepository(path);
+				// ====================================================================================
+				// LOAD MODULES FROM EXTERNAL SOURCES
+				// ====================================================================================
+				var catalog = new AggregateCatalog();
+				catalog.Catalogs.Add(new AssemblyCatalog(typeof(Game).Assembly));
+
+				if (config.ModulesDirectory != null)
+				{
+					var modulesDirectory = config.ModulesDirectory.Path;
+					if (config.ModulesDirectory.IsVirtual)
+					{
+						// Using a virtual path
+						throw new NotImplementedException();
+					}
+
+					if (!string.IsNullOrEmpty(modulesDirectory))
+						catalog.Catalogs.Add(new DirectoryCatalog(modulesDirectory));
+				}
+
+				if (config.Modules != null && config.Modules.Count > 0)
+				{
+					var moduleTypes = config.Modules.Cast<ModuleElement>()
+						.Select(moduleElement => Type.GetType(moduleElement.Type, false, true))
+						.Where(moduleType => moduleType != null);
+
+					catalog.Catalogs.Add(new TypeCatalog(moduleTypes));
+				}
+
+				var container = new CompositionContainer(catalog);
+				container.ComposeParts(this);
+
+				// ====================================================================================
+				// INITIALIZE LOGGING
+				// ====================================================================================
+				Log.Initialize(Loggers);
+
+				// ====================================================================================
+				// INITIALIZE BASIC SYSTEMS
+				// ====================================================================================
+				// Data repository
+				if (Repository == null && config.Repository != null)
+				{
+					Repository = config.Repository.ToRepository();
+				}
+				if (Repository != null)
+					Repository.Initialize();
+				Log.Info("Initialized repository {0}", Repository);
+
+				// Crypto services
+				ICryptoKeyProvider cryptoKeyProvider = null;
+				if (!string.IsNullOrEmpty(config.CryptoKeyProviderType))
+				{
+					var cryptoType = Type.GetType(config.CryptoKeyProviderType, false, true);
+					if (cryptoType != null)
+						cryptoKeyProvider = Activator.CreateInstance(cryptoType) as ICryptoKeyProvider;
+				}
+				if (cryptoKeyProvider == null)
+					cryptoKeyProvider = new DefaultCryptKeyProvider();
+				Cryptography.Initialize(cryptoKeyProvider);
+				Log.Info("Initialized the cryptography service.");
+
+				// Connection manager
+				var timeout = DefaultConnectionTimeout;
+				if (config.ConnectionTimeout > 0)
+					timeout = TimeSpan.FromMinutes(config.ConnectionTimeout);
+				ConnectionManager.Initialize(timeout);
+				Log.Info("Initialized the connection manager.");
+
+				// Command manager
+				CommandManager.Initialize();
+				Log.Info("Initialized the command manager.");
+
+				// Game World
+				World = new World();
+				Log.Info("Initialized the game world.");
+
+
+				// ====================================================================================
+				// INITIALIZE MODULES
+				// ====================================================================================
+				_modules = LoadedModules.OrderByDescending(m => (int)m.Metadata.Priority).Select(m => m.Value).ToList();
+				foreach (var module in _modules)
+				{
+					module.Initialize();
+				}
+
+				// ====================================================================================
+				// START THE MAIN GAME LOOP
+				// ====================================================================================
+				var interval = DefaultGameStepInterval;
+				if (config.GameStepInterval > 0)
+					interval = TimeSpan.FromMilliseconds(config.GameStepInterval);
+				_clock.Start(interval.TotalMilliseconds, Update);
 			}
-			Log.Info("Initialized repository {0}", Repository);
-
-			// Crypto services
-			Cryptography.Initialize(_settings.CryptoKeyProvider);
-			Log.Info("Initialized the cryptography service.");
-
-			// Connection manager
-			ConnectionManager.Initialize(_settings.ConnectionTimeout);
-			Log.Info("Initialized the connection manager.");
-
-			// Command manager
-			CommandManager.Initialize();
-			Log.Info("Initialized the command manager.");
-
-			// Game World
-			World = new World();
-			Log.Info("Initialized the game world.");
-
-
-			// ====================================================================================
-			// INITIALIZE MODULES
-			// ====================================================================================
-			_modules = LoadedModules.OrderByDescending(m => (int)m.Metadata.Priority).Select(m => m.Value).ToList();
-			foreach (var module in _modules)
+			catch (Exception)
 			{
-				module.Initialize();
+				IsRunning = false;
+				throw;
 			}
-
-			// ====================================================================================
-			// START THE MAIN GAME LOOP
-			// ====================================================================================
-			_clock.Start(_settings.GameStepInterval.TotalMilliseconds, Update);
 		}
 
 		public void Stop()

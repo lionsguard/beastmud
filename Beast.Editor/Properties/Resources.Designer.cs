@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Beast {
+namespace Beast.Editor.Properties {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Beast {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CommonResources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CommonResources() {
+        internal Resources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Beast {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Beast.CommonResources", typeof(CommonResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Beast.Editor.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,110 +61,101 @@ namespace Beast {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You need to login before attempting to execute this command..
+        ///   Looks up a localized string similar to Beast MUD Editor.
         /// </summary>
-        internal static string AccessDenied {
+        internal static string BaseTitle {
             get {
-                return ResourceManager.GetString("AccessDenied", resourceCulture);
+                return ResourceManager.GetString("BaseTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The arguments supplied with the command were invalid. Use the &apos;{0}&apos; command in the following manner: {1}.
+        ///   Looks up a localized string similar to *.
         /// </summary>
-        internal static string CommandInvalidArgumentsFormat {
+        internal static string FileDirtyIndicator {
             get {
-                return ResourceManager.GetString("CommandInvalidArgumentsFormat", resourceCulture);
+                return ResourceManager.GetString("FileDirtyIndicator", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;beast&apos; configuration section was not found. Ensure the configuration section exists in the application configuration file or use an overloaded method that accepts the configuration section or file name..
+        ///   Looks up a localized string similar to Beast MUD files|*.beast.
         /// </summary>
-        internal static string ConfigBeastSectionNotFound {
+        internal static string FileFilter {
             get {
-                return ResourceManager.GetString("ConfigBeastSectionNotFound", resourceCulture);
+                return ResourceManager.GetString("FileFilter", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The direction &apos;{0}&apos; was not a valid direction or alias..
+        ///   Looks up a localized string similar to Open Beast MUD Project.
         /// </summary>
-        internal static string DirectionNotFoundFormat {
+        internal static string OpenProjectDialog_Title {
             get {
-                return ResourceManager.GetString("DirectionNotFoundFormat", resourceCulture);
+                return ResourceManager.GetString("OpenProjectDialog_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ALIASES.
+        ///   Looks up a localized string similar to Properties.
         /// </summary>
-        internal static string HelpAliases {
+        internal static string PlacePropertyEditorName {
             get {
-                return ResourceManager.GetString("HelpAliases", resourceCulture);
+                return ResourceManager.GetString("PlacePropertyEditorName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DESCRIPTION.
+        ///   Looks up a localized string similar to plugins.
         /// </summary>
-        internal static string HelpDescription {
+        internal static string PluginsDirectory {
             get {
-                return ResourceManager.GetString("HelpDescription", resourceCulture);
+                return ResourceManager.GetString("PluginsDirectory", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a command in which you need help information..
+        ///   Looks up a localized string similar to BeastMUD.
         /// </summary>
-        internal static string HelpInvalidArgument {
+        internal static string RootFolder {
             get {
-                return ResourceManager.GetString("HelpInvalidArgument", resourceCulture);
+                return ResourceManager.GetString("RootFolder", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NAME.
+        ///   Looks up a localized string similar to Save Project Failed.
         /// </summary>
-        internal static string HelpName {
+        internal static string SaveProjectDialog_ProjectEmpty_Caption {
             get {
-                return ResourceManager.GetString("HelpName", resourceCulture);
+                return ResourceManager.GetString("SaveProjectDialog_ProjectEmpty_Caption", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help information could not located for the command &apos;{0}&apos;. Please check the spelling of the command and try again..
+        ///   Looks up a localized string similar to Open or create a project before attempting to save..
         /// </summary>
-        internal static string HelpNotFoundFormat {
+        internal static string SaveProjectDialog_ProjectEmpty_Msg {
             get {
-                return ResourceManager.GetString("HelpNotFoundFormat", resourceCulture);
+                return ResourceManager.GetString("SaveProjectDialog_ProjectEmpty_Msg", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SYNOPSIS.
+        ///   Looks up a localized string similar to {0} - {1}{2}.
         /// </summary>
-        internal static string HelpSynopsis {
+        internal static string TitleFormat {
             get {
-                return ResourceManager.GetString("HelpSynopsis", resourceCulture);
+                return ResourceManager.GetString("TitleFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The command &apos;{0}&apos; is not a valid or recognized command. Please check the spelling of the command and try again..
+        ///   Looks up a localized string similar to Zones.
         /// </summary>
-        internal static string InvalidCommandFormat {
+        internal static string ZoneListEditorName {
             get {
-                return ResourceManager.GetString("InvalidCommandFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please login to continue playing..
-        /// </summary>
-        internal static string LoginRequired {
-            get {
-                return ResourceManager.GetString("LoginRequired", resourceCulture);
+                return ResourceManager.GetString("ZoneListEditorName", resourceCulture);
             }
         }
     }

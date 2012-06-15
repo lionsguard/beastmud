@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -22,6 +23,12 @@ namespace Beast
 		{
 			var body = (MemberExpression)expression.Body;
 			return (PropertyInfo)body.Member;
+		}
+
+		public static object GetValue<T>(this T obj, string name)
+		{
+			var mi = obj.GetType().GetMember(name).FirstOrDefault();
+			return mi == null ? null : mi.GetValue(obj);
 		}
 
 		public static object GetValue(this MemberInfo mi, object o)

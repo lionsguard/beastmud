@@ -1,0 +1,18 @@
+﻿{
+	"Name":"look",
+	"Summary":"Information about looking or examining the current place, objects or entities.",
+	"Description":"Places, objects and entities in the game world can be examined to provide more information about them. For instance, using the basic LOOK command returns information regarding the current place including a full description, exits and any entities present.",
+	"Synopsis":[
+		"look",
+		"look <direction>",
+		"look <object or entity name>"
+	],
+	"Aliases":[
+		"look",
+		"l"
+	],
+	"Arguments":[
+		"direction",
+		"name"
+	]
+}

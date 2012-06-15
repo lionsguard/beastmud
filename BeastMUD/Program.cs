@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using Beast;
 using Beast.Net;
@@ -15,10 +14,7 @@ namespace BeastMUD
 			Console.WriteLine();
 			try
 			{
-				var game = new Game(new GameSettings
-				                    	{
-				                    		FileRepositoryPath = Directory.GetCurrentDirectory() + "\\data"
-				                    	});
+				var game = Game.Current;
 				game.Start();
 
 				var listener = new SocketListener();
