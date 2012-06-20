@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 using Beast.Editor.ViewModel;
 
 namespace Beast.Editor
@@ -12,6 +13,13 @@ namespace Beast.Editor
 		{
 			InitializeComponent();
 			Closing += (s, e) => ViewModelLocator.Cleanup();
+			Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
+		}
+
+		private static void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+		{
+			System.Diagnostics.Debug.WriteLine(e.Exception);
+			e.Handled = true;
 		}
 	}
 }

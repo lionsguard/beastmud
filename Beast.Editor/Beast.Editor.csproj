@@ -44,13 +44,13 @@
     <Reference Include="AvalonDock.Themes.VS2010">
       <HintPath>..\packages\AvalonDock.2.0.0928\lib\net40\AvalonDock.Themes.VS2010.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.WPF4">
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=3.0.0.19993, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+      <HintPath>..\packages\MvvmLight.3.1.1\lib\net40\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4">
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=3.0.0.19994, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+      <HintPath>..\packages\MvvmLight.3.1.1\lib\net40\GalaSoft.MvvmLight.WPF4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -60,12 +60,11 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Laurent Bugnion (GalaSoft)\Mvvm Light Toolkit\Binaries\WPF4\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLight.3.1.1\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -86,13 +85,26 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ColorExtensions.cs" />
+    <Compile Include="Controls\PlacePropertiesToolView.xaml.cs">
+      <DependentUpon>PlacePropertiesToolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlaceView.xaml.cs">
+      <DependentUpon>PlaceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ZoneDocumentView.xaml.cs">
+      <DependentUpon>ZoneDocumentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ZoneListToolView.xaml.cs">
       <DependentUpon>ZoneListToolView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\UnitToMarginConverter.cs" />
     <Compile Include="Dialogs\CreateProjectDialog.xaml.cs">
       <DependentUpon>CreateProjectDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockPaneStyleSelector.cs" />
+    <Compile Include="EditorProperties.cs" />
     <Compile Include="EditorTemplates\FileRepositoryEditor.xaml.cs">
       <DependentUpon>FileRepositoryEditor.xaml</DependentUpon>
     </Compile>
@@ -103,13 +115,33 @@
     <Compile Include="ViewModel\CreateProjectViewModel.cs" />
     <Compile Include="ViewModel\EditorDocumentViewModel.cs" />
     <Compile Include="ViewModel\EditorItemViewModel.cs" />
+    <Compile Include="ViewModel\EditorMenuItemViewModel.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\EditorToolViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MappedObjectViewModel.cs" />
+    <Compile Include="ViewModel\Notifications.cs" />
     <Compile Include="ViewModel\ProjectViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="ViewModel\ZoneEditorViewModel.cs" />
+    <Compile Include="ViewModel\Zones\PlacePropertiesToolViewModel.cs" />
+    <Compile Include="ViewModel\Zones\PlaceViewModel.cs" />
+    <Compile Include="ViewModel\Zones\ZoneDocumentViewModel.cs" />
+    <Compile Include="ViewModel\Zones\ZoneEditorViewModel.cs" />
+    <Compile Include="ViewModel\Zones\ZoneListItemViewModel.cs" />
+    <Compile Include="ViewModel\Zones\ZoneListToolViewModel.cs" />
     <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PlacePropertiesToolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PlaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ZoneDocumentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -184,6 +216,12 @@
   <ItemGroup>
     <Resource Include="Assets\openHS.png" />
     <Resource Include="Assets\saveHS.png" />
+    <Resource Include="Assets\DeleteHS.png" />
+    <Resource Include="Assets\NewDocumentHS.png" />
+    <Resource Include="Assets\NewFolderHS.png" />
+    <Resource Include="Assets\RefreshDocViewHS.png" />
+    <Resource Include="Assets\SaveAllHS.png" />
+    <Resource Include="Assets\RadialChartHS.png" />
     <Content Include="CommandDefinitions\createuser.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

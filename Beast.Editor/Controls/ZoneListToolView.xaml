@@ -1,11 +1,78 @@
-﻿<UserControl x:Class="Beast.Editor.Controls.ZoneListToolView"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+			 xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4" 
+			 xmlns:Editor="clr-namespace:Beast.Editor" 
+			 x:Class="Beast.Editor.Controls.ZoneListToolView" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+	<UserControl.Resources>
+		<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+	</UserControl.Resources>
+	<Grid>
+    	<Grid.RowDefinitions>
+    		<RowDefinition Height="32"/>
+    		<RowDefinition Height="*"/>
+    	</Grid.RowDefinitions>
+    	<ToolBarPanel Margin="0" Background="{DynamicResource ToolbarBackgroundBrush}">
+			<ToolBar Background="{x:Null}" HorizontalAlignment="Left" ItemsSource="{Binding MenuItems}">
+				<ToolBar.ItemTemplate>
+					<DataTemplate>
+						<Button ToolTip="{Binding Title}">
+							<Image Source="{Binding IconSource}"/>
+						</Button>
+					</DataTemplate>
+				</ToolBar.ItemTemplate>
+    		</ToolBar>
+    	</ToolBarPanel>
+    	<TreeView Margin="0" Grid.Row="1" ItemsSource="{Binding Items}">
+			<TreeView.Resources>
+				<ContextMenu x:Key="RootContext">
+					<MenuItem Header="New Zone" Command="{Binding AddCommand}" CommandParameter="{Binding}"/>
+				</ContextMenu>
+				<ContextMenu x:Key="ItemContext">
+					<MenuItem Header="Open" Command="{Binding LoadCommand}" CommandParameter="{Binding}"/>
+					<MenuItem Header="Rename" Command="{Binding BeginRenameCommand}" />
+				</ContextMenu>
+			</TreeView.Resources>
+    		<TreeView.ItemContainerStyle>
+    			<Style TargetType="{x:Type TreeViewItem}">
+    				<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+      				<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />	
+					<Setter Property="ContextMenu" Value="{StaticResource ItemContext}"/>
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Parent}" Value="{x:Null}">
+							<Setter Property="ContextMenu" Value="{StaticResource RootContext}"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style> 		
+			</TreeView.ItemContainerStyle>
+    		<TreeView.ItemTemplate>
+    			<HierarchicalDataTemplate ItemsSource="{Binding Items}">
+					<Grid>
+						<TextBlock Text="{Binding Title}" Visibility="{Binding IsInReadOnlyMode, Converter={StaticResource BooleanToVisibilityConverter}}" Background="#02000000">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="MouseLeftButtonDown">
+									<GalaSoft_MvvmLight_Command:EventToCommand PassEventArgsToCommand="True" Command="{Binding MouseDownCommand}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</TextBlock>
+						<TextBox x:Name="TextEntry" Text="{Binding Title}" Editor:EditorProperties.FocusAndSelect="{Binding IsInEditMode}"  Visibility="{Binding IsInEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="KeyDown">
+									<GalaSoft_MvvmLight_Command:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True"/>
+								</i:EventTrigger>
+								<i:EventTrigger EventName="LostFocus">
+									<GalaSoft_MvvmLight_Command:EventToCommand Command="{Binding EndRenameCommand}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</TextBox>
+					</Grid>
+				</HierarchicalDataTemplate> 		
+			</TreeView.ItemTemplate>  	
+		</TreeView>
     </Grid>
 </UserControl>

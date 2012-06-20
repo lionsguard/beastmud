@@ -120,6 +120,21 @@
   <data name="BaseTitle" xml:space="preserve">
     <value>Beast MUD Editor</value>
   </data>
+  <data name="DeletePlaceDialog_Caption" xml:space="preserve">
+    <value>Delete Place?</value>
+  </data>
+  <data name="DeletePlaceDialog_MsgFormat" xml:space="preserve">
+    <value>Are you sure you want to delete the place at {0}, {1}?</value>
+  </data>
+  <data name="DocumentSaveDialog_Caption" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="DocumentSaveDialog_MsgFormat" xml:space="preserve">
+    <value>'{0}' has unsaved changes. Do you want to save '{0}' first before closing?</value>
+  </data>
+  <data name="DocumentTitleFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
   <data name="FileDirtyIndicator" xml:space="preserve">
     <value>*</value>
   </data>
@@ -128,6 +143,9 @@
   </data>
   <data name="OpenProjectDialog_Title" xml:space="preserve">
     <value>Open Beast MUD Project</value>
+  </data>
+  <data name="PlaceLocationFormat" xml:space="preserve">
+    <value>X:{0}, Y:{1}</value>
   </data>
   <data name="PlacePropertyEditorName" xml:space="preserve">
     <value>Properties</value>

@@ -8,7 +8,7 @@ namespace Beast.Editor.ViewModel
 		#region Title
 		public const string TitlePropertyName = "Title";
 		private string _title;	
-		public string Title
+		public virtual string Title
 		{
 			get
 			{
@@ -54,7 +54,7 @@ namespace Beast.Editor.ViewModel
 		#region ContentId
 		public const string ContentIdPropertyName = "ContentId";
 		private string _contentId;	
-		public string ContentId
+		public virtual string ContentId
 		{
 			get
 			{
@@ -70,6 +70,29 @@ namespace Beast.Editor.ViewModel
 
 				// Update bindings, no broadcast
 				RaisePropertyChanged(ContentIdPropertyName);
+			}
+		}
+		#endregion
+
+		#region IsSelected
+		public const string IsSelectedPropertyName = "IsSelected";
+		private bool _isSelected;	
+		public bool IsSelected
+		{
+			get
+			{
+				return _isSelected;
+			}
+
+			set
+			{
+				if (_isSelected == value)
+					return;
+
+				_isSelected = value;
+
+				// Update bindings, no broadcast
+				RaisePropertyChanged(IsSelectedPropertyName);
 			}
 		}
 		#endregion

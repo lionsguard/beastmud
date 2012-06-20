@@ -8,7 +8,6 @@ namespace Beast
 {
 	public class Place
 	{
-		public string Id { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public Terrain Terrain { get; set; }

@@ -70,6 +70,51 @@ namespace Beast.Editor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Place?.
+        /// </summary>
+        internal static string DeletePlaceDialog_Caption {
+            get {
+                return ResourceManager.GetString("DeletePlaceDialog_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the place at {0}, {1}?.
+        /// </summary>
+        internal static string DeletePlaceDialog_MsgFormat {
+            get {
+                return ResourceManager.GetString("DeletePlaceDialog_MsgFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        internal static string DocumentSaveDialog_Caption {
+            get {
+                return ResourceManager.GetString("DocumentSaveDialog_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has unsaved changes. Do you want to save &apos;{0}&apos; first before closing?.
+        /// </summary>
+        internal static string DocumentSaveDialog_MsgFormat {
+            get {
+                return ResourceManager.GetString("DocumentSaveDialog_MsgFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1}.
+        /// </summary>
+        internal static string DocumentTitleFormat {
+            get {
+                return ResourceManager.GetString("DocumentTitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to *.
         /// </summary>
         internal static string FileDirtyIndicator {
@@ -93,6 +138,15 @@ namespace Beast.Editor.Properties {
         internal static string OpenProjectDialog_Title {
             get {
                 return ResourceManager.GetString("OpenProjectDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X:{0}, Y:{1}.
+        /// </summary>
+        internal static string PlaceLocationFormat {
+            get {
+                return ResourceManager.GetString("PlaceLocationFormat", resourceCulture);
             }
         }
         

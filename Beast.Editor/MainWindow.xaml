@@ -354,7 +354,7 @@
 	</Window.InputBindings>
 
 	<Grid x:Name="LayoutRoot">
-    	<DockPanel x:Name="LayoutDock">
+    	<DockPanel x:Name="LayoutDock" Background="{DynamicResource ToolbarBackgroundBrush}">
     		<Menu x:Name="MainMenu" DockPanel.Dock="Top" VerticalAlignment="Top" Height="24" ItemContainerStyle="{DynamicResource MainMenuItemStyle}">
     			<Menu.Background>
     				<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
@@ -363,16 +363,8 @@
     				</LinearGradientBrush>
     			</Menu.Background>
     			<MenuItem Header="_File">
-    				<MenuItem Header="_Open..." InputGestureText="Ctrl+O" Command="{Binding OpenProjectCommand, Mode=OneWay}">
-    					<MenuItem.Icon>
-    						<Image Source="Assets/openHS.png"/>			
-    					</MenuItem.Icon>			
-    				</MenuItem>
-    				<MenuItem Header="_New..." InputGestureText="Ctrl+N" Command="{Binding CreateProjectCommand, Mode=OneWay}">
-    					<MenuItem.Icon>
-    						<Image Source="Assets/saveHS.png"/>			
-    					</MenuItem.Icon>			
-    				</MenuItem>
+    				<MenuItem Header="_Open..." InputGestureText="Ctrl+O" Command="{Binding OpenProjectCommand, Mode=OneWay}" Icon="{DynamicResource openHS}"/>
+    				<MenuItem Header="_New..." InputGestureText="Ctrl+N" Command="{Binding CreateProjectCommand, Mode=OneWay}" Icon="{DynamicResource NewDocumentHS}"/>
     				<Separator/>
     				<MenuItem Header="E_xit" Command="{Binding ExitCommand, Mode=OneWay}"/>
     			</MenuItem>
@@ -380,17 +372,10 @@
     				<MenuItem Header="_About Beast MUD Editor" Command="{Binding AboutCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=window}"/>
     			</MenuItem>
     		</Menu>
-    		<ToolBarPanel DockPanel.Dock="Top" VerticalAlignment="Top" Height="28">
-    			<ToolBarPanel.Background>
-    				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-    					<GradientStop Color="#FF9CAAC1" Offset="0"/>
-    					<GradientStop Color="#FFA4B2C9" Offset="1"/>
-    				</LinearGradientBrush>
-    			</ToolBarPanel.Background>
-    		</ToolBarPanel>
+    		<ToolBarPanel DockPanel.Dock="Top" VerticalAlignment="Top" Height="28"/>
     		<StatusBar VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Height="24" Background="#FF293955" Foreground="White"/>
 			
-    		<avalondock:DockingManager DataContext="{Binding CurrentEditor}" AnchorablesSource="{Binding Tools}" DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument}">
+    		<avalondock:DockingManager DataContext="{Binding CurrentEditor}" AnchorablesSource="{Binding Tools}" DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
 				<avalondock:DockingManager.Theme>
 					<avalondock:VS2010Theme/>
 				</avalondock:DockingManager.Theme>
@@ -401,13 +386,14 @@
 								<Setter Property="Title" Value="{Binding Model.Title}"/>
 								<Setter Property="IconSource" Value="{Binding Model.IconSource}"/>
 								<Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+								<Setter Property="IsSelected" Value="{Binding Model.IsSelected}"/>
 							</Style>
 						</local:DockPaneStyleSelector.ToolStyle>
 						<local:DockPaneStyleSelector.DocumentStyle>
 							<Style TargetType="{x:Type avalondock:LayoutItem}">
 								<Setter Property="Title" Value="{Binding Model.Title}"/>
-								<!--<Setter Property="ToolTip" Value="{Binding Model.FilePath}"/>
-								<Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}"/>-->
+								<!--<Setter Property="ToolTip" Value="{Binding Model.FilePath}"/>-->
+								<Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}"/>
 								<Setter Property="IconSource" Value="{Binding Model.IconSource}"/>
 								<Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
 							</Style>
@@ -429,7 +415,7 @@
 					</avalondock:LayoutRoot.BottomSide>
 					<avalondock:LayoutPanel>
 						<avalondock:LayoutDocumentPane/>
-						<avalondock:LayoutAnchorablePane DockWidth="200"/>
+						<avalondock:LayoutAnchorablePane DockWidth="250"/>
 					</avalondock:LayoutPanel>			
 				</avalondock:LayoutRoot> 		
 			</avalondock:DockingManager>

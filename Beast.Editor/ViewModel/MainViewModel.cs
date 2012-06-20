@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using Beast.Commands;
 using Beast.Editor.Dialogs;
+using Beast.Editor.ViewModel.Zones;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;

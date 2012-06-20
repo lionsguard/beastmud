@@ -8,6 +8,7 @@ using Beast.Commands;
 using Beast.Configuration;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 
@@ -29,6 +30,8 @@ namespace Beast.Data
 		{
 			Server = MongoServer.Create(ConnectionString);
 			MongoDatabase = Server.GetDatabase(DatabaseName);
+
+			BsonSerializer.RegisterIdGenerator(typeof(string), StringObjectIdGenerator.Instance);
 
 			BsonClassMap.RegisterClassMap<CommandDefinition>(o =>
 			                                                 	{
