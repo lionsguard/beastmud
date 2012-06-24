@@ -22,7 +22,7 @@ namespace Beast {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CommonResources {
+    public class CommonResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Beast {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Beast.CommonResources", typeof(CommonResources).Assembly);
@@ -51,7 +51,7 @@ namespace Beast {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to You need to login before attempting to execute this command..
         /// </summary>
-        internal static string AccessDenied {
+        public static string AccessDenied {
             get {
                 return ResourceManager.GetString("AccessDenied", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to The arguments supplied with the command were invalid. Use the &apos;{0}&apos; command in the following manner: {1}.
         /// </summary>
-        internal static string CommandInvalidArgumentsFormat {
+        public static string CommandInvalidArgumentsFormat {
             get {
                 return ResourceManager.GetString("CommandInvalidArgumentsFormat", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to The &apos;beast&apos; configuration section was not found. Ensure the configuration section exists in the application configuration file or use an overloaded method that accepts the configuration section or file name..
         /// </summary>
-        internal static string ConfigBeastSectionNotFound {
+        public static string ConfigBeastSectionNotFound {
             get {
                 return ResourceManager.GetString("ConfigBeastSectionNotFound", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to The direction &apos;{0}&apos; was not a valid direction or alias..
         /// </summary>
-        internal static string DirectionNotFoundFormat {
+        public static string DirectionNotFoundFormat {
             get {
                 return ResourceManager.GetString("DirectionNotFoundFormat", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to ALIASES.
         /// </summary>
-        internal static string HelpAliases {
+        public static string HelpAliases {
             get {
                 return ResourceManager.GetString("HelpAliases", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to DESCRIPTION.
         /// </summary>
-        internal static string HelpDescription {
+        public static string HelpDescription {
             get {
                 return ResourceManager.GetString("HelpDescription", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to Please specify a command in which you need help information..
         /// </summary>
-        internal static string HelpInvalidArgument {
+        public static string HelpInvalidArgument {
             get {
                 return ResourceManager.GetString("HelpInvalidArgument", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to NAME.
         /// </summary>
-        internal static string HelpName {
+        public static string HelpName {
             get {
                 return ResourceManager.GetString("HelpName", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to Help information could not located for the command &apos;{0}&apos;. Please check the spelling of the command and try again..
         /// </summary>
-        internal static string HelpNotFoundFormat {
+        public static string HelpNotFoundFormat {
             get {
                 return ResourceManager.GetString("HelpNotFoundFormat", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to SYNOPSIS.
         /// </summary>
-        internal static string HelpSynopsis {
+        public static string HelpSynopsis {
             get {
                 return ResourceManager.GetString("HelpSynopsis", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to The command &apos;{0}&apos; is not a valid or recognized command. Please check the spelling of the command and try again..
         /// </summary>
-        internal static string InvalidCommandFormat {
+        public static string InvalidCommandFormat {
             get {
                 return ResourceManager.GetString("InvalidCommandFormat", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace Beast {
         /// <summary>
         ///   Looks up a localized string similar to Please login to continue playing..
         /// </summary>
-        internal static string LoginRequired {
+        public static string LoginRequired {
             get {
                 return ResourceManager.GetString("LoginRequired", resourceCulture);
             }

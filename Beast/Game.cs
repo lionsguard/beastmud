@@ -13,14 +13,27 @@ using Beast.Security;
 
 namespace Beast
 {
+	/// <summary>
+	/// Represents the game entry point and main loop.
+	/// </summary>
 	public class Game
 	{
+		/// <summary>
+		/// Gets the default game step interval.
+		/// </summary>
 		public static readonly TimeSpan DefaultGameStepInterval = TimeSpan.FromSeconds(5);
+
+		/// <summary>
+		/// Gets the default connection timeout.
+		/// </summary>
 		public static readonly TimeSpan DefaultConnectionTimeout = TimeSpan.FromMinutes(15);
 
 		#region Current
 		private static readonly object InitLock = new object();
 		private static Game _current;
+		/// <summary>
+		/// Gets the current Game instance.
+		/// </summary>
 		public static Game Current
 		{
 			get
@@ -38,6 +51,9 @@ namespace Beast
 		}
 		#endregion
 
+		/// <summary>
+		/// Gets or sets the current data repository.
+		/// </summary>
 		[Import(typeof(IRepository), AllowDefault = true)]
 		public IRepository Repository { get; set; }
 
@@ -47,10 +63,24 @@ namespace Beast
 		[ImportMany(typeof(ILogger), AllowRecomposition = true)]
 		private IEnumerable<ILogger> Loggers { get; set; }
 
+		/// <summary>
+		/// Gets a value indicating whether or not the game is currently running.
+		/// </summary>
 		public bool IsRunning { get; private set; }
+
+		/// <summary>
+		/// Gets the current GameTime.
+		/// </summary>
 		public GameTime GameTime { get; private set; }
+
+		/// <summary>
+		/// Gets the currently loaded world.
+		/// </summary>
 		public World World { get; private set; }
 
+		/// <summary>
+		/// Gets the currently loaded configuration section.
+		/// </summary>
 		public BeastSection Config { get; private set; }
 
 		private GameClock _clock;
@@ -62,16 +92,27 @@ namespace Beast
 		}
 
 		#region Start and Stop
+		/// <summary>
+		/// Starts the game and begins the main loop using the default game settings.
+		/// </summary>
 		public void Start()
 		{
 			Start(new BeastSection{Repository = new RepositoryElement{Type = typeof(FileRepository).AssemblyQualifiedName}});
 		}
 
+		/// <summary>
+		/// Starts the game and begins the main loop using the specified configFilePath to load the game settings.
+		/// </summary>
+		/// <param name="configFilePath">The path to the configuration file used to load game settings.</param>
 		public void Start(string configFilePath)
 		{
 			Start(BeastSection.Load(configFilePath));
 		}
 
+		/// <summary>
+		/// Starts the game and begins the main loop.
+		/// </summary>
+		/// <param name="config">The configuration section used to initialize the game settings.</param>
 		public void Start(BeastSection config)
 		{
 			if (IsRunning)
@@ -197,6 +238,9 @@ namespace Beast
 			}
 		}
 
+		/// <summary>
+		/// Stops the game loop.
+		/// </summary>
 		public void Stop()
 		{
 			_clock.Stop();
@@ -205,6 +249,9 @@ namespace Beast
 		#endregion
 
 		#region Update
+		/// <summary>
+		/// Updates the current game by one tick.
+		/// </summary>
 		public void Update()
 		{
 			// Update the game time.
@@ -223,32 +270,5 @@ namespace Beast
 			ConnectionManager.Flush(); // Send all queued output to the connections.
 		}
 		#endregion
-
-		//#region ExecuteCommand
-		//public bool ExecuteCommand(string connectionId, IDictionary<string, object> args, IConnectionFactory connectionFactory)
-		//{
-		//    var command = new Command(args);
-		//    IConnection connection = null;
-
-		//    // If command is auth command then create a new connection.
-		//    if (AuthenticationModule.IsAuthenticationCommand(command.Name))
-		//    {
-		//        connection = ConnectionManager.Create(connectionFactory);
-		//    }
-
-		//    if (connection == null)
-		//    {
-		//        // A connection must exist for the specified connectionId.
-		//        connection = ConnectionManager.Find(connectionId);
-		//        if (connection == null)
-		//        {
-		//            return false;
-		//        }
-		//    }
-
-		//    connection.EnqueueCommand(command);
-		//    return true;
-		//}
-		//#endregion
 	}
 }

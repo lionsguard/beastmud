@@ -1,0 +1,8 @@
+﻿@using Beast;
+@{
+	ViewBag.Title = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+<div>Game: @(Game.Current.IsRunning ? "Running" : "Stopped")</div>
+<div>Started: @Game.Current.GameTime.Started</div>

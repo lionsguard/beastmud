@@ -6,4 +6,4 @@
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6091490a-8838-47b0-91e7-4cf836b2b967")]
+[assembly: Guid("52d032b0-4597-4a74-a9c6-82d0d4f47d8d")]
