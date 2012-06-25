@@ -52,10 +52,9 @@
     <Compile Include="Behaviors\BehaviorCollection.cs" />
     <Compile Include="Behaviors\LifeFormBehavior.cs" />
     <Compile Include="Commands\Command.cs" />
-    <Compile Include="Commands\CommandHandler.cs" />
-    <Compile Include="Commands\CommandDefinition.cs" />
     <Compile Include="Commands\CommandManager.cs" />
-    <Compile Include="Commands\StandardCommandsModule.cs" />
+    <Compile Include="Commands\ICommandMetadata.cs" />
+    <Compile Include="Commands\StandardCommands.cs" />
     <Compile Include="CommonResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -91,15 +90,17 @@
     <Compile Include="Mobiles\Mobile.cs" />
     <Compile Include="ModulePriority.cs" />
     <Compile Include="Net\ByteExtensions.cs" />
-    <Compile Include="Net\CommandMessage.cs" />
+    <Compile Include="Net\ResponseMessage.cs" />
     <Compile Include="Net\ConnectionBase.cs" />
     <Compile Include="Net\ConnectionManager.cs" />
     <Compile Include="Net\DeltaMessage.cs" />
     <Compile Include="Net\EventDeltaMessage.cs" />
     <Compile Include="Net\IConnection.cs" />
     <Compile Include="Net\IConnectionFactory.cs" />
+    <Compile Include="Net\IInput.cs" />
     <Compile Include="Net\IMessage.cs" />
     <Compile Include="Net\IMessageFormatter.cs" />
+    <Compile Include="Net\InputBase.cs" />
     <Compile Include="Net\Message.cs" />
     <Compile Include="Net\MessageType.cs" />
     <Compile Include="Net\NotificationCategories.cs" />

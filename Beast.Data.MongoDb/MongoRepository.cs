@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Linq;
-using Beast.Commands;
 using Beast.Configuration;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -32,12 +31,6 @@ namespace Beast.Data
 			MongoDatabase = Server.GetDatabase(DatabaseName);
 
 			BsonSerializer.RegisterIdGenerator(typeof(string), StringObjectIdGenerator.Instance);
-
-			BsonClassMap.RegisterClassMap<CommandDefinition>(o =>
-			                                                 	{
-			                                                 		o.AutoMap();
-			                                                 		o.MapIdProperty(p => p.Name);
-			                                                 	});
 
 			RegisterClassMaps();
 		}
@@ -103,31 +96,6 @@ namespace Beast.Data
 			return true;
 		}
 		#endregion
-
-		public CommandDefinition GetCommandDefinition(string name)
-		{
-			return GetMongoObject<CommandDefinition>(Collections.CommandDefinitions, Query.EQ(PropertyNames.Id.ColumnName, name));
-		}
-
-		public void SaveCommandDefinition(CommandDefinition definition)
-		{
-			SaveMongoObject(definition, Collections.CommandDefinitions, d => d.EQ(PropertyNames.Name));
-		}
-
-		public IEnumerable<Zone> GetZones()
-		{
-			return GetMongoObjects<Zone>(Collections.Zones);
-		}
-
-		public Zone GetZone(string id)
-		{
-			return GetMongoObject<Zone>(Collections.Zones, id);
-		}
-
-		public void SaveZone(Zone zone)
-		{
-			SaveMongoObject(zone, Collections.Zones);
-		}
 
 		public RepositoryElement ToConfig()
 		{

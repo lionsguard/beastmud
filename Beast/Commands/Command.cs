@@ -1,95 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
+using Beast.Net;
 
 namespace Beast.Commands
 {
 	/// <summary>
-	/// Represents a command issued by a character, specifically a player character.
+	/// Represents an abstract base class for handling a command.
 	/// </summary>
-	public class Command : Dictionary<string,object>
+	public abstract class Command
 	{
-		public const string ParameterKeyCommand = "cmd";
+		public const string KeyName = "Name";
+		public const string KeyDescription = "Description";
+		public const string KeySynopsis = "Synopsis";
+		public const string KeyAliases = "Aliases";
+		public const string KeyArguments = "Arguments";
 
 		/// <summary>
-		/// Gets or sets a unique identifier for the command.
+		/// Executes the current command.
 		/// </summary>
-		public string Id { get; set; }
+		/// <param name="input">The IInput containing the command information to execute.</param>
+		/// <param name="connection">The connection associated with the executing of the command.</param>
+		/// <returns>A message detailing the results of command execution.</returns>
+		public abstract ResponseMessage Execute(IInput input, IConnection connection);
 
 		/// <summary>
-		/// Gets or sets the name of the command.
+		/// Validates the arguments for the command.
 		/// </summary>
-		public string Name { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the Command class.
-		/// </summary>
-		public Command()
-			: base(StringComparer.InvariantCultureIgnoreCase)
+		/// <param name="input">The IInput containing the arguments for the command.</param>
+		/// <param name="errorMessage">An error message detailing the problems with the arguments, null if the arguments are valid.</param>
+		/// <returns>True if the arguments are valid for this command; otherwise false.</returns>
+		public virtual bool ValidateArguments(IInput input, out string errorMessage)
 		{
-			Id = Guid.NewGuid().ToString();
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the Command class, sets the name and optionally sets any command arguments.
-		/// </summary>
-		/// <param name="name">The name of the command.</param>
-		/// <param name="args">An array of arguments for the command.</param>
-		public Command(IDictionary<string, object> args)
-			: base(args, StringComparer.InvariantCultureIgnoreCase)
-		{
-			Id = Guid.NewGuid().ToString();
-			Name = Get<string>(ParameterKeyCommand);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the Command class, sets the name and optionally sets any command arguments.
-		/// </summary>
-		/// <param name="name">The name of the command.</param>
-		/// <param name="args">An array of arguments for the command.</param>
-		public Command(string name, params KeyValuePair<string,object>[] args)
-			: this()
-		{
-			Name = name;
-			if (args == null || args.Length <= 0) 
-				return;
-			foreach (var arg in args)
+			var cmd = Game.Current.Commands.FindCommandInternal(input.CommandName);
+			if (cmd == null)
 			{
-				Add(arg.Key, arg.Value);
-			}
-		}
-
-		/// <summary>
-		/// Gets a value from the command of the specified type for the specified key.
-		/// </summary>
-		/// <typeparam name="T">The type of the value to return.</typeparam>
-		/// <param name="key">The key used to locate the value.</param>
-		/// <returns>The value of the specified key cast as T.</returns>
-		public T Get<T>(string key)
-		{
-			object value;
-			if (TryGetValue(key, out value))
-			{
-				return ValueConverter.Convert<T>(value);
-			}
-			return default(T);
-		}
-
-		/// <summary>
-		/// Attempts to retrieve the specified value using the specified key.
-		/// </summary>
-		/// <typeparam name="T">The type of the value to return.</typeparam>
-		/// <param name="key">The key used to locate the value.</param>
-		/// <param name="value">The variable to hold the returned value.</param>
-		/// <returns>True if a value was found for the specified key; otherwise false.</returns>
-		public bool TryGetValue<T>(string key, out T value)
-		{
-			object objValue;
-			if (!base.TryGetValue(key, out objValue))
-			{
-				value = default(T);
+				errorMessage = string.Format(CommonResources.HelpNotFoundFormat, input.CommandName);
 				return false;
 			}
-			value = ValueConverter.Convert<T>(objValue);
+
+			if (cmd.Metadata.Arguments.Any(arg => !input.Contains(arg)))
+			{
+				errorMessage = string.Format(CommonResources.CommandInvalidArgumentsFormat, cmd.Metadata.Name, cmd.Metadata.Synopsis);
+				return false;
+			}
+
+			errorMessage = null;
 			return true;
 		}
 	}

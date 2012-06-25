@@ -83,12 +83,18 @@ namespace Beast
 		/// </summary>
 		public BeastSection Config { get; private set; }
 
+		/// <summary>
+		/// Gets the current CommandManager instance.
+		/// </summary>
+		public CommandManager Commands { get; private set; }
+
 		private GameClock _clock;
 
 		private List<IModule> _modules = new List<IModule>();
 
 		private Game()
 		{
+			Commands = new CommandManager();
 		}
 
 		#region Start and Stop
@@ -166,7 +172,7 @@ namespace Beast
 				}
 
 				var container = new CompositionContainer(catalog);
-				container.ComposeParts(this);
+				container.ComposeParts(this, Commands);
 
 				// ====================================================================================
 				// INITIALIZE LOGGING
@@ -204,10 +210,6 @@ namespace Beast
 					timeout = TimeSpan.FromMinutes(config.ConnectionTimeout);
 				ConnectionManager.Initialize(timeout);
 				Log.Info("Initialized the connection manager.");
-
-				// Command manager
-				CommandManager.Initialize();
-				Log.Info("Initialized the command manager.");
 
 				// Game World
 				World = new World();

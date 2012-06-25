@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.IO;
-using Beast.Commands;
 using Beast.Configuration;
 using Beast.Data;
 using Newtonsoft.Json;
@@ -37,35 +34,8 @@ namespace Beast.IO
 			File.WriteAllText(GetFileName(directory, name), JsonConvert.SerializeObject(obj));
 		}
 
-		#region CommandDefinition
-
 		public void Initialize()
 		{
-		}
-
-		public CommandDefinition GetCommandDefinition(string name)
-		{
-			return Load<CommandDefinition>(HelpDirectory, name);
-		}
-
-		public void SaveCommandDefinition(CommandDefinition definition)
-		{
-			Save(HelpDirectory, definition.Name, definition);
-		}
-
-		public IEnumerable<Zone> GetZones()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Zone GetZone(string id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SaveZone(Zone zone)
-		{
-			throw new NotImplementedException();
 		}
 
 		public RepositoryElement ToConfig()
@@ -82,7 +52,5 @@ namespace Beast.IO
 		{
 			DirectoryPath = (string)config[ConfigKeyPath];
 		}
-
-		#endregion
 	}
 }

@@ -79,6 +79,15 @@ namespace Beast {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The command &apos;{0}&apos; is not a valid or recognized command. Please check the spelling of the command and try again..
+        /// </summary>
+        public static string CommandInvalidFormat {
+            get {
+                return ResourceManager.GetString("CommandInvalidFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;beast&apos; configuration section was not found. Ensure the configuration section exists in the application configuration file or use an overloaded method that accepts the configuration section or file name..
         /// </summary>
         public static string ConfigBeastSectionNotFound {
@@ -147,15 +156,6 @@ namespace Beast {
         public static string HelpSynopsis {
             get {
                 return ResourceManager.GetString("HelpSynopsis", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The command &apos;{0}&apos; is not a valid or recognized command. Please check the spelling of the command and try again..
-        /// </summary>
-        public static string InvalidCommandFormat {
-            get {
-                return ResourceManager.GetString("InvalidCommandFormat", resourceCulture);
             }
         }
         

@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.Composition;
-using Beast.Commands;
-using Beast.Net;
+﻿using System;
+using System.ComponentModel.Composition;
 
 namespace Beast.Security
 {
@@ -8,33 +7,19 @@ namespace Beast.Security
 	[ExportMetadata("Priority", ModulePriority.High)]
 	public class AuthenticationModule : IModule
 	{
-		public static CommandDefinition LoginCommand { get; private set; }
-		public static CommandDefinition CreateUserCommand { get; private set; }
-
 		public void Initialize()
 		{
-			LoginCommand = Game.Current.Repository.GetCommandDefinition("login");
-			CreateUserCommand = Game.Current.Repository.GetCommandDefinition("createuser");
-
-			CommandManager.Add(LoginCommand, HandleLoginCommand);
-			CommandManager.Add(CreateUserCommand, HandleCreateUserCommand);
+			throw new NotImplementedException();
 		}
 
 		public void Update(GameTime gameTime)
 		{
 		}
 
-		private static void HandleLoginCommand(IConnection connection, Command command, CommandMessage response)
-		{
-		}
-
-		private static void HandleCreateUserCommand(IConnection connection, Command command, CommandMessage response)
-		{
-		}
-
 		public static bool IsAuthenticationCommand(string commandName)
 		{
-			return string.Compare(LoginCommand, commandName, true) == 0 || string.Compare(CreateUserCommand, commandName, true) == 0;
+			throw new NotImplementedException();
+			//return string.Compare(LoginCommand, commandName, true) == 0 || string.Compare(CreateUserCommand, commandName, true) == 0;
 		}
 	}
 }

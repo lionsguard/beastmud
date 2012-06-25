@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Beast.Commands;
 using Beast.Mobiles;
 
 namespace Beast.Net
@@ -31,16 +30,16 @@ namespace Beast.Net
 		Character Character { get; set; }
 
 		/// <summary>
-		/// Enqueues the specified command from processing by the game.
+		/// Enqueues the specified IInput for processing by the game.
 		/// </summary>
-		/// <param name="command">The command to process.</param>
-		void EnqueueCommand(Command command);
+		/// <param name="input">The input to process.</param>
+		void EnqueueInput(IInput input);
 
 		/// <summary>
-		/// Dequeues all current queued commands.
+		/// Dequeues all current queued input.
 		/// </summary>
-		/// <returns>An enumerable list of Command instances queued for the current connection.</returns>
-		IEnumerable<Command> DequeueCommands();
+		/// <returns>An enumerable list of IInput instances queued for the current connection.</returns>
+		IEnumerable<IInput> DequeueInput();
 
 		/// <summary>
 		/// Writes the specified IMessage instances to the current connection output stream.

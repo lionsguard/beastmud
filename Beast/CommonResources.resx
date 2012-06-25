@@ -123,6 +123,9 @@
   <data name="CommandInvalidArgumentsFormat" xml:space="preserve">
     <value>The arguments supplied with the command were invalid. Use the '{0}' command in the following manner: {1}</value>
   </data>
+  <data name="CommandInvalidFormat" xml:space="preserve">
+    <value>The command '{0}' is not a valid or recognized command. Please check the spelling of the command and try again.</value>
+  </data>
   <data name="ConfigBeastSectionNotFound" xml:space="preserve">
     <value>The 'beast' configuration section was not found. Ensure the configuration section exists in the application configuration file or use an overloaded method that accepts the configuration section or file name.</value>
   </data>
@@ -146,9 +149,6 @@
   </data>
   <data name="HelpSynopsis" xml:space="preserve">
     <value>SYNOPSIS</value>
-  </data>
-  <data name="InvalidCommandFormat" xml:space="preserve">
-    <value>The command '{0}' is not a valid or recognized command. Please check the spelling of the command and try again.</value>
   </data>
   <data name="LoginRequired" xml:space="preserve">
     <value>Please login to continue playing.</value>

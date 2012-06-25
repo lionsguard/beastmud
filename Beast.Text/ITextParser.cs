@@ -1,10 +1,10 @@
 ﻿
-using Beast.Commands;
+using Beast.Net;
 
 namespace Beast.Text
 {
 	public interface ITextParser
 	{
-		Command Parse(string text);
+		IInput Parse(string text);
 	}
 }

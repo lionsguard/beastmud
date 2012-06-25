@@ -1,5 +1,4 @@
-﻿using Beast.Commands;
-
+﻿
 namespace Beast.Net
 {
 	/// <summary>
@@ -16,10 +15,10 @@ namespace Beast.Net
 		T FormatMessage(IMessage message);
 
 		/// <summary>
-		/// Formats the specified data into a Command instance.
+		/// Formats the specified data into a IInput instance.
 		/// </summary>
 		/// <param name="data">The data to format.</param>
-		/// <returns>An Command instance for the specified data.</returns>
-		Command FormatCommand(T data);
+		/// <returns>An IInput instance for the specified data.</returns>
+		IInput FormatInput(T data);
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Beast.Commands;
 using Beast.Mobiles;
 
 namespace Beast.Net
@@ -19,9 +18,9 @@ namespace Beast.Net
 
 		protected bool IsClosed { get; set; }
 
-		private readonly Queue<Command> _commands = new Queue<Command>();
+		private readonly Queue<IInput> _input = new Queue<IInput>();
 		private readonly Queue<IMessage> _messages = new Queue<IMessage>();
-		private readonly Queue<Command> _history = new Queue<Command>(100);
+		private readonly Queue<IInput> _history = new Queue<IInput>(100);
 
 		protected ConnectionBase()
 		{
@@ -29,28 +28,29 @@ namespace Beast.Net
 			LastActivity = DateTime.UtcNow;
 		}
 
-		public void EnqueueCommand(Command command)
+		
+		public void EnqueueInput(IInput input)
 		{
 			if (IsClosed)
 				return;
 
-			lock (_commands)
+			lock (_input)
 			{
-				_commands.Enqueue(command);
+				_input.Enqueue(input);
 
-				_history.Enqueue(command);
+				_history.Enqueue(input);
 				if (_history.Count > 100)
 					_history.Dequeue();
 			}
 		}
 
-		public IEnumerable<Command> DequeueCommands()
+		public IEnumerable<IInput> DequeueInput()
 		{
-			lock (_commands)
+			lock (_input)
 			{
-				while (_commands.Count > 0)
+				while (_input.Count > 0)
 				{
-					yield return _commands.Dequeue();
+					yield return _input.Dequeue();
 				}
 			}
 		}
@@ -97,9 +97,9 @@ namespace Beast.Net
 		public void Close()
 		{
 			IsClosed = true;
-			lock (_commands)
+			lock (_input)
 			{
-				_commands.Clear();
+				_input.Clear();
 			}
 			lock (_messages)
 			{

@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Beast.Commands;
 using Beast.Net;
 
 namespace Beast.Text
@@ -27,7 +26,7 @@ namespace Beast.Text
 			return Encoding.ASCII.GetBytes(MessageParser.Parse(message));
 		}
 
-		public Command FormatCommand(byte[] data)
+		public IInput FormatInput(byte[] data)
 		{
 			var text = Encoding.ASCII.GetString(data);
 			return TextParser.Parse(text);

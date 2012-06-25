@@ -87,8 +87,8 @@ namespace Beast.Net
 						if (buffer.Length > CommandTerminator.Length)
 							connection.PacketData.AddRange(buffer.Take(buffer.Length - CommandTerminator.Length));
 
-						var cmd = connection.MessageFormatter.FormatCommand(connection.PacketData.ToArray());
-						connection.EnqueueCommand(cmd);
+						var input = connection.MessageFormatter.FormatInput(connection.PacketData.ToArray());
+						connection.EnqueueInput(input);
 						connection.PacketData.Clear();
 					}
 					else

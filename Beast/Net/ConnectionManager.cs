@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using Beast.Commands;
 
 namespace Beast.Net
 {
@@ -87,10 +86,10 @@ namespace Beast.Net
 			foreach (var connection in connections)
 			{
 				// Retrieve and process all queued commands on the connection, clearing them out as they are processed.
-				var commands = connection.DequeueCommands();
-				foreach (var command in commands)
+				var inputs = connection.DequeueInput();
+				foreach (var input in inputs)
 				{
-					CommandManager.Execute(command, connection);
+					Game.Current.Commands.Execute(input, connection);
 				}
 			}
 		}

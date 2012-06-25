@@ -13,7 +13,7 @@ namespace Beast.Text
 			switch (msg.Type)
 			{
 				case MessageType.Command:
-					return FormatCommand((CommandMessage) msg);
+					return FormatCommand((ResponseMessage) msg);
 				case MessageType.Property:
 					return FormatProperty((PropertyDeltaMessage) msg);
 				case MessageType.Event:
@@ -24,7 +24,7 @@ namespace Beast.Text
 			return string.Empty;
 		}
 
-		protected virtual string FormatCommand(CommandMessage msg)
+		protected virtual string FormatCommand(ResponseMessage msg)
 		{
 			return string.Empty;
 		}
