@@ -7,6 +7,11 @@ namespace Beast.Data
 	{
 		void Initialize();
 
+		string GetNextObjectId(IGameObject obj);
+
+		IGameObject GetTemplate(string templateName);
+		void SaveTemplate(IGameObject obj);
+
 		RepositoryElement ToConfig();
 		void FromConfig(RepositoryElement config);
 	}

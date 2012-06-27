@@ -1,42 +1,146 @@
 ﻿
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Beast.Behaviors;
+using Newtonsoft.Json;
 
 namespace Beast
 {
 	/// <summary>
-	/// Represents an interactive game object or object used explicitly within the game world and updated by the game engine.
+	/// Represents an interactive game object; an object used explicitly within the game world and updated by the game engine.
 	/// </summary>
-	public class GameObject : IUpdatable
+	public class GameObject : IGameObject
 	{
-		public string Id { get; set; }
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public BehaviorCollection Behaviors { get; set; }
-		public PropertyCollection Properties { get; set; }
+		public string Id
+		{
+			get { return Get<string>(CommonProperties.Id); }
+			set { Set(CommonProperties.Id, value); }
+		}
+		public string Name
+		{
+			get { return Get<string>(CommonProperties.Name); }
+			set { Set(CommonProperties.Name, value); }
+		}
+		public string Description
+		{
+			get { return Get<string>(CommonProperties.Description); }
+			set { Set(CommonProperties.Description, value); }
+		}
 
-		#region Events
-		public event EventHandler Updating = delegate { };
-		public event EventHandler Updated = delegate { };
+		protected BehaviorCollection Behaviors { get; private set; }
 
-		//public event EventHandler Created = delegate { };
-		//public event EventHandler Destroyed = delegate { }; 
-		#endregion
+		private readonly Dictionary<Property, object> _properties = new Dictionary<Property, object>();
+
+		public object this[Property property]
+		{
+			get { return Get(property); }
+			set{Set(property, value);}
+		}
 
 		public GameObject()
 		{
+			Id = Game.Current.Repository.GetNextObjectId(this);
 			Behaviors = new BehaviorCollection(this);
-			Properties = new PropertyCollection();
+		}
+
+		#region Property Handling
+		public T Get<T>(Property property)
+		{
+			var value = Get(property);
+			if (value == null)
+				return default(T);
+			if (value.GetType() == typeof(T))
+				return (T) value;
+			return (T) Convert.ChangeType(value, typeof (T));
+		}
+
+		protected internal object Get(Property property)
+		{
+			object value;
+			return !_properties.TryGetValue(property, out value) ? property.DefaultValue : value;
+		}
+		protected internal void Set(Property property, object value)
+		{
+			_properties[property] = value;
+		}
+
+		public void Merge(IGameObject obj, bool overwriteExisting)
+		{
+			foreach (var kvp in obj)
+			{
+				if (!overwriteExisting && _properties.ContainsKey(kvp.Key))
+					continue;
+				_properties[kvp.Key] = kvp.Value;
+			}
+		}
+		#endregion
+
+		public IEnumerator<KeyValuePair<Property, object>> GetEnumerator()
+		{
+			return _properties.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is IGameObject && (obj as IGameObject).Id.Equals(Id);
+		}
+
+		public override int GetHashCode()
+		{
+			return Id.GetHashCode();
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			Updating(this, EventArgs.Empty);
+			EventManager.Raise(CommonEvents.Updating, this, EventArgs.Empty);
 			UpdateOverride(gameTime);
-			Updated(this, EventArgs.Empty);
+			EventManager.Raise(CommonEvents.Updated, this, EventArgs.Empty);
 		}
+
+		/// <summary>
+		/// Provides an override where derived classes can perform actions during an object update.
+		/// </summary>
+		/// <param name="gameTime"></param>
 		protected virtual void UpdateOverride(GameTime gameTime)
 		{
 		}
+
+		public virtual string ToShortString()
+		{
+			return Name;
+		}
+
+		public virtual string ToLongString()
+		{
+			return string.Concat(Name, Environment.NewLine, Description);
+		}
+	}
+
+	public class GameObjectJsonConverter : JsonConverter
+	{
+		#region Overrides of JsonConverter
+
+		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool CanConvert(Type objectType)
+		{
+			return objectType is IGameObject || objectType.IsSubclassOf(typeof (IGameObject)) || objectType.GetInterface(typeof (IGameObject).Name) != null;
+		}
+
+		#endregion
 	}
 }

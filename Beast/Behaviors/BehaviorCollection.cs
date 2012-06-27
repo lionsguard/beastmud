@@ -4,31 +4,31 @@ using System.Collections.Generic;
 
 namespace Beast.Behaviors
 {
-	public class BehaviorCollection : ICollection<Behavior>
+	public class BehaviorCollection : ICollection<IBehavior>
 	{
-		private readonly Dictionary<Type, Behavior> _behaviors = new Dictionary<Type, Behavior>();
+		private readonly Dictionary<Type, IBehavior> _behaviors = new Dictionary<Type, IBehavior>();
 
-		public GameObject Owner { get; private set; }
+		public IGameObject Owner { get; private set; }
 
-		public BehaviorCollection(GameObject owner)
+		public BehaviorCollection(IGameObject owner)
 		{
 			Owner = owner;
 		}
 
-		public Behavior Find(Type type)
+		public IBehavior Find(Type type)
 		{
-			Behavior item;
+			IBehavior item;
 			_behaviors.TryGetValue(type, out item);
 			return item;
 		}
-		public T Find<T>() where T : Behavior
+		public T Find<T>() where T : IBehavior
 		{
 			return (T)Find(typeof(T));
 		}
 
 		#region Implementation of IEnumerable
 
-		public IEnumerator<Behavior> GetEnumerator()
+		public IEnumerator<IBehavior> GetEnumerator()
 		{
 			return _behaviors.Values.GetEnumerator();
 		}
@@ -42,7 +42,7 @@ namespace Beast.Behaviors
 
 		#region Implementation of ICollection<Behavior>
 
-		public void Add(Behavior item)
+		public void Add(IBehavior item)
 		{
 			var key = item.GetType();
 			if (_behaviors.ContainsKey(key))
@@ -61,17 +61,17 @@ namespace Beast.Behaviors
 			_behaviors.Clear();
 		}
 
-		public bool Contains(Behavior item)
+		public bool Contains(IBehavior item)
 		{
 			return _behaviors.ContainsKey(item.GetType());
 		}
 
-		public void CopyTo(Behavior[] array, int arrayIndex)
+		public void CopyTo(IBehavior[] array, int arrayIndex)
 		{
 			_behaviors.Values.CopyTo(array, arrayIndex);
 		}
 
-		public bool Remove(Behavior item)
+		public bool Remove(IBehavior item)
 		{
 			item.Detach();
 			return _behaviors.Remove(item.GetType());

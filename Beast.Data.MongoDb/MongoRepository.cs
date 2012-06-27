@@ -35,6 +35,11 @@ namespace Beast.Data
 			RegisterClassMaps();
 		}
 
+		public string GetNextObjectId(IGameObject obj)
+		{
+			return (string)StringObjectIdGenerator.Instance.GenerateId(MongoDatabase.GetCollection<IGameObject>(Collections.Objects), obj);
+		}
+
 		protected virtual void RegisterClassMaps()
 		{
 			

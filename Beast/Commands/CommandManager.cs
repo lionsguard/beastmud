@@ -14,14 +14,14 @@ namespace Beast.Commands
 		/// <summary>
 		/// Gets a list of all loaded commands.
 		/// </summary>
-		[ImportMany(typeof(Command), AllowRecomposition = true)]
-		public IEnumerable<Lazy<Command, ICommandMetadata>> Commands { get; private set; }
+		[ImportMany(typeof(ICommand), AllowRecomposition = true)]
+		public IEnumerable<Lazy<ICommand, ICommandMetadata>> Commands { get; private set; }
 
 		internal CommandManager()
 		{
 		}
 
-		internal Lazy<Command, ICommandMetadata> FindCommandInternal(string name)
+		internal Lazy<ICommand, ICommandMetadata> FindCommandInternal(string name)
 		{
 			return Commands.FirstOrDefault(c => string.Compare(c.Metadata.Name, name, true) == 0 || c.Metadata.Aliases.Any(a => string.Compare(a, name, true) == 0));
 		}

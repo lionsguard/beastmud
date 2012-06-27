@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beast.Tests
 {
@@ -44,5 +45,23 @@ namespace Beast.Tests
 		//
 		#endregion
 
+		private static void ExecuteCommandTest(string command, params KeyValuePair<string, object>[] args)
+		{
+			var input = new TestInput(command, args);
+			Game.Current.Commands.Execute(input, Connection);
+			Connection.Flush();
+		}
+
+		[TestMethod]
+		public void CommandHelpTest()
+		{
+			ExecuteCommandTest("help", new KeyValuePair<string, object>("command", "help"));
+		}
+
+		[TestMethod]
+		public void CommandWhoTest()
+		{
+			ExecuteCommandTest("who");
+		}
 	}
 }

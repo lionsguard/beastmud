@@ -37,7 +37,7 @@ namespace Beast.Net
 		/// <param name="obj">The IGameObject instance.</param>
 		/// <param name="expression">The Expression used to resolve the property.</param>
 		/// <returns>A new PropertyDeltaMessage instance.</returns>
-		public static PropertyDeltaMessage Create<TObject, TProperty>(TObject obj, Expression<Func<TObject, TProperty>> expression) where TObject : GameObject
+		public static PropertyDeltaMessage Create<TObject, TProperty>(TObject obj, Expression<Func<TObject, TProperty>> expression) where TObject : IGameObject
 		{
 			var p = ReflectionExtensions.GetProperty(expression);
 			return new PropertyDeltaMessage
@@ -55,7 +55,7 @@ namespace Beast.Net
 		/// <param name="obj">The IGameObject instance.</param>
 		/// <param name="propertyName">The name of the property which will be represented by the delta.</param>
 		/// <returns>A new PropertyDeltaMessage instance.</returns>
-		public static PropertyDeltaMessage Create<TObject>(TObject obj, string propertyName) where TObject : GameObject
+		public static PropertyDeltaMessage Create<TObject>(TObject obj, string propertyName) where TObject : IGameObject
 		{
 			return new PropertyDeltaMessage
 			       	{

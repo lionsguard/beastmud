@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using Beast.Mobiles;
 
 namespace Beast.Net
 {
@@ -73,6 +75,15 @@ namespace Beast.Net
 				IConnection conn;
 				Connections.TryRemove(remove, out conn);
 			}
+		}
+
+		/// <summary>
+		/// Gets a list of active players, connections with a Character instance.
+		/// </summary>
+		/// <returns>A list of active players.</returns>
+		public static IEnumerable<Character> ActivePlayers()
+		{
+			return Connections.Values.Where(c => c.Character != null).Select(c => c.Character);
 		}
 
 		/// <summary>

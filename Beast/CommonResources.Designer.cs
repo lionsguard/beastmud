@@ -167,5 +167,23 @@ namespace Beast {
                 return ResourceManager.GetString("LoginRequired", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no players currently online..
+        /// </summary>
+        public static string WhoNoPlayers {
+            get {
+                return ResourceManager.GetString("WhoNoPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player currently online {0}:.
+        /// </summary>
+        public static string WhoPlayersFormat {
+            get {
+                return ResourceManager.GetString("WhoPlayersFormat", resourceCulture);
+            }
+        }
     }
 }

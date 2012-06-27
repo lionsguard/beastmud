@@ -50,11 +50,17 @@
     </Compile>
     <Compile Include="Behaviors\Behavior.cs" />
     <Compile Include="Behaviors\BehaviorCollection.cs" />
+    <Compile Include="Behaviors\IBehavior.cs" />
+    <Compile Include="Behaviors\IBehaviorMetadata.cs" />
     <Compile Include="Behaviors\LifeFormBehavior.cs" />
+    <Compile Include="BoundProperty.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandManager.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandMetadata.cs" />
     <Compile Include="Commands\StandardCommands.cs" />
+    <Compile Include="CommonEvents.cs" />
+    <Compile Include="CommonProperties.cs" />
     <Compile Include="CommonResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -75,9 +81,10 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameTime.cs" />
+    <Compile Include="IGameObject.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IModule.cs" />
-    <Compile Include="IModuleMetaData.cs" />
+    <Compile Include="IModuleMetadata.cs" />
     <Compile Include="IO\FileRepository.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Items\Item.cs" />
@@ -109,11 +116,12 @@
     <Compile Include="Net\SocketConnectionFactory.cs" />
     <Compile Include="Net\SocketListener.cs" />
     <Compile Include="Net\NotificationMessage.cs" />
+    <Compile Include="ObjectManager.cs" />
     <Compile Include="Place.cs" />
     <Compile Include="PlaceCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameClock.cs" />
-    <Compile Include="PropertyCollection.cs" />
+    <Compile Include="Property.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Security\AuthenticationModule.cs" />
     <Compile Include="Security\AuthToken.cs" />

@@ -1,6 +1,6 @@
 ﻿namespace Beast
 {
-	public interface IModuleMetaData
+	public interface IModuleMetadata
 	{
 		ModulePriority Priority { get; }
 	}

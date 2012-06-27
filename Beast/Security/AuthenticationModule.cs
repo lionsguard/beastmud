@@ -9,7 +9,6 @@ namespace Beast.Security
 	{
 		public void Initialize()
 		{
-			throw new NotImplementedException();
 		}
 
 		public void Update(GameTime gameTime)

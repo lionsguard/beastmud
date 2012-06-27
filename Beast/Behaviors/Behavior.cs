@@ -1,11 +1,11 @@
 ﻿
 namespace Beast.Behaviors
 {
-	public abstract class Behavior
+	public abstract class Behavior : IBehavior
 	{
-		public GameObject Owner { get; private set; }
+		public IGameObject Owner { get; private set; }
 
-		public void Attach(GameObject owner)
+		public void Attach(IGameObject owner)
 		{
 			Owner = owner;
 			OnAttached();
@@ -27,7 +27,7 @@ namespace Beast.Behaviors
 		}
 	}
 
-	public abstract class Behavior<T> : Behavior where T : GameObject
+	public abstract class Behavior<T> : Behavior where T : IGameObject
 	{
 		public new T Owner
 		{

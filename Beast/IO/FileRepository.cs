@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.IO;
 using Beast.Configuration;
 using Beast.Data;
@@ -36,6 +37,21 @@ namespace Beast.IO
 
 		public void Initialize()
 		{
+		}
+
+		public string GetNextObjectId(IGameObject obj)
+		{
+			return Guid.NewGuid().ToString();
+		}
+
+		public IGameObject GetTemplate(string templateName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SaveTemplate(IGameObject obj)
+		{
+			throw new NotImplementedException();
 		}
 
 		public RepositoryElement ToConfig()

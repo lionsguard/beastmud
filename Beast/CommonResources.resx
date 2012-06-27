@@ -153,4 +153,10 @@
   <data name="LoginRequired" xml:space="preserve">
     <value>Please login to continue playing.</value>
   </data>
+  <data name="WhoNoPlayers" xml:space="preserve">
+    <value>There are no players currently online.</value>
+  </data>
+  <data name="WhoPlayersFormat" xml:space="preserve">
+    <value>Player currently online {0}:</value>
+  </data>
 </root>

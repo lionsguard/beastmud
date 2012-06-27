@@ -58,7 +58,7 @@ namespace Beast
 		public IRepository Repository { get; set; }
 
 		[ImportMany(AllowRecomposition = true, RequiredCreationPolicy = CreationPolicy.Shared)]
-		private IEnumerable<Lazy<IModule, IModuleMetaData>> LoadedModules { get; set; }
+		private IEnumerable<Lazy<IModule, IModuleMetadata>> LoadedModules { get; set; }
 
 		[ImportMany(typeof(ILogger), AllowRecomposition = true)]
 		private IEnumerable<ILogger> Loggers { get; set; }

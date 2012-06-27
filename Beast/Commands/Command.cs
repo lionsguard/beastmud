@@ -6,7 +6,7 @@ namespace Beast.Commands
 	/// <summary>
 	/// Represents an abstract base class for handling a command.
 	/// </summary>
-	public abstract class Command
+	public abstract class Command : ICommand
 	{
 		public const string KeyName = "Name";
 		public const string KeyDescription = "Description";
@@ -20,7 +20,21 @@ namespace Beast.Commands
 		/// <param name="input">The IInput containing the command information to execute.</param>
 		/// <param name="connection">The connection associated with the executing of the command.</param>
 		/// <returns>A message detailing the results of command execution.</returns>
-		public abstract ResponseMessage Execute(IInput input, IConnection connection);
+		public ResponseMessage Execute(IInput input, IConnection connection)
+		{
+			var response = new ResponseMessage(input);
+			ExecuteOverride(input, connection, response);
+			return response;
+		}
+
+		/// <summary>
+		/// Executes the current command.
+		/// </summary>
+		/// <param name="input">The IInput containing the command information to execute.</param>
+		/// <param name="connection">The connection associated with the executing of the command.</param>
+		/// <param name="response">A ResponseMessage associated with the current input and command.</param>
+		/// <returns>A message detailing the results of command execution.</returns>
+		protected abstract void ExecuteOverride(IInput input, IConnection connection, ResponseMessage response);
 
 		/// <summary>
 		/// Validates the arguments for the command.
@@ -37,7 +51,7 @@ namespace Beast.Commands
 				return false;
 			}
 
-			if (cmd.Metadata.Arguments.Any(arg => !input.Contains(arg)))
+			if (cmd.Metadata.Arguments.Any(arg => !string.IsNullOrEmpty(arg) && !input.Contains(arg)))
 			{
 				errorMessage = string.Format(CommonResources.CommandInvalidArgumentsFormat, cmd.Metadata.Name, cmd.Metadata.Synopsis);
 				return false;
