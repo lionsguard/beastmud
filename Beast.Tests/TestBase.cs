@@ -1,4 +1,5 @@
-﻿using Beast.Net;
+﻿using Beast.Configuration;
+using Beast.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beast.Tests
@@ -22,7 +23,13 @@ namespace Beast.Tests
 			TestContextLogger.TestContext = context;
 
 			_game = Game.Current;
-			_game.Start();
+			_game.Start(new BeastSection
+							{
+								Repository = new RepositoryElement
+								             	{
+								             		Type = typeof(TestRepository).AssemblyQualifiedName
+								             	}
+							});
 
 			Connection = ConnectionManager.Create(new TestContextConnectionFactory(context));
 		}

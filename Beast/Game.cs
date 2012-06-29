@@ -7,7 +7,6 @@ using System.Linq;
 using Beast.Commands;
 using Beast.Configuration;
 using Beast.Data;
-using Beast.IO;
 using Beast.Net;
 using Beast.Security;
 
@@ -63,6 +62,9 @@ namespace Beast
 		[ImportMany(typeof(ILogger), AllowRecomposition = true)]
 		private IEnumerable<ILogger> Loggers { get; set; }
 
+		[ImportMany(typeof(ITypeResolver), AllowRecomposition = true)]
+		private IEnumerable<ITypeResolver> TypeResolvers { get; set; }
+
 		/// <summary>
 		/// Gets a value indicating whether or not the game is currently running.
 		/// </summary>
@@ -98,14 +100,6 @@ namespace Beast
 		}
 
 		#region Start and Stop
-		/// <summary>
-		/// Starts the game and begins the main loop using the default game settings.
-		/// </summary>
-		public void Start()
-		{
-			Start(new BeastSection{Repository = new RepositoryElement{Type = typeof(FileRepository).AssemblyQualifiedName}});
-		}
-
 		/// <summary>
 		/// Starts the game and begins the main loop using the specified configFilePath to load the game settings.
 		/// </summary>
@@ -270,6 +264,32 @@ namespace Beast
 
 			// Process output to clients.
 			ConnectionManager.Flush(); // Send all queued output to the connections.
+		}
+		#endregion
+
+		#region Resolve Types
+		private readonly BeastTypeResolver _baseResolver = new BeastTypeResolver();
+		private readonly Dictionary<string, Type> _cachedTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
+
+		public Type FindType(string name)
+		{
+			Type type;
+			if (_cachedTypes.TryGetValue(name, out type))
+				return type;
+
+			type = _baseResolver.ResolveType(name);
+			if (type == null)
+			{
+				foreach (var resolver in TypeResolvers)
+				{
+					type = resolver.ResolveType(name);
+					if (type != null)
+						break;
+				}
+			}
+
+			_cachedTypes[name] = type;
+			return type;
 		}
 		#endregion
 	}

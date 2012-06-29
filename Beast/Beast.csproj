@@ -48,6 +48,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BeastException.cs" />
     <Compile Include="Behaviors\Behavior.cs" />
     <Compile Include="Behaviors\BehaviorCollection.cs" />
     <Compile Include="Behaviors\IBehavior.cs" />
@@ -80,14 +81,15 @@
     <Compile Include="ExitCollection.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="GameObjectJsonConverter.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="IGameObject.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="IModuleMetadata.cs" />
-    <Compile Include="IO\FileRepository.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Items\Item.cs" />
+    <Compile Include="ITypeResolver.cs" />
     <Compile Include="IUpdatable.cs" />
     <Compile Include="KnownDirection.cs" />
     <Compile Include="Log.cs" />
@@ -116,7 +118,6 @@
     <Compile Include="Net\SocketConnectionFactory.cs" />
     <Compile Include="Net\SocketListener.cs" />
     <Compile Include="Net\NotificationMessage.cs" />
-    <Compile Include="ObjectManager.cs" />
     <Compile Include="Place.cs" />
     <Compile Include="PlaceCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,14 +129,18 @@
     <Compile Include="Security\Cryptography.cs" />
     <Compile Include="Security\DefaultCryptKeyProvider.cs" />
     <Compile Include="Security\EncryptionAlgorithm.cs" />
+    <Compile Include="Security\GenericLogin.cs" />
     <Compile Include="Security\ICryptoKeyProvider.cs" />
+    <Compile Include="Security\Login.cs" />
+    <Compile Include="Security\User.cs" />
+    <Compile Include="Serializer.cs" />
     <Compile Include="Terrain.cs" />
     <Compile Include="TerrainCollection.cs" />
+    <Compile Include="BeastTypeResolver.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="ValueConverter.cs" />
     <Compile Include="WalkTypes.cs" />
     <Compile Include="World.cs" />
-    <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommonResources.resx">

@@ -61,6 +61,15 @@ namespace Beast.Data {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; could not be found when attempting to deserialize an object from the repository. Ensure an Beast.ITypeResolver instance exists that can found the proper type..
+        /// </summary>
+        internal static string DeserializeTypeNotFoundFormat {
+            get {
+                return ResourceManager.GetString("DeserializeTypeNotFoundFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The repository configuration section for a MongoDB repository is invalid. The attributes &apos;connectionString&apos; and &apos;database&apos; are required..
         /// </summary>
         internal static string InvalidRepositoryConfig {

@@ -6,10 +6,8 @@ using Beast.Net;
 
 namespace Beast
 {
-	public class Place
+	public class Place : GameObject
 	{
-		public string Name { get; set; }
-		public string Description { get; set; }
 		public Terrain Terrain { get; set; }
 		public BitVector32 Flags { get; set; }
 		public ExitCollection Exits { get; set; }

@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Beast.Behaviors;
-using Newtonsoft.Json;
 
 namespace Beast
 {
@@ -17,11 +16,13 @@ namespace Beast
 			get { return Get<string>(CommonProperties.Id); }
 			set { Set(CommonProperties.Id, value); }
 		}
+
 		public string Name
 		{
 			get { return Get<string>(CommonProperties.Name); }
 			set { Set(CommonProperties.Name, value); }
 		}
+
 		public string Description
 		{
 			get { return Get<string>(CommonProperties.Description); }
@@ -40,7 +41,6 @@ namespace Beast
 
 		public GameObject()
 		{
-			Id = Game.Current.Repository.GetNextObjectId(this);
 			Behaviors = new BehaviorCollection(this);
 		}
 
@@ -74,6 +74,30 @@ namespace Beast
 				_properties[kvp.Key] = kvp.Value;
 			}
 		}
+
+		public void Merge(IDictionary<string, object> collection, IEnumerable<Property> properties)
+		{
+			foreach (var kvp in collection)
+			{
+				var prop = properties.FirstOrDefault(p => string.Compare(p.Name, kvp.Key, true) == 0);
+				if (prop == null)
+					continue;
+
+				var value = kvp.Value;
+				if (value == null && prop.PropertyType.IsValueType)
+				{
+					value = Activator.CreateInstance(prop.PropertyType);
+				}
+
+				if (value != null && value.GetType() != prop.PropertyType)
+				{
+					value = Convert.ChangeType(value, prop.PropertyType);
+				}
+
+				_properties[prop] = value;
+			}
+		}
+
 		#endregion
 
 		public IEnumerator<KeyValuePair<Property, object>> GetEnumerator()
@@ -88,12 +112,19 @@ namespace Beast
 
 		public override bool Equals(object obj)
 		{
-			return obj is IGameObject && (obj as IGameObject).Id.Equals(Id);
+			return obj is IGameObject && Equals(obj as IGameObject);
+		}
+
+		public bool Equals(IGameObject obj)
+		{
+			if (string.IsNullOrEmpty(obj.Id) || string.IsNullOrEmpty(Id))
+				return base.Equals(obj);
+			return obj.Id.Equals(Id);
 		}
 
 		public override int GetHashCode()
 		{
-			return Id.GetHashCode();
+			return string.IsNullOrEmpty(Id) ? base.GetHashCode() : Id.GetHashCode();
 		}
 
 		public void Update(GameTime gameTime)
@@ -120,27 +151,21 @@ namespace Beast
 		{
 			return string.Concat(Name, Environment.NewLine, Description);
 		}
-	}
 
-	public class GameObjectJsonConverter : JsonConverter
-	{
-		#region Overrides of JsonConverter
-
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		public static T FromTemplate<T>(string templateName, params KeyValuePair<string,object>[] properties) where T : IGameObject
 		{
-			throw new NotImplementedException();
+			return FromTemplate<T>(Game.Current.Repository.GetTemplate(templateName));
 		}
 
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public static T FromTemplate<T>(IGameObject template, params KeyValuePair<string, object>[] properties) where T : IGameObject
 		{
-			throw new NotImplementedException();
-		}
+			if (properties == null)
+				properties = new KeyValuePair<string, object>[0];
 
-		public override bool CanConvert(Type objectType)
-		{
-			return objectType is IGameObject || objectType.IsSubclassOf(typeof (IGameObject)) || objectType.GetInterface(typeof (IGameObject).Name) != null;
+			var obj = Activator.CreateInstance<T>();
+			obj.Merge(template, true);
+			obj.Merge(properties.ToDictionary(p => p.Key, p => p.Value), Property.FindProperties(obj));
+			return obj;
 		}
-
-		#endregion
 	}
 }

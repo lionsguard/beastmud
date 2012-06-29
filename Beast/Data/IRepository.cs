@@ -1,5 +1,6 @@
 ﻿
 using Beast.Configuration;
+using Beast.Security;
 
 namespace Beast.Data
 {
@@ -7,10 +8,12 @@ namespace Beast.Data
 	{
 		void Initialize();
 
-		string GetNextObjectId(IGameObject obj);
-
 		IGameObject GetTemplate(string templateName);
 		void SaveTemplate(IGameObject obj);
+
+		long GetUserCount();
+		User GetUser(Login login);
+		void SaveUser(User user);
 
 		RepositoryElement ToConfig();
 		void FromConfig(RepositoryElement config);

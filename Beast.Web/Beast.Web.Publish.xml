@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="C:\Projects\lionsguard\github\beastmud\release" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="BeastMUD" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="bin/Beast.Net.Http.pdb" publishTime="06/27/2012 15:53:09" />
+    <file relUrl="Content/css/text.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="Content/css/720.min.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="Content/css/960.min.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="bin/System.Web.WebPages.xml" publishTime="12/19/2010 23:59:38" />
+    <file relUrl="Global.asax" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="Views/_ViewStart.cshtml" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="bin/Microsoft.Web.Infrastructure.xml" publishTime="12/20/2010 10:52:36" />
+    <file relUrl="Content/css/1200.min.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="bin/System.Web.WebPages.Administration.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="Scripts/MicrosoftAjax.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="Scripts/modernizr-2.5.3.js" publishTime="06/27/2012 14:46:32" />
+    <file relUrl="Scripts/MicrosoftMvcAjax.debug.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="Scripts/MicrosoftMvcValidation.debug.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="bin/Beast.pdb" publishTime="06/27/2012 15:44:13" />
+    <file relUrl="bin/System.Web.Helpers.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="bin/Beast.dll" publishTime="06/27/2012 15:44:13" />
+    <file relUrl="Content/css/1560.min.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="06/14/2012 15:57:48" />
+    <file relUrl="Content/css/1920.min.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="Views/Shared/_Layout.cshtml" publishTime="06/27/2012 15:42:04" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="12/20/2010 10:52:36" />
+    <file relUrl="packages.config" publishTime="06/27/2012 14:47:19" />
+    <file relUrl="bin/Beast.Web.dll" publishTime="06/27/2012 15:53:11" />
+    <file relUrl="bin/System.Web.WebPages.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="Scripts/jquery.unobtrusive-ajax.min.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="bin/NuGet.Core.dll" publishTime="12/20/2010 13:37:28" />
+    <file relUrl="Views/Home/Index.cshtml" publishTime="06/27/2012 15:35:48" />
+    <file relUrl="bin/WebMatrix.Data.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="bin/System.Web.Razor.xml" publishTime="12/20/2010 10:52:36" />
+    <file relUrl="Scripts/MicrosoftMvcValidation.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="Content/css/reset.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="Scripts/jquery-1.7.2.js" publishTime="06/27/2012 14:46:26" />
+    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="06/14/2012 15:57:48" />
+    <file relUrl="Scripts/MicrosoftMvcAjax.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="Views/Shared/Error.cshtml" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="Scripts/jquery.validate.unobtrusive.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="bin/WebMatrix.WebData.xml" publishTime="12/19/2010 23:59:38" />
+    <file relUrl="Scripts/jquery-1.7.2-vsdoc.js" publishTime="06/27/2012 14:46:26" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="01/05/2011 17:42:16" />
+    <file relUrl="Content/css/2520.min.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="12/20/2010 10:52:36" />
+    <file relUrl="Content/css/mobile.min.css" publishTime="06/27/2012 15:32:57" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="bin/WebMatrix.WebData.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="01/05/2011 15:45:38" />
+    <file relUrl="Content/css/master.css" publishTime="06/27/2012 15:40:48" />
+    <file relUrl="Web.config" publishTime="06/27/2012 15:53:53" />
+    <file relUrl="bin/Beast.Web.pdb" publishTime="06/27/2012 15:53:11" />
+    <file relUrl="Scripts/jquery-1.7.2.min.js" publishTime="06/27/2012 14:46:26" />
+    <file relUrl="Scripts/MicrosoftAjax.debug.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="bin/WebMatrix.Data.xml" publishTime="12/19/2010 23:59:38" />
+    <file relUrl="bin/Beast.Net.Http.dll" publishTime="06/27/2012 15:53:09" />
+    <file relUrl="Scripts/jquery.unobtrusive-ajax.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="Scripts/jquery.validate.unobtrusive.min.js" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="Views/Web.config" publishTime="06/27/2012 14:45:09" />
+    <file relUrl="bin/System.Web.Helpers.xml" publishTime="12/19/2010 23:59:38" />
+  </publishProfile>
+</publishData>

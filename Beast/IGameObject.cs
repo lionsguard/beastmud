@@ -46,6 +46,13 @@ namespace Beast
 		void Merge(IGameObject obj, bool overwriteExisting);
 
 		/// <summary>
+		/// Merges the specified collection into the current object, merging the properties found in the specified collection.
+		/// </summary>
+		/// <param name="collection">The collection of name/value pairs to merge into the current object.</param>
+		/// <param name="properties">A list of Property instances defining which properties will be merged.</param>
+		void Merge(IDictionary<string, object> collection, IEnumerable<Property> properties);
+
+		/// <summary>
 		/// Gets a short descriptive string used to display the object in a message context.
 		/// </summary>
 		/// <returns>A string representing a short description of the object.</returns>
