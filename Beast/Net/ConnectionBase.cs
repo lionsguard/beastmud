@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Beast.Mobiles;
+using Beast.Security;
 
 namespace Beast.Net
 {
@@ -13,7 +14,7 @@ namespace Beast.Net
 
 		public string Id { get; set; }
 		public DateTime LastActivity { get; set; }
-		public object User { get; set; }
+		public User User { get; set; }
 		public Character Character { get; set; }
 
 		protected bool IsClosed { get; set; }

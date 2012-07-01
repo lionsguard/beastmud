@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Beast.Configuration;
 using Beast.Data;
+using Beast.Mobiles;
 using Beast.Security;
 
 namespace Beast.Tests
@@ -9,6 +11,16 @@ namespace Beast.Tests
 	{
 		public void Initialize()
 		{
+		}
+
+		public IEnumerable<Terrain> GetTerrain()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SaveTerrain(Terrain terrain)
+		{
+			throw new NotImplementedException();
 		}
 
 		public IGameObject GetTemplate(string templateName)
@@ -26,12 +38,42 @@ namespace Beast.Tests
 			throw new NotImplementedException();
 		}
 
-		public User GetUser(Login login)
+		public User GetUser(string username)
 		{
 			throw new NotImplementedException();
 		}
 
 		public void SaveUser(User user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Place GetPlace(Unit location)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SavePlace(Place place)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long GetCharacterCount()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<Character> GetCharacters(string userId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Character GetCharacter(string id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SaveCharacter(Character character)
 		{
 			throw new NotImplementedException();
 		}

@@ -6,7 +6,7 @@ namespace Beast
 	/// <summary>
 	/// Represents an interactive game object; an object used explicitly within the game world and updated by the game engine.
 	/// </summary>
-	public interface IGameObject : IUpdatable, IEnumerable<KeyValuePair<Property,object>>
+	public interface IGameObject : IUpdatable, IDictionary<string,object>
 	{
 		/// <summary>
 		/// Gets or sets the unique identifier of the object.
@@ -24,11 +24,9 @@ namespace Beast
 		string Description { get; set; }
 
 		/// <summary>
-		/// Gets or sets a property with the specified name.
+		/// Gets a collection of flags (Boolean properties) for the current object.
 		/// </summary>
-		/// <param name="property">The Property metadata for the property to get or set.</param>
-		/// <returns>The value of the property.</returns>
-		object this[Property property] { get; set; }
+		FlagCollection Flags { get; }
 
 		/// <summary>
 		/// Gets the type cast value of the specified property.
@@ -36,21 +34,14 @@ namespace Beast
 		/// <typeparam name="T">The System.Type of the value to return.</typeparam>
 		/// <param name="property">The property containing the metadata describing the attribute to retrieve.</param>
 		/// <returns>The value of the specified property.</returns>
-		T Get<T>(Property property);
+		T Get<T>(string property);
 
 		/// <summary>
 		/// Merges the specified object with the current object, overwriting existing values if specified.
 		/// </summary>
-		/// <param name="obj">The object containing properties to set on the current object.</param>
+		/// <param name="values">The dictionary containing properties to set on the current object.</param>
 		/// <param name="overwriteExisting">True to overwrite any existing properties, false to leave properties.</param>
-		void Merge(IGameObject obj, bool overwriteExisting);
-
-		/// <summary>
-		/// Merges the specified collection into the current object, merging the properties found in the specified collection.
-		/// </summary>
-		/// <param name="collection">The collection of name/value pairs to merge into the current object.</param>
-		/// <param name="properties">A list of Property instances defining which properties will be merged.</param>
-		void Merge(IDictionary<string, object> collection, IEnumerable<Property> properties);
+		void Merge(IDictionary<string, object> values, bool overwriteExisting);
 
 		/// <summary>
 		/// Gets a short descriptive string used to display the object in a message context.

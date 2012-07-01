@@ -2,11 +2,18 @@
 {
 	public class CommonProperties
 	{
-		public static readonly Property Id = new Property("Id", typeof(string), null);
-		public static readonly Property Name = new Property("Name",typeof(string), null);
-		public static readonly Property Description = new Property("Description", typeof(string), null);
-		public static readonly Property Body = new Property("Body", typeof(BoundProperty<int>), new BoundProperty<int>());
-		public static readonly Property Mind = new Property("Mind", typeof(BoundProperty<int>), new BoundProperty<int>());
-		public static readonly Property IsAtRest = new Property("IsAtRest", typeof(bool), true);
+		public const string Id = "Id";
+		public const string Name = "Name";
+		public const string Description = "Description";
+
+		public const string X = "X";
+		public const string Y = "Y";
+		public const string Z = "Z";
+
+		public const string Body = "Body";
+		public const string Mind = "Mind";
+		public const string IsAtRest = "IsAtRest";
+
+		public const string UserId = "UserId";
 	}
 }

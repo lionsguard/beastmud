@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Beast Command Class</Title>
+			<Shortcut>beastcmd</Shortcut>
+			<Description>Code snippet for a Beast.Commands.Command class.</Description>
+			<Author>Lionsguard Technologies</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>className</ID>
+					<ToolTip>Class Name</ToolTip>
+					<Default>My</Default>
+				</Literal>
+				<Literal>
+					<ID>desc</ID>
+					<ToolTip>Description</ToolTip>
+					<Default></Default>
+				</Literal>
+				<Literal>
+					<ID>synopsis</ID>
+					<ToolTip>Synopsis</ToolTip>
+					<Default></Default>
+				</Literal>
+				<Literal>
+					<ID>aliases</ID>
+					<ToolTip>Aliases</ToolTip>
+					<Default></Default>
+				</Literal>
+				<Literal>
+					<ID>args</ID>
+					<ToolTip>Arguments</ToolTip>
+					<Default></Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+                <![CDATA[#region $className$
+	[Export(typeof(ICommand))]
+	[ExportMetadata(KeyName, "$className$")]
+	[ExportMetadata(KeyDescription, "$desc$")]
+	[ExportMetadata(KeySynopsis, "$synopsis$")]
+	[ExportMetadata(KeyAliases, new []{$aliases$})]
+	[ExportMetadata(KeyArguments, new[] {$args$})]
+	public class $className$Command : Command
+	{
+		protected override void ExecuteOverride(IInput input, IConnection connection, ResponseMessage response)
+		{
+			throw new NotImplementedException();
+		}
+	}
+	#endregion$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

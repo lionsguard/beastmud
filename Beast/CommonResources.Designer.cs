@@ -160,6 +160,24 @@ namespace Beast {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A user account already exists for the username specified..
+        /// </summary>
+        public static string LoginAlreadyExists {
+            get {
+                return ResourceManager.GetString("LoginAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The login credentials supplied are invalid. Please check your username and password and try again..
+        /// </summary>
+        public static string LoginInvalid {
+            get {
+                return ResourceManager.GetString("LoginInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please login to continue playing..
         /// </summary>
         public static string LoginRequired {

@@ -8,5 +8,15 @@
 		public string Name { get; set; }
 		public string Color { get; set; }
 		public WalkTypes WalkType { get; set; }
+
+		public override bool Equals(object obj)
+		{
+			return obj is Terrain && (obj as Terrain).Id.Equals(Id);
+		}
+
+		public override int GetHashCode()
+		{
+			return Id.GetHashCode();
+		}
 	}
 }

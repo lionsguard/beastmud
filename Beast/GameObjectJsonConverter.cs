@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Beast
@@ -17,7 +16,7 @@ namespace Beast
 			writer.WriteStartObject();
 			foreach (var kvp in obj)
 			{
-				writer.WritePropertyName(kvp.Key.Name);
+				writer.WritePropertyName(kvp.Key);
 				serializer.Serialize(writer, kvp.Value);
 			}
 			writer.WriteEndObject();
@@ -30,14 +29,18 @@ namespace Beast
 			if (obj == null)
 				return null;
 
-			// Serialize the reader data into a dictionary.
-			var values = serializer.Deserialize<Dictionary<string, object>>(reader);
-
-			// Find all property definitions.
-			var props = Property.FindProperties(obj);
-			
-			// Set the values on the object.
-			obj.Merge(values, props);
+			while (reader.Read())
+			{
+				if (reader.TokenType == JsonToken.PropertyName)
+				{
+					var name = reader.ReadAsString();
+					var prop = createType.GetProperty(name);
+					if (prop != null)
+						obj[name] = serializer.Deserialize(reader, prop.PropertyType);
+					else
+						obj[name] = serializer.Deserialize(reader);
+				}
+			}
 
 			return obj;
 		}

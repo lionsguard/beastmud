@@ -150,6 +150,12 @@
   <data name="HelpSynopsis" xml:space="preserve">
     <value>SYNOPSIS</value>
   </data>
+  <data name="LoginAlreadyExists" xml:space="preserve">
+    <value>A user account already exists for the username specified.</value>
+  </data>
+  <data name="LoginInvalid" xml:space="preserve">
+    <value>The login credentials supplied are invalid. Please check your username and password and try again.</value>
+  </data>
   <data name="LoginRequired" xml:space="preserve">
     <value>Please login to continue playing.</value>
   </data>

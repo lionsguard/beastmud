@@ -4,7 +4,7 @@ using Beast.Net;
 
 namespace Beast.Mobiles
 {
-	public abstract class Character : Mobile
+	public class Character : Mobile
 	{
 		#region Deltas
 		private readonly Queue<IMessage> _messages = new Queue<IMessage>();

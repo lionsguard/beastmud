@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Beast.Mobiles;
+using Beast.Security;
 
 namespace Beast.Net
 {
@@ -22,7 +23,7 @@ namespace Beast.Net
 		/// <summary>
 		/// Gets or sets the user instance associated with the current connection.
 		/// </summary>
-		object User { get; set; }
+		User User { get; set; }
 
 		/// <summary>
 		/// Gets or sets the character instance associated with the current connection.

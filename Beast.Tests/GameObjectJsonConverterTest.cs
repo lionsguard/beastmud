@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace Beast.Tests
 {
@@ -44,17 +43,16 @@ namespace Beast.Tests
 		//
 		#endregion
 
-		private const string ExpectedJsonFormat = "{0}\"Id\":\"{2}\",\"Name\":\"{3}\",\"Description\":\"{4}\",\"prop1\":{5}{1}";
+		private const string ExpectedJsonFormat = "{0}\"Id\":\"{2}\",\"Name\":\"{3}\",\"Description\":\"{4}\"{1}";
 		private const string Name = "TestObject";
 		private const string Desc = "Test object's description...";
-		private const int Prop1Value = 25;
 
 		[TestMethod()]
 		public void GameObjectJsonSerializationTest()
 		{
 			var id = Guid.NewGuid().ToString();
 
-			var expectedJson = string.Format(ExpectedJsonFormat, "{","}", id, Name, Desc, Prop1Value);
+			var expectedJson = string.Format(ExpectedJsonFormat, "{","}", id, Name, Desc);
 
 			var obj = new GameObject
 			          	{
@@ -62,9 +60,8 @@ namespace Beast.Tests
 			          		Name = Name,
 			          		Description = Desc
 			          	};
-			obj[TestObject.Prop1] = Prop1Value;
 
-			var json = JsonConvert.SerializeObject(obj, new GameObjectJsonConverter());
+			var json = obj.ToJson();
 			TestContext.WriteLine("JSON: {0}", json);
 
 			Assert.AreEqual(json, expectedJson);
@@ -75,21 +72,16 @@ namespace Beast.Tests
 		{
 			var id = Guid.NewGuid().ToString();
 
-			var json = string.Format(ExpectedJsonFormat, "{", "}", id, Name, Desc, Prop1Value);
-			var obj = JsonConvert.DeserializeObject<TestObject>(json, new GameObjectJsonConverter());
-			
-			TestContext.WriteLine("DESERIALIZED OBJECT JSON: {0}", JsonConvert.SerializeObject(obj, new GameObjectJsonConverter()));
+			var json = string.Format(ExpectedJsonFormat, "{", "}", id, Name, Desc);
+			var obj = json.FromJson<GameObject>();
 
 			Assert.IsNotNull(obj);
+			
+			TestContext.WriteLine("DESERIALIZED OBJECT JSON: {0}", obj.ToJson());
+
 			Assert.AreEqual(obj.Id, id);
 			Assert.AreEqual(obj.Name, Name);
 			Assert.AreEqual(obj.Description, Desc);
-			Assert.AreEqual(obj[TestObject.Prop1], Prop1Value);
-		}
-
-		public class TestObject : GameObject
-		{
-			public static readonly Property Prop1 = new Property("prop1", typeof(int), 0);
 		}
 	}
 }

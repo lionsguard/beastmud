@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using Beast.Mobiles;
 using Beast.Net;
 
@@ -8,19 +7,45 @@ namespace Beast
 {
 	public class Place : GameObject
 	{
-		public Terrain Terrain { get; set; }
-		public BitVector32 Flags { get; set; }
-		public ExitCollection Exits { get; set; }
-		public Unit Location { get; set; }
+		#region Terrain
+		public int Terrain
+		{
+			get { return Get<int>(PropertyTerrain); }
+			set { Set(PropertyTerrain, value); }
+		}
+		public static readonly string PropertyTerrain = "Terrain";
+		#endregion
+
+		#region Location
+		private Unit _location = Unit.Empty;
+		public Unit Location
+		{
+			get
+			{
+				if (_location == Unit.Empty)
+				{
+					_location = new Unit(Get<int>(CommonProperties.X), Get<int>(CommonProperties.Y), Get<int>(CommonProperties.Z));
+				}
+				return _location;
+			}
+			set
+			{
+				_location = value;
+				Set(CommonProperties.X, value.X);
+				Set(CommonProperties.Y, value.Y);
+				Set(CommonProperties.Z, value.Z);
+			}
+		}
+		#endregion
+
+		public ExitCollection Exits { get; private set; }
 
 		private readonly Dictionary<string,Mobile> _mobiles = new Dictionary<string, Mobile>();
 
 		public Place()
 		{
-			Flags = new BitVector32();
-			Exits = new ExitCollection();
-			Terrain = Terrain.Empty;
 			Location = Unit.Empty;
+			Exits = new ExitCollection(this);
 		}
 
 		public void Enter(Mobile who, KnownDirection direction)

@@ -90,6 +90,11 @@ namespace Beast
 		/// </summary>
 		public CommandManager Commands { get; private set; }
 
+		/// <summary>
+		/// Gets an object used to validate users and process login information.
+		/// </summary>
+		public UserManager Users { get; private set; }
+
 		private GameClock _clock;
 
 		private List<IModule> _modules = new List<IModule>();
@@ -97,6 +102,7 @@ namespace Beast
 		private Game()
 		{
 			Commands = new CommandManager();
+			Users= new UserManager();
 		}
 
 		#region Start and Stop
@@ -166,7 +172,7 @@ namespace Beast
 				}
 
 				var container = new CompositionContainer(catalog);
-				container.ComposeParts(this, Commands);
+				container.ComposeParts(this, Commands, Users);
 
 				// ====================================================================================
 				// INITIALIZE LOGGING

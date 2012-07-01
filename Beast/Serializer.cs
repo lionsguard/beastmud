@@ -32,7 +32,7 @@ namespace Beast
 		private static JsonSerializer CreateSerializer(JsonSerializerSettings settings)
 		{
 			var serializer = JsonSerializer.Create(settings);
-			serializer.Converters.Add(new GameObjectJsonConverter());
+			//serializer.Converters.Add(new GameObjectJsonConverter());
 			return serializer;
 		}
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
@@ -34,15 +33,14 @@ namespace Beast.Data
 					return BsonSerializer.Deserialize(bsonReader, nominalType, options);
 				}
 
-				var props = Property.FindProperties(obj);
-
 				foreach (var element in doc.Elements)
 				{
-					var name = element.Name;
-					var prop = props.FirstOrDefault(p => string.Compare(p.Name, name, true) == 0);
-					if (prop == null)
+					if (element.Value.IsObjectId)
+					{
+						obj.Id = element.Value.ToString();
 						continue;
-					ReadProperty(element, obj, prop);
+					}
+					ReadProperty(element, obj);
 				}
 
 				return obj;
@@ -55,14 +53,14 @@ namespace Beast.Data
 			}
 		}
 
-		protected virtual void ReadProperty(BsonElement element, IGameObject obj, Property property)
+		protected virtual void ReadProperty(BsonElement element, IGameObject obj)
 		{
 			if (element.Value.IsBsonArray)
 			{
 				var prop = obj.GetType().GetProperty(element.Name);
 				if (prop != null)
 				{
-					obj[property] = BsonSerializer.Deserialize(element.Value.ToJson(), prop.PropertyType);
+					obj[element.Name] = BsonSerializer.Deserialize(element.Value.ToJson(), prop.PropertyType);
 				}
 			}
 			else if (element.Value.IsBsonDocument)
@@ -76,23 +74,26 @@ namespace Beast.Data
 						var serializer = BsonSerializer.LookupSerializer(type);
 						using (var reader = new BsonDocumentReader(element.Value.AsBsonDocument, new BsonDocumentReaderSettings()))
 						{
-							obj[property] = serializer.Deserialize(reader, type, null);
+							obj[element.Name] = serializer.Deserialize(reader, type, null);
 						}
-						//obj[element.Name] = PropertyValue.Create(serializer.Deserialize(element.Value.AsBsonDocument, type));
 					}
 					else
 					{
-						obj[property] = BsonSerializer.Deserialize(element.Value.AsBsonDocument, typeof(IGameObject));
+						var propInfo = obj.GetType().GetProperty(element.Name);
+						if (propInfo != null)
+						{
+							obj[element.Name] = BsonSerializer.Deserialize(element.Value.AsBsonDocument, propInfo.PropertyType);	
+						}
 					}
 				}
 				else
 				{
-					obj[property] = BsonSerializer.Deserialize(element.Value.AsBsonDocument, element.Value.RawValue.GetType());
+					obj[element.Name] = BsonSerializer.Deserialize(element.Value.AsBsonDocument, element.Value.RawValue.GetType());
 				}
 			}
 			else
 			{
-				obj[property] = element.Value.RawValue;
+				obj[element.Name] = element.Value.RawValue;
 			}
 		}
 
@@ -110,10 +111,14 @@ namespace Beast.Data
 				EnsureObjectId(obj);
 
 				bsonWriter.WriteStartDocument();
+				bsonWriter.WriteString("_id", obj.Id);
 				bsonWriter.WriteString("_t", obj.GetType().Name);
 
 				foreach (var kvp in obj)
 				{
+					if (kvp.Key == CommonProperties.Id)
+						continue;
+
 					bsonWriter.WriteName(kvp.Key);
 
 					if (kvp.Value != null)

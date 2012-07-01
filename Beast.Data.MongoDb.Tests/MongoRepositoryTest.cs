@@ -9,9 +9,9 @@ namespace Beast.Data.MongoDb.Tests
     ///</summary>
 	[TestClass()]
 	public class MongoRepositoryTest : RepositoryTestBase
-	{
-		[TestInitialize()]
-		public void InitTest()
+    {
+    	[ClassInitialize()]
+		public static void InitTest(TestContext context)
 		{
 			Repository = new MongoRepository
 			{
@@ -49,6 +49,42 @@ namespace Beast.Data.MongoDb.Tests
 		public void GetTemplateTest()
 		{
 			BaseGetTemplateTest();
+		}
+
+		[TestMethod]
+		public void GetPlaceTest()
+		{
+			BaseGetPlaceTest();
+		}
+
+		[TestMethod]
+		public void SavePlaceTest()
+		{
+			BaseSavePlaceTest();
+		}
+
+		[TestMethod]
+		public void GetTerrainTest()
+		{
+			BaseGetTerrainTest();
+		}
+
+		[TestMethod]
+		public void SaveTerrainTest()
+		{
+			BaseSaveTerrainTest();
+		}
+
+		[TestMethod]
+		public void GetCharacterTest()
+		{
+			BaseGetCharacterTest();
+		}
+
+		[TestMethod]
+		public void SaveCharacterTest()
+		{
+			BaseSaveCharacterTest();
 		}
 	}
 }

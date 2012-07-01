@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace Beast
+﻿namespace Beast
 {
-	public class ExitCollection : IEnumerable<bool>
+	public class ExitCollection : OwnedPropertyCollection<bool>
 	{
-		private readonly Dictionary<KnownDirection, bool> _values;
-
 		public bool this[KnownDirection direction]
 		{
-			get { return _values[direction]; }
-			set { _values[direction] = value; }
+			get { return Get(direction.ToString()); }
+			set { Set(direction.ToString(), value); }
 		}
 
 		public bool North
@@ -74,53 +68,9 @@ namespace Beast
 			set { this[KnownDirection.Down] = value; }
 		}
 
-		public ExitCollection()
+		public ExitCollection(IGameObject owner) 
+			: base(owner, string.Empty)
 		{
-			_values = new Dictionary<KnownDirection, bool>();
-			foreach (var direction in Direction.All)
-			{
-				_values.Add(direction.Value, false);
-			}
-		}
-
-		private List<bool> GetList()
-		{
-			return new List<bool>(new[] {North, South, East, West, Northeast, Northwest, Southeast, Southwest, Up, Down});
-		}
-
-		#region Implementation of IEnumerable
-
-		public IEnumerator<bool> GetEnumerator()
-		{
-			return GetList().GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		#endregion
-
-		public override string ToString()
-		{
-			return string.Join(",", GetList());
-		}
-
-		public static ExitCollection FromString(string values)
-		{
-			var exits = new ExitCollection();
-			var parts = values.Split(',');
-			if (parts.Length <= Enum.GetValues(typeof(KnownDirection)).Length)
-			{
-				for (var i = 0; i < parts.Length; i++)
-				{
-					if (string.IsNullOrEmpty(parts[i]))
-						continue;
-					exits[(KnownDirection) i] = Convert.ToBoolean(parts[i]);
-				}
-			}
-			return exits;
 		}
 	}
 }
