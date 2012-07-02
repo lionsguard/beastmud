@@ -1,0 +1,1 @@
+xcopy %1Beast.Data.MongoDb/bin/Debug/Beast.Data.MongoDb.dll %2 /f /r /y /i

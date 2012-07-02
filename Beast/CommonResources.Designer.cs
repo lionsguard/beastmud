@@ -187,6 +187,15 @@ namespace Beast {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An instance of Beast.IVirtualPathResolver could not be found. Provide an IVirtualPathResolver instance to use virtual paths..
+        /// </summary>
+        public static string VirtualPathResolverNotSet {
+            get {
+                return ResourceManager.GetString("VirtualPathResolverNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no players currently online..
         /// </summary>
         public static string WhoNoPlayers {

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<modules>
+	<module path="Beast.Data.MongoDb\bin\Debug\Beast.Data.MongoDb.dll" />
+	<module path="Beast.Data.MongoDb\bin\Debug\MongoDB.Bson.dll" />
+	<module path="Beast.Data.MongoDb\bin\Debug\MongoDB.Driver.dll" />
+</modules>

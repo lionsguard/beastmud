@@ -1,0 +1,28 @@
+﻿.login-padding {
+	float:left;
+	height: 50%;
+	margin-bottom: -240px;
+}
+.login-container
+{
+	padding: 8px;
+	clear: both;
+	position: relative;
+	width: 364px;
+	height: 240px;
+	margin: 0 auto;
+}
+.login-form
+{
+	border: 1px solid #333333;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
+	padding: 16px;
+	margin-top: 12px;
+	background-color: #282828;
+	color: #CCCCCC;
+}
+
+input[type="text"] {
+	width: 80%;
+}

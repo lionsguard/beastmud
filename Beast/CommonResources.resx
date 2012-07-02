@@ -159,6 +159,9 @@
   <data name="LoginRequired" xml:space="preserve">
     <value>Please login to continue playing.</value>
   </data>
+  <data name="VirtualPathResolverNotSet" xml:space="preserve">
+    <value>An instance of Beast.IVirtualPathResolver could not be found. Provide an IVirtualPathResolver instance to use virtual paths.</value>
+  </data>
   <data name="WhoNoPlayers" xml:space="preserve">
     <value>There are no players currently online.</value>
   </data>

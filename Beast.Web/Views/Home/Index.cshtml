@@ -1,5 +1,37 @@
-﻿@{
-    ViewBag.Title = "BeastMUD";
+﻿@model Beast.Web.Models.LoginData
+@{
+    Layout = null;
 }
 
-<h2>BeastMUD</h2>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>BeastMUD Login</title>
+    @Html.Partial("_Meta")
+    @Html.Partial("_Css")
+    @Html.Partial("_Script")
+	<link href="@Url.Content("~/Content/css/login.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="login-padding"></div>
+	<div class="login-container">
+		<img src="/content/images/beastmud.png" alt="BeastMUD" />
+		<div class="login-form">
+			@if (Model.CanInstall) { 
+			<h3>BeastMUD Installer</h3>
+			<p>BeastMUD requires an Admin account in order to allow editing, building and user management. Enter your admin user details below.</p>
+			}
+			@Html.ValidationSummary()
+			@using (Html.BeginForm()){ 
+				<div>Username</div>
+				<div>@Html.TextBoxFor(o => o.UserName)</div>
+				<div>Password</div>
+				<div>@Html.TextBoxFor(o => o.Password)</div>
+				<div>@Html.CheckBoxFor(o => o.RememberMe) Remember me?</div>
+				<div><input type="submit" value="@(Model.CanInstall ? "Create Admin Account" : "Login")" /></div>
+			}
+		</div>
+	</div>
+</body>
+</html>

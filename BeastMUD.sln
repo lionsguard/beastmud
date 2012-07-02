@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Data.FileSystem", "Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Data.FileSystem.Tests", "Beast.Data.FileSystem.Tests\Beast.Data.FileSystem.Tests.csproj", "{846BD487-45D7-48DC-8EDA-3DEE8CA59499}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{33B35D55-0DC9-41BB-A6D7-7ED3C6E245A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.ModuleCopy", "Beast.ModuleCopy\Beast.ModuleCopy.csproj", "{CE70221E-7952-4E59-B380-C987CECDBEE0}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = BeastMUD.vsmdi
@@ -140,6 +144,16 @@ Global
 		{846BD487-45D7-48DC-8EDA-3DEE8CA59499}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{846BD487-45D7-48DC-8EDA-3DEE8CA59499}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{846BD487-45D7-48DC-8EDA-3DEE8CA59499}.Release|x86.ActiveCfg = Release|Any CPU
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Debug|x86.ActiveCfg = Debug|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Debug|x86.Build.0 = Debug|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Release|Any CPU.ActiveCfg = Release|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Release|Mixed Platforms.Build.0 = Release|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Release|x86.ActiveCfg = Release|x86
+		{CE70221E-7952-4E59-B380-C987CECDBEE0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,5 +168,6 @@ Global
 		{846BD487-45D7-48DC-8EDA-3DEE8CA59499} = {B1AF9EC6-A278-402C-8A7D-079D2216DF79}
 		{DD541545-516F-4717-A3BA-414CCB0D5454} = {E744EE2B-5513-4733-B211-1F4599ED6A3B}
 		{3C0F1EFE-C25A-4355-A489-3113925C8241} = {E744EE2B-5513-4733-B211-1F4599ED6A3B}
+		{CE70221E-7952-4E59-B380-C987CECDBEE0} = {33B35D55-0DC9-41BB-A6D7-7ED3C6E245A0}
 	EndGlobalSection
 EndGlobal

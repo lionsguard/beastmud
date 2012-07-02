@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using Beast.Commands;
 using Beast.Configuration;
@@ -155,7 +156,7 @@ namespace Beast
 					if (config.ModulesDirectory.IsVirtual)
 					{
 						// Using a virtual path
-						throw new NotImplementedException();
+						modulesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, config.ModulesDirectory.Path);
 					}
 
 					if (!string.IsNullOrEmpty(modulesDirectory))
@@ -188,14 +189,18 @@ namespace Beast
 					Repository = config.Repository.ToRepository();
 				}
 				if (Repository != null)
+				{
+					if (config.Repository != null)
+						Repository.FromConfig(config.Repository);
 					Repository.Initialize();
+				}
 				Log.Info("Initialized repository {0}", Repository);
 
 				// Crypto services
 				ICryptoKeyProvider cryptoKeyProvider = null;
 				if (!string.IsNullOrEmpty(config.CryptoKeyProviderType))
 				{
-					var cryptoType = Type.GetType(config.CryptoKeyProviderType, false, true);
+					var cryptoType = FindType(config.CryptoKeyProviderType);
 					if (cryptoType != null)
 						cryptoKeyProvider = Activator.CreateInstance(cryptoType) as ICryptoKeyProvider;
 				}
@@ -284,7 +289,7 @@ namespace Beast
 				return type;
 
 			type = _baseResolver.ResolveType(name);
-			if (type == null)
+			if (type == null && TypeResolvers != null)
 			{
 				foreach (var resolver in TypeResolvers)
 				{

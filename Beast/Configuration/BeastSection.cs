@@ -3,6 +3,22 @@ using System.Xml;
 
 namespace Beast.Configuration
 {
+	/// <summary>
+	/// Defines a beast configuration section.
+	/// </summary>
+	/// <remarks>
+	/// <para>
+	/// Sample Configuration File:
+	/// </para>
+	/// <para>
+	/// <![CDATA[
+	/// <beast install="true">
+	///	  <modulesDirectory path="modules" isVirtual="true"/>
+	///	  <repository type="Beast.Data.MongoRepository, Beast.Data.MongoDb, Version=0.1, Culture=neutral, PublicKeyToken=null" connectionString="mongodb://localhost/beast" database="beast" />
+	///	</beast>
+	/// ]]>
+	/// </para>
+	/// </remarks>
 	public class BeastSection : ConfigurationSection
 	{
 		public const string KeyRoot = "beast";
@@ -12,6 +28,7 @@ namespace Beast.Configuration
 		public const string KeyCryptoKeyProviderType = "cryptoKeyProviderType";
 		public const string KeyConnectionTimeout = "connectionTimeout";
 		public const string KeyGameStepInterval = "gameStepInterval";
+		public const string KeyInstall = "install";
 
 		[ConfigurationProperty(KeyRepository, IsRequired = true)]
 		public RepositoryElement Repository
@@ -53,6 +70,16 @@ namespace Beast.Configuration
 		{
 			get { return (double)base[KeyGameStepInterval]; }
 			set { base[KeyGameStepInterval] = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether or not the game installer can be run.
+		/// </summary>
+		[ConfigurationProperty(KeyInstall, DefaultValue = false)]
+		public bool Install
+		{
+			get { return (bool)base[KeyInstall]; }
+			set { base[KeyInstall] = value; }
 		}
 
 		public void WriteXml(XmlWriter writer)
