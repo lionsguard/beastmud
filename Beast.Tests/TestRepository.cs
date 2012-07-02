@@ -43,6 +43,11 @@ namespace Beast.Tests
 			throw new NotImplementedException();
 		}
 
+		public User GetUserById(string id)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void SaveUser(User user)
 		{
 			throw new NotImplementedException();

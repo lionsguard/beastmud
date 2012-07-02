@@ -5,24 +5,36 @@ using Beast.Web.Models;
 
 namespace Beast.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BeastController
     {
+		[Authorize]
+		public ActionResult Index()
+		{
+			return View(new DashboardData
+			            	{
+			            		UserCount = Game.Current.Repository.GetUserCount(),
+								CharacterCount = Game.Current.Repository.GetCharacterCount()
+			            	});
+		}
+
 		[HttpGet]
-        public ActionResult Index()
+        public ActionResult Login()
         {
             return View(new LoginData
                         	{
+								ReturnUrl = Request.Params["returnUrl"],
                         		CanInstall = CanInstall()
                         	});
         }
 
 		[HttpPost]
-		public ActionResult Index(LoginData data)
+		public ActionResult Login(LoginData data)
 		{
 			data.CanInstall = CanInstall();
 			if (ModelState.IsValid)
 			{
 				var input = new JsonInput { { "username", data.UserName }, { "password", data.Password } };
+				input.CommandName = "login";
 				if (data.CanInstall)
 				{
 					User user;
@@ -53,8 +65,27 @@ namespace Beast.Web.Controllers
 				}
 
 				// Attempt to login.
+				var response = ProcessInput(input);
+				if (response != null && response.Success)
+				{
+					Authorize((string) response.Data, data.RememberMe);
+
+					// Successful login
+					if (!string.IsNullOrEmpty(data.ReturnUrl))
+						return Redirect(data.ReturnUrl);
+					return RedirectToAction("index");
+				}
+
+				// Login failed
+				ModelState.AddModelError("Login", response != null ? response.Error : CommonResources.LoginInvalid);
 			}
 			return View(data);
+		}
+
+		public ActionResult Logout()
+		{
+			SignOut();
+			return RedirectToAction("login");
 		}
 
 		private static bool CanInstall()

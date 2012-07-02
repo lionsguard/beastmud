@@ -100,6 +100,8 @@
     <Compile Include="Mobiles\Mobile.cs" />
     <Compile Include="ModulePriority.cs" />
     <Compile Include="Net\ByteExtensions.cs" />
+    <Compile Include="Net\ConnectionFactory.cs" />
+    <Compile Include="Net\IFormatterConnection.cs" />
     <Compile Include="Net\ResponseMessage.cs" />
     <Compile Include="Net\ConnectionBase.cs" />
     <Compile Include="Net\ConnectionManager.cs" />
@@ -116,7 +118,6 @@
     <Compile Include="Net\NotificationCategories.cs" />
     <Compile Include="Net\PropertyDeltaMessage.cs" />
     <Compile Include="Net\SocketConnection.cs" />
-    <Compile Include="Net\SocketConnectionFactory.cs" />
     <Compile Include="Net\SocketListener.cs" />
     <Compile Include="Net\NotificationMessage.cs" />
     <Compile Include="OwnedPropertyCollection.cs" />

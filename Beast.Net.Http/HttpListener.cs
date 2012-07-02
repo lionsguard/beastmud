@@ -4,35 +4,34 @@ namespace Beast.Net
 {
 	public class HttpListener : IHttpHandler
 	{
-		public const string KeyConnectionId = "connectionId";
-
 		public void ProcessRequest(HttpContext context)
 		{
-			var connId = context.Request.Params[KeyConnectionId];
+			var input = JsonInput.FromRequestParams(context.Request.Params);
+			var connId = context.Request.Params[HttpConstants.ConnectionId];
 			IConnection conn;
 			if (string.IsNullOrEmpty(connId))
-				conn = ConnectionManager.Create(new HttpConnectionFactory<StandardHttpConnection>(new JsonMessageFormatter()));
+				conn = ConnectionManager.Create(HttpConnection.Factory);
 			else
 				conn = ConnectionManager.Find(connId);
 
 			if (conn == null)
 			{
-				// TODO: Error
+				var formatter = new JsonMessageFormatter();
+				context.Response.Write(formatter.FormatMessage(new ResponseMessage(input).Invalidate(CommonResources.LoginRequired)));
+				context.Response.End();
 				return;
 			}
 
-			// Process input
-			conn.EnqueueInput(JsonInput.FromRequestParams(context.Request.Params));
-
-			// Process any messages queued for this connection.
-			if (conn is StandardHttpConnection)
+			if (conn is HttpConnection)
 			{
-				var messages = (conn as StandardHttpConnection).DequeueMessages();
-				foreach (var message in messages)
-				{
-					context.Response.Write(message);
-				}
+				(conn as HttpConnection).ProcessInput(input, context.Response);
 			}
+			else
+			{
+				// Process input for an IConnection instance.
+				conn.EnqueueInput(input);	
+			}
+			context.Response.End();
 		}
 
 		public bool IsReusable

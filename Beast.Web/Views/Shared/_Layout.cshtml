@@ -10,8 +10,18 @@
 </head>
 
 <body>
-	<div class="container_12">
+	<header><img src="/content/images/beastmud.png" alt="BeastMUD" /></header>
+	<nav>
+		<ul>
+			<li>@Html.ActionLink("Editor", "index", "editor")</li>
+			<li>@Html.ActionLink("Users", "index", "users")</li>
+			<li>@Html.ActionLink("Dashboard", "index", "home")</li>
+			<li>@Html.ActionLink("Logout", "logout", "home")</li>
+		</ul>
+	</nav>
+	<div class="content">
 		@RenderBody()
 	</div>
+	<footer>&copy; 2007 - @DateTime.Now.Year Lionsguard Technologies, LLC</footer>
 </body>
 </html>

@@ -7,13 +7,13 @@ namespace Beast.Net
 	public class SocketListener
 	{
 		private Socket _listener;
-		private SocketConnectionFactory _factory;
+		private ConnectionFactory<SocketConnection, byte[]> _factory;
 		private Action<IConnection> _onNewConnection;
 
 		public void Start(IPEndPoint endPoint, IMessageFormatter<byte[]> messageFormatter, Action<IConnection> onNewConnection)
 		{
 			_onNewConnection = onNewConnection;
-			_factory = new SocketConnectionFactory(messageFormatter);
+			_factory = new ConnectionFactory<SocketConnection, byte[]>(messageFormatter);
 
 			_listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			_listener.Bind(endPoint);

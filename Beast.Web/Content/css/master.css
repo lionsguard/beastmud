@@ -62,3 +62,37 @@ input[type="button"], input[type="submit"]
 	border: 1px solid #FF0000;
 	background-color: #FFCCFF;
 }
+
+header {
+}
+
+nav {
+	background-color:#282828;
+	color: #CCCCCC;
+}
+nav ul {
+	display: inline;
+}
+nav ul li {
+	display: inline;
+}
+nav a, nav a:visited {
+	color: #CCCCCC;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: larger;
+}
+nav a:hover {
+	color: #fff;
+}
+
+footer
+{
+	font-size: smaller;
+	color: #808080;
+	padding: 4px;
+}
+
+.content {
+	padding:8px;	
+}

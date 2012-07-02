@@ -101,6 +101,11 @@ namespace Beast.Data
 								   Query.EQ(PropertyNames.UserName.ColumnName, username)));
 		}
 
+		public User GetUserById(string id)
+		{
+			return GetMongoObject<User>(Collections.Users, id);
+		}
+
 		public void SaveUser(User user)
 		{
 			foreach (var login in user.Logins)

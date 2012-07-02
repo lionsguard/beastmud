@@ -115,6 +115,11 @@ namespace Beast.Data
 			return loginData == null ? null : Load<User>(Users, loginData);
 		}
 
+		public User GetUserById(string id)
+		{
+			return Load<User>(Users, id);
+		}
+
 		public void SaveUser(User user)
 		{
 			if (string.IsNullOrEmpty(user.Id))

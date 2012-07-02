@@ -11,5 +11,6 @@ namespace Beast.Web.Models
 		public string Password { get; set; }
 		public bool RememberMe { get; set; }
 		public bool CanInstall { get; set; }
+		public string ReturnUrl { get; set; }
 	}
 }

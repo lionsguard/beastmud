@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Beast.Net
 {
-	public class SocketConnection : ConnectionBase
+	public class SocketConnection : ConnectionBase, IFormatterConnection<byte[]>
 	{
 		public const int ReceiveBufferSize = 1024;
 		public static readonly byte[] CommandTerminator = Encoding.ASCII.GetBytes(Environment.NewLine);
@@ -17,10 +17,7 @@ namespace Beast.Net
 		public IMessageFormatter<byte[]> MessageFormatter { get; set; }
 		public Socket Socket { get; private set; }
 
-		public SocketConnection(IMessageFormatter<byte[]> formatter)
-		{
-			MessageFormatter = formatter;
-		}
+		public IMessageFormatter<byte[]> Formatter { get; set; }
 
 		public void Manage(Socket socket)
 		{

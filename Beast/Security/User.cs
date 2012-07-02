@@ -12,6 +12,7 @@ namespace Beast.Security
 
 		public User()
 		{
+			DateCreated = DateTime.UtcNow;
 			Logins = new List<Login>();
 			AccessLevel = UserAccessLevel.Player;
 		}

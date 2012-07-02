@@ -62,10 +62,13 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\EditorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DashboardData.cs" />
     <Compile Include="Models\LoginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -106,10 +109,13 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Shared\_Meta.cshtml" />
     <Content Include="Views\Shared\_Css.cshtml" />
     <Content Include="Views\Shared\_Script.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Editor\Index.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\WebMatrix.WebData.xml" />
     <None Include="_bin_deployableAssemblies\WebMatrix.WebData.dll" />
@@ -138,6 +144,10 @@
     <ProjectReference Include="..\Beast.Net.Http\Beast.Net.Http.csproj">
       <Project>{0B34C429-9C3D-43EF-880A-BC22972B1574}</Project>
       <Name>Beast.Net.Http</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Beast.Net.Mvc\Beast.Net.Mvc.csproj">
+      <Project>{9997EFE2-CD67-463B-89F5-C943F78EFD5A}</Project>
+      <Name>Beast.Net.Mvc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Beast\Beast.csproj">
       <Project>{8017C3D1-1546-4C16-8A5B-B5F00928F2D2}</Project>

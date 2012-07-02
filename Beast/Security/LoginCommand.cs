@@ -20,6 +20,7 @@ namespace Beast.Security
 				response.Invalidate(CommonResources.LoginInvalid);
 			}
 
+			response.Data = user.Id;
 			connection.User = user;
 		}
 	}

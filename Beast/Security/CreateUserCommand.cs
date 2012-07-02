@@ -34,6 +34,7 @@ namespace Beast.Security
 
 			user.Logins.Add(login);
 			Game.Current.Repository.SaveUser(user);
+			response.Data = user.Id;
 			connection.User = user;
 		}
 	}
