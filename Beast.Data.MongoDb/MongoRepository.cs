@@ -63,10 +63,6 @@ namespace Beast.Data
 			var options = IndexOptions.SetUnique(true);
 			MongoDatabase.GetCollection<IGameObject>(Collections.Templates).EnsureIndex(keys, options);
 
-			keys = IndexKeys.Ascending(PropertyNames.X.ColumnName, PropertyNames.Y.ColumnName, PropertyNames.Z.ColumnName);
-			options = IndexOptions.SetUnique(true);
-			MongoDatabase.GetCollection<Place>(Collections.Places).EnsureIndex(keys, options);
-
 			keys = IndexKeys.Ascending(PropertyNames.UserId.ColumnName);
 			MongoDatabase.GetCollection<Character>(Collections.Characters).EnsureIndex(keys);
 		}
@@ -137,18 +133,14 @@ namespace Beast.Data
 			return GetMongoObjectCount<Place>(Collections.Places);
 		}
 
-		public Place GetPlace(Unit location)
+		public Place GetPlace(string id)
 		{
-			return GetMongoObject<Place>(Collections.Places, Query.And(Query.EQ(PropertyNames.X.ColumnName, location.X),
-			                                                           Query.EQ(PropertyNames.Y.ColumnName, location.Y),
-			                                                           Query.EQ(PropertyNames.Z.ColumnName, location.Z)));
+			return GetMongoObject<Place>(Collections.Places, id);
 		}
 
 		public void SavePlace(Place place)
 		{
-			SaveMongoObject(place, Collections.Places, p => Query.And(Query.EQ(PropertyNames.X.ColumnName, p.Location.X),
-				Query.EQ(PropertyNames.Y.ColumnName, p.Location.Y),
-				Query.EQ(PropertyNames.Z.ColumnName, p.Location.Z)));
+			SaveMongoObject(place, Collections.Places);
 		}
 
 		public long GetCharacterCount()
@@ -260,9 +252,6 @@ namespace Beast.Data
 			public static readonly PropertyName Name = new PropertyName(CommonProperties.Name);
 			public static readonly PropertyName Logins = new PropertyName("Logins");
 			public static readonly PropertyName UserName = new PropertyName("UserName");
-			public static readonly PropertyName X = new PropertyName(CommonProperties.X);
-			public static readonly PropertyName Y = new PropertyName(CommonProperties.Y);
-			public static readonly PropertyName Z = new PropertyName(CommonProperties.Z);
 			public static readonly PropertyName UserId = new PropertyName("UserId");
 		}
 		#endregion

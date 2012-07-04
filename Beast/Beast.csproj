@@ -152,7 +152,6 @@
     <Compile Include="Terrain.cs" />
     <Compile Include="TerrainCollection.cs" />
     <Compile Include="BeastTypeResolver.cs" />
-    <Compile Include="Unit.cs" />
     <Compile Include="ValueConverter.cs" />
     <Compile Include="WalkTypes.cs" />
     <Compile Include="World.cs" />

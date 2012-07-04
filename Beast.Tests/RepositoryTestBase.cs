@@ -18,12 +18,11 @@ namespace Beast.Tests
 		private const string TemplateName = "TestTemplate";
 		private const string TemplateDesc = "Test template description";
 
+		private const string PlaceId = "E2AECB42-7C0B-4640-AFA2-F99EF13F2578";
 		private const string PlaceName = "TestPlace";
-		private static readonly Unit PlaceLocation = new Unit(1, 1, 1);
 		private const string PlaceDesc = "This is the description for the test place.";
 
 		private const string CharName = "Character1";
-		private static readonly Unit CharPosition = new Unit(3,2,1);
 
 		private const string UserId = "355D7BAA-9CD6-4B5A-AA91-4486E2AF6589";
 
@@ -91,24 +90,21 @@ namespace Beast.Tests
 
 		protected void BaseGetPlaceTest()
 		{
-			var place = Places.GetPlace(PlaceLocation);
+			var place = Places.GetPlace(PlaceId);
 			Assert.IsNotNull(place);
 			Assert.AreEqual(place.Name, PlaceName);
 			Assert.AreEqual(place.Description, PlaceDesc);
 			Assert.AreEqual(place.Terrain, 1);
-			Assert.IsTrue(place.Exits.North);
-			Assert.IsTrue(place.Exits.South);
 		}
 
 		protected void BaseSavePlaceTest()
 		{
 			var place = new Place
 			            	{
+								Id = PlaceId,
 			            		Name = PlaceName,
 			            		Description = PlaceDesc,
-			            		Location = PlaceLocation,
 			            		Terrain = 1,
-			            		Exits = {North = true, South = true}
 			            	};
 			Places.SavePlace(place);
 			Assert.IsNotNull(place.Id);
@@ -154,8 +150,7 @@ namespace Beast.Tests
 		{
 			var character = new Character
 			                	{
-									Name = CharName,
-									Position = CharPosition
+									Name = CharName
 			                	};
 			character[CommonProperties.UserId] = UserId;
 			Characters.SaveCharacter(character);
@@ -163,7 +158,6 @@ namespace Beast.Tests
 			Assert.IsNotNull(character.Id);
 
 			Assert.AreEqual(character.Name, CharName);
-			Assert.AreEqual(character.Position, CharPosition);
 		}
 	}
 }

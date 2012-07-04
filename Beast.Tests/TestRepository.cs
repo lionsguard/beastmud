@@ -71,7 +71,7 @@ namespace Beast.Tests
 			throw new NotImplementedException();
 		}
 
-		public Place GetPlace(Unit location)
+		public Place GetPlace(string id)
 		{
 			throw new NotImplementedException();
 		}

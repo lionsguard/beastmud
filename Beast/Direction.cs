@@ -7,13 +7,11 @@ namespace Beast
 	public struct Direction
 	{
 		public KnownDirection Value;
-		public Unit Unit;
 		public List<string> Aliases;
 
-		public Direction(KnownDirection value, Unit unit, params string[] aliases)
+		public Direction(KnownDirection value, params string[] aliases)
 		{
 			Value = value;
-			Unit = unit;
 			Aliases = new List<string>(aliases);
 		}
 
@@ -61,51 +59,51 @@ namespace Beast
 		#region Directions
 		public static Direction Void
 		{
-			get { return new Direction(KnownDirection.Void, new Unit(0, 0, 0)); }
+			get { return new Direction(KnownDirection.Void); }
 		}
 		public static Direction North
 		{
-			get{return new Direction(KnownDirection.North, new Unit(0, -1, 0));}
+			get{return new Direction(KnownDirection.North, "n");}
 		}
 		public static Direction South
 		{
-			get { return new Direction(KnownDirection.South, new Unit(0, 1, 0)); }
+			get { return new Direction(KnownDirection.South, "s"); }
 		}
 		public static Direction East
 		{
-			get { return new Direction(KnownDirection.East, new Unit(1, 0, 0)); }
+			get { return new Direction(KnownDirection.East, "e"); }
 		}
 		public static Direction West
 		{
-			get { return new Direction(KnownDirection.West, new Unit(-1, 0, 0)); }
+			get { return new Direction(KnownDirection.West, "w"); }
 		}
 		public static Direction Northeast
 		{
-			get { return new Direction(KnownDirection.Northeast, new Unit(1, -1, 0)); }
+			get { return new Direction(KnownDirection.Northeast,"ne"); }
 		}
 		public static Direction Northwest
 		{
-			get { return new Direction(KnownDirection.Northwest, new Unit(-1, -1, 0)); }
+			get { return new Direction(KnownDirection.Northwest, "nw"); }
 		}
 		public static Direction Southeast
 		{
-			get { return new Direction(KnownDirection.Southeast, new Unit(1, 1, 0)); }
+			get { return new Direction(KnownDirection.Southeast, "se"); }
 		}
 		public static Direction Southwest
 		{
-			get { return new Direction(KnownDirection.Southwest, new Unit(-1, 1, 0)); }
+			get { return new Direction(KnownDirection.Southwest, "sw"); }
 		}
 		public static Direction Up
 		{
-			get { return new Direction(KnownDirection.Up, new Unit(0, 0, 1)); }
+			get { return new Direction(KnownDirection.Up); }
 		}
 		public static Direction Down
 		{
-			get { return new Direction(KnownDirection.Down, new Unit(0, 0, -1)); }
+			get { return new Direction(KnownDirection.Down); }
 		}
 		public static Direction Enter
 		{
-			get { return new Direction(KnownDirection.Enter, new Unit(0, 0, 0)); }
+			get { return new Direction(KnownDirection.Enter); }
 		}
 		#endregion
 

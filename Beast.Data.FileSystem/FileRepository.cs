@@ -27,7 +27,6 @@ namespace Beast.Data
 		public const string FileExt = ".beast";
 		public const string IndexFileExt = ".index";
 		public const string TerrainFileName = "terrain";
-		public const string PlaceFileNameFormat = "{0}_{1}_{2}";
 		public const string CharacterIndexFileName = "characters";
 
 		[Import(ConfigKeys.Path)]
@@ -152,16 +151,16 @@ namespace Beast.Data
 			return Count(Places);
 		}
 
-		public Place GetPlace(Unit location)
+		public Place GetPlace(string id)
 		{
-			return Load<Place>(Places, GetPlaceFileName(location));
+			return Load<Place>(Places, id);
 		}
 
 		public void SavePlace(Place place)
 		{
 			if (string.IsNullOrEmpty(place.Id))
 				place.Id = Guid.NewGuid().ToString();
-			Save(Places, GetPlaceFileName(place.Location), place);
+			Save(Places, place.Id, place);
 		}
 
 		public long GetCharacterCount()
@@ -196,11 +195,6 @@ namespace Beast.Data
 			if (!userInfo.Chars.Contains(character.Id))
 				userInfo.Chars.Add(character.Id);
 			Save(CharactersUsers, userId, userInfo);
-		}
-
-		private static string GetPlaceFileName(Unit location)
-		{
-			return string.Format(PlaceFileNameFormat, location.X, location.Y, location.Z);
 		}
 
 		#region Nested Classes

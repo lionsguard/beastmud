@@ -8,7 +8,7 @@ namespace Beast.Data
 		void SaveTerrain(Terrain terrain);
 
 		long GetPlaceCount();
-		Place GetPlace(Unit location);
+		Place GetPlace(string id);
 		void SavePlace(Place place);
 	}
 }

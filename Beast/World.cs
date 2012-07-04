@@ -18,10 +18,34 @@ namespace Beast
 		}
 
 		/// <summary>
+		/// Gets a collection of current loaded places.
+		/// </summary>
+		public static PlaceCollection Places { get; private set; }
+
+		/// <summary>
 		/// Initializes the game world.
 		/// </summary>
 		internal static void Initialize()
 		{
+			Places = new PlaceCollection();
 		}
+
+		#region Place Methods
+		public static Place GetPlace(string id)
+		{
+			if (!Places.ContainsKey(id))
+			{
+				var place = Game.Current.Repository.GetPlace(id);
+				if (place != null)
+					Places[place.Id] = place;
+			}
+			return Places[id];
+		}
+		public static void SavePlace(Place place)
+		{
+			Game.Current.Repository.SavePlace(place);
+			Places[place.Id] = place;
+		}
+		#endregion
 	}
 }

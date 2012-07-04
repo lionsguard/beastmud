@@ -103,9 +103,9 @@ namespace Beast.Data
 			return Places.GetPlaceCount();
 		}
 
-		public Place GetPlace(Unit location)
+		public Place GetPlace(string id)
 		{
-			return Places.GetPlace(location);
+			return Places.GetPlace(id);
 		}
 
 		public void SavePlace(Place place)

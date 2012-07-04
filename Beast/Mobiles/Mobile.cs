@@ -5,27 +5,17 @@ namespace Beast.Mobiles
 {
 	public abstract class Mobile : GameObject
 	{
-		#region Position
-		private Unit _position = Unit.Empty;
-		public Unit Position
+		public Place Place
 		{
-			get
-			{
-				if (_position == Unit.Empty)
-				{
-					_position = new Unit(Get<int>(CommonProperties.X), Get<int>(CommonProperties.Y), Get<int>(CommonProperties.Z));
-				}
-				return _position;
-			}
+			get { return World.GetPlace(Get<string>(CommonProperties.PlaceId)); }
 			set
 			{
-				_position = value;
-				Set(CommonProperties.X, value.X);
-				Set(CommonProperties.Y, value.Y);
-				Set(CommonProperties.Z, value.Z);
+				if (value != null && string.IsNullOrEmpty(value.Id))
+					World.SavePlace(value);
+
+				Set(CommonProperties.PlaceId, value != null ? value.Id : null);
 			}
 		}
-		#endregion
 
 		public virtual void EnqueueMessages(params IMessage[] messages)
 		{

@@ -1,12 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Beast
 {
-	public class PlaceCollection : Dictionary<Unit, Place>
+	public class PlaceCollection : Dictionary<string, Place>
 	{
+		public PlaceCollection()
+			: base(StringComparer.InvariantCultureIgnoreCase)
+		{
+			
+		}
+
 		public void Add(Place place)
 		{
-			Add(place.Location, place);
+			Add(place.Id, place);
 		}
 	}
 }
