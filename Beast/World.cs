@@ -1,51 +1,27 @@
 ﻿
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Beast
 {
 	/// <summary>
-	/// Represents in game world data including zones, places, objects and mobiles.
+	/// Represents active world data including places, objects and mobiles.
 	/// </summary>
-	public class World : IEnumerable<Place>
+	public static class World
 	{
-		private readonly Dictionary<Unit, Place> _places = new Dictionary<Unit, Place>();
-
-		public Place this[Unit location]
+		private static List<Terrain> _terrain;
+		/// <summary>
+		/// Gets a list of the current terrain loaded into the active world.
+		/// </summary>
+		public static IEnumerable<Terrain> Terrain
 		{
-			get 
-			{ 
-				Place place;
-				_places.TryGetValue(location, out place);
-				return place;
-			}
-		}
-
-		public Place this[int x, int y, int z]
-		{
-			get { return this[new Unit(x, y, z)]; }
+			get { return _terrain ?? (_terrain = new List<Terrain>(Game.Current.Repository.GetTerrain())); }
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the World class.
+		/// Initializes the game world.
 		/// </summary>
-		internal World()
+		internal static void Initialize()
 		{
-			
 		}
-
-		#region Implementation of IEnumerable
-
-		public IEnumerator<Place> GetEnumerator()
-		{
-			return _places.Values.GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		#endregion
 	}
 }

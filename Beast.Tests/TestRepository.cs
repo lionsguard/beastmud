@@ -1,15 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using Beast.Configuration;
+using System.ComponentModel.Composition;
 using Beast.Data;
 using Beast.Mobiles;
 using Beast.Security;
 
 namespace Beast.Tests
 {
-	public class TestRepository : IRepository
+	[Export(typeof(IUserRepository))]
+	[Export(typeof(ITemplateRepository))]
+	[Export(typeof(IPlaceRepository))]
+	[Export(typeof(ICharacterRepository))]
+	public class TestRepository : IUserRepository, ITemplateRepository, IPlaceRepository, ICharacterRepository
 	{
 		public void Initialize()
+		{
+		}
+
+		public void Shutdown()
 		{
 		}
 
@@ -19,6 +27,11 @@ namespace Beast.Tests
 		}
 
 		public void SaveTerrain(Terrain terrain)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long GetTemplateCount()
 		{
 			throw new NotImplementedException();
 		}
@@ -53,6 +66,11 @@ namespace Beast.Tests
 			throw new NotImplementedException();
 		}
 
+		public long GetPlaceCount()
+		{
+			throw new NotImplementedException();
+		}
+
 		public Place GetPlace(Unit location)
 		{
 			throw new NotImplementedException();
@@ -81,18 +99,6 @@ namespace Beast.Tests
 		public void SaveCharacter(Character character)
 		{
 			throw new NotImplementedException();
-		}
-
-		public RepositoryElement ToConfig()
-		{
-			return new RepositoryElement
-			       	{
-			       		Type = GetType().AssemblyQualifiedName
-			       	};
-		}
-
-		public void FromConfig(RepositoryElement config)
-		{
 		}
 	}
 }

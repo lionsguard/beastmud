@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using Beast.Configuration;
 using Beast.Mobiles;
 using Beast.Security;
 using Newtonsoft.Json;
 
 namespace Beast.Data
 {
-	public class FileRepository : IRepository
+	[Export(typeof(IUserRepository))]
+	[Export(typeof(ITemplateRepository))]
+	[Export(typeof(IPlaceRepository))]
+	[Export(typeof(ICharacterRepository))]
+	public class FileRepository : IUserRepository, ITemplateRepository, IPlaceRepository, ICharacterRepository
 	{
-		public static readonly ConfigurationProperty ConfigKeyPath = new ConfigurationProperty("path", typeof(string));
 		private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings{TypeNameHandling = TypeNameHandling.Objects};
 
 		public const string Places = "places";
@@ -28,6 +30,7 @@ namespace Beast.Data
 		public const string PlaceFileNameFormat = "{0}_{1}_{2}";
 		public const string CharacterIndexFileName = "characters";
 
+		[Import(ConfigKeys.Path)]
 		public string DirectoryPath { get; set; }
 
 		private List<Terrain> _terrain; 
@@ -61,8 +64,16 @@ namespace Beast.Data
 				Directory.CreateDirectory(GetDirectory(directory));
 			File.WriteAllText(GetFileName(directory, name), obj.ToJson(JsonSettings));
 		}
+		private long Count(string directory)
+		{
+			return Directory.GetFiles(GetDirectory(directory), string.Concat("*", FileExt)).Length;
+		}
 
 		public void Initialize()
+		{
+		}
+
+		public void Shutdown()
 		{
 		}
 
@@ -92,6 +103,11 @@ namespace Beast.Data
 			Save(Game, TerrainFileName, _terrain);
 		}
 
+		public long GetTemplateCount()
+		{
+			return Count(Templates);
+		}
+
 		public IGameObject GetTemplate(string templateName)
 		{
 			return Load<GameObject>(Templates, templateName);
@@ -106,7 +122,7 @@ namespace Beast.Data
 
 		public long GetUserCount()
 		{
-			return Directory.GetFiles(GetDirectory(Users), string.Concat("*", FileExt)).Length;
+			return Count(Users);
 		}
 
 		public User GetUser(string username)
@@ -131,6 +147,11 @@ namespace Beast.Data
 			}
 		}
 
+		public long GetPlaceCount()
+		{
+			return Count(Places);
+		}
+
 		public Place GetPlace(Unit location)
 		{
 			return Load<Place>(Places, GetPlaceFileName(location));
@@ -145,7 +166,7 @@ namespace Beast.Data
 
 		public long GetCharacterCount()
 		{
-			return Directory.GetFiles(GetDirectory(Characters), string.Concat("*", FileExt)).Count();
+			return Count(Characters);
 		}
 
 		public IEnumerable<Character> GetCharacters(string userId)
@@ -180,21 +201,6 @@ namespace Beast.Data
 		private static string GetPlaceFileName(Unit location)
 		{
 			return string.Format(PlaceFileNameFormat, location.X, location.Y, location.Z);
-		}
-
-		public RepositoryElement ToConfig()
-		{
-			var config = new RepositoryElement
-			{
-				Type = GetType().AssemblyQualifiedName
-			};
-			config[ConfigKeyPath] = DirectoryPath;
-			return config;
-		}
-
-		public void FromConfig(RepositoryElement config)
-		{
-			DirectoryPath = (string)config[ConfigKeyPath];
 		}
 
 		#region Nested Classes

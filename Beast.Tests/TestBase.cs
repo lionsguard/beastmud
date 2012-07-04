@@ -22,14 +22,18 @@ namespace Beast.Tests
 		{
 			TestContextLogger.TestContext = context;
 
+			var config = new BeastSection
+			             	{
+			             		Modules = new ModuleElementCollection()
+			             	};
+			config.Modules.Add(new ModuleElement
+			                   	{
+			                   		Name = "test",
+									Type = typeof(TestRepository).AssemblyQualifiedName
+			                   	});
+
 			_game = Game.Current;
-			_game.Start(new BeastSection
-							{
-								Repository = new RepositoryElement
-								             	{
-								             		Type = typeof(TestRepository).AssemblyQualifiedName
-								             	}
-							});
+			_game.Start(config);
 
 			Connection = ConnectionManager.Create(new TestContextConnectionFactory(context));
 		}

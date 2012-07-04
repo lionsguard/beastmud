@@ -13,12 +13,17 @@ namespace Beast.Data.MongoDb.Tests
     	[ClassInitialize()]
 		public static void InitTest(TestContext context)
 		{
-			Repository = new MongoRepository
+			var repo = new MongoRepository
 			{
 				ConnectionString = "mongodb://localhost/beast",
 				DatabaseName = "beast"
 			};
-			Repository.Initialize();
+			repo.Initialize();
+
+    		Users = repo;
+    		Templates = repo;
+    		Places = repo;
+    		Characters = repo;
 		}
 
 		[TestMethod()]

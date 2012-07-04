@@ -14,10 +14,16 @@ namespace Beast.Data.FileSystem.Tests
 		[ClassInitialize()]
 		public static void InitTest(TestContext context)
 		{
-			Repository = new FileRepository
+			var repo = new FileRepository
 			             	{
 			             		DirectoryPath = Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName).FullName
 			             	};
+			repo.Initialize();
+
+			Users = repo;
+			Templates = repo;
+			Places = repo;
+			Characters = repo;
 		}
 
 		[TestMethod()]

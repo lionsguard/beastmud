@@ -68,10 +68,17 @@
       <DependentUpon>CommonResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Configuration\BeastSection.cs" />
+    <Compile Include="Configuration\ConfigurationExportProvider.cs" />
+    <Compile Include="Configuration\FileConfigurationSource.cs" />
+    <Compile Include="Configuration\IConfigurationSource.cs" />
     <Compile Include="Configuration\ModuleElementCollection.cs" />
     <Compile Include="Configuration\ModulesDirectoryElement.cs" />
     <Compile Include="Configuration\ModuleTypeElementCollection.cs" />
-    <Compile Include="Configuration\RepositoryElement.cs" />
+    <Compile Include="Data\ICharacterRepository.cs" />
+    <Compile Include="Data\IPlaceRepository.cs" />
+    <Compile Include="Data\ITemplateRepository.cs" />
+    <Compile Include="Data\IUserRepository.cs" />
+    <Compile Include="Data\RepositoryManager.cs" />
     <Compile Include="DateTimeEx.cs" />
     <Compile Include="Diagnostics\TraceLogger.cs" />
     <Compile Include="Dice.cs" />

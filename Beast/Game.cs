@@ -51,12 +51,6 @@ namespace Beast
 		}
 		#endregion
 
-		/// <summary>
-		/// Gets or sets the current data repository.
-		/// </summary>
-		[Import(typeof(IRepository), AllowDefault = true)]
-		public IRepository Repository { get; set; }
-
 		[ImportMany(AllowRecomposition = true, RequiredCreationPolicy = CreationPolicy.Shared)]
 		private IEnumerable<Lazy<IModule, IModuleMetadata>> LoadedModules { get; set; }
 
@@ -67,6 +61,11 @@ namespace Beast
 		private IEnumerable<ITypeResolver> TypeResolvers { get; set; }
 
 		/// <summary>
+		/// Gets or sets the current data repository.
+		/// </summary>
+		public RepositoryManager Repository { get; set; }
+
+		/// <summary>
 		/// Gets a value indicating whether or not the game is currently running.
 		/// </summary>
 		public bool IsRunning { get; private set; }
@@ -75,11 +74,6 @@ namespace Beast
 		/// Gets the current GameTime.
 		/// </summary>
 		public GameTime GameTime { get; private set; }
-
-		/// <summary>
-		/// Gets the currently loaded world.
-		/// </summary>
-		public World World { get; private set; }
 
 		/// <summary>
 		/// Gets the currently loaded configuration section.
@@ -102,8 +96,9 @@ namespace Beast
 
 		private Game()
 		{
+			Repository= new RepositoryManager();
 			Commands = new CommandManager();
-			Users= new UserManager();
+			Users = new UserManager();
 		}
 
 		#region Start and Stop
@@ -172,8 +167,8 @@ namespace Beast
 					catalog.Catalogs.Add(new TypeCatalog(moduleTypes));
 				}
 
-				var container = new CompositionContainer(catalog);
-				container.ComposeParts(this, Commands, Users);
+				var container = new CompositionContainer(catalog, new ConfigurationExportProvider(new FileConfigurationSource()));
+				container.ComposeParts(this, Repository, Commands, Users);
 
 				// ====================================================================================
 				// INITIALIZE LOGGING
@@ -184,17 +179,8 @@ namespace Beast
 				// INITIALIZE BASIC SYSTEMS
 				// ====================================================================================
 				// Data repository
-				if (Repository == null && config.Repository != null)
-				{
-					Repository = config.Repository.ToRepository();
-				}
-				if (Repository != null)
-				{
-					if (config.Repository != null)
-						Repository.FromConfig(config.Repository);
-					Repository.Initialize();
-				}
-				Log.Info("Initialized repository {0}", Repository);
+				Repository.Initialize();
+				Log.Info("Initialized repositories.");
 
 				// Crypto services
 				ICryptoKeyProvider cryptoKeyProvider = null;
@@ -217,7 +203,7 @@ namespace Beast
 				Log.Info("Initialized the connection manager.");
 
 				// Game World
-				World = new World();
+				World.Initialize();
 				Log.Info("Initialized the game world.");
 
 
@@ -252,6 +238,11 @@ namespace Beast
 		{
 			_clock.Stop();
 			IsRunning = false;
+			Repository.Shutdown();
+			foreach (var module in _modules)
+			{
+				module.Shutdown();
+			}
 		}
 		#endregion
 
@@ -282,6 +273,11 @@ namespace Beast
 		private readonly BeastTypeResolver _baseResolver = new BeastTypeResolver();
 		private readonly Dictionary<string, Type> _cachedTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 
+		/// <summary>
+		/// Attempts to find a System.Type with the specified name using the current TypeResolvers.
+		/// </summary>
+		/// <param name="name">The name of the Type to find.</param>
+		/// <returns>The System.Type with the specified name or null if not found.</returns>
 		public Type FindType(string name)
 		{
 			Type type;

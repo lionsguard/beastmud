@@ -14,7 +14,6 @@ namespace Beast.Configuration
 	/// <![CDATA[
 	/// <beast install="true">
 	///	  <modulesDirectory path="modules" isVirtual="true"/>
-	///	  <repository type="Beast.Data.MongoRepository, Beast.Data.MongoDb, Version=0.1, Culture=neutral, PublicKeyToken=null" connectionString="mongodb://localhost/beast" database="beast" />
 	///	</beast>
 	/// ]]>
 	/// </para>
@@ -22,20 +21,12 @@ namespace Beast.Configuration
 	public class BeastSection : ConfigurationSection
 	{
 		public const string KeyRoot = "beast";
-		public const string KeyRepository = "repository";
 		public const string KeyModulesDirectory = "modulesDirectory";
 		public const string KeyModules = "modules";
 		public const string KeyCryptoKeyProviderType = "cryptoKeyProviderType";
 		public const string KeyConnectionTimeout = "connectionTimeout";
 		public const string KeyGameStepInterval = "gameStepInterval";
 		public const string KeyInstall = "install";
-
-		[ConfigurationProperty(KeyRepository, IsRequired = true)]
-		public RepositoryElement Repository
-		{
-			get { return (RepositoryElement)base[KeyRepository]; }
-			set { base[KeyRepository] = value; }
-		}
 
 		[ConfigurationProperty(KeyModulesDirectory)]
 		public ModulesDirectoryElement ModulesDirectory

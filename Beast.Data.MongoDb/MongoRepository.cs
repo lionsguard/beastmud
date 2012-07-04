@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Configuration;
 using System.Linq;
-using Beast.Configuration;
 using Beast.Items;
 using Beast.Mobiles;
 using Beast.Security;
@@ -15,13 +13,16 @@ using MongoDB.Driver.Builders;
 
 namespace Beast.Data
 {
-	[Export(typeof(IRepository))]
-	public class MongoRepository : IRepository
+	[Export(typeof(IUserRepository))]
+	[Export(typeof(ITemplateRepository))]
+	[Export(typeof(IPlaceRepository))]
+	[Export(typeof(ICharacterRepository))]
+	public class MongoRepository : IUserRepository, ITemplateRepository, IPlaceRepository, ICharacterRepository
 	{
-		public static readonly ConfigurationProperty ConfigKeyConnectionString = new ConfigurationProperty("connectionString", typeof(string));
-		public static readonly ConfigurationProperty ConfigKeyDatabaseName = new ConfigurationProperty("database", typeof(string));
-
+		[Import(ConfigKeys.ConnectionString)]
 		public string ConnectionString { get; set; }
+
+		[Import(ConfigKeys.DatabaseName)]
 		public string DatabaseName { get; set; }
 
 		protected MongoServer Server { get; private set; }
@@ -36,29 +37,24 @@ namespace Beast.Data
 
 			BsonSerializer.RegisterIdGenerator(typeof(string), StringObjectIdGenerator.Instance);
 
-			BsonClassMap.RegisterClassMap<GameObject>();
-			BsonClassMap.RegisterClassMap<Mobile>();
-			BsonClassMap.RegisterClassMap<Character>();
-			BsonClassMap.RegisterClassMap<Item>();
-			BsonClassMap.RegisterClassMap<Terrain>();
-			BsonClassMap.RegisterClassMap<Place>();
-			BsonClassMap.RegisterClassMap<Login>();
-			BsonClassMap.RegisterClassMap<GenericLogin>();
-			BsonClassMap.RegisterClassMap<User>();
+			RegisterClassMap<GameObject>();
+			RegisterClassMap<Mobile>();
+			RegisterClassMap<Character>();
+			RegisterClassMap<Item>();
+			RegisterClassMap<Terrain>();
+			RegisterClassMap<Place>();
+			RegisterClassMap<Login>();
+			RegisterClassMap<GenericLogin>();
+			RegisterClassMap<User>();
 
 			RegisterClassMaps();
 
 			EnsureIndexes();
 		}
 
-		public IEnumerable<Terrain> GetTerrain()
+		public void Shutdown()
 		{
-			return GetMongoObjects<Terrain>(Collections.Terrain);
-		}
-
-		public void SaveTerrain(Terrain terrain)
-		{
-			SaveMongoObject(terrain, Collections.Terrain);
+			Server.Disconnect();
 		}
 
 		private void EnsureIndexes()
@@ -73,6 +69,21 @@ namespace Beast.Data
 
 			keys = IndexKeys.Ascending(PropertyNames.UserId.ColumnName);
 			MongoDatabase.GetCollection<Character>(Collections.Characters).EnsureIndex(keys);
+		}
+
+		public IEnumerable<Terrain> GetTerrain()
+		{
+			return GetMongoObjects<Terrain>(Collections.Terrain);
+		}
+
+		public void SaveTerrain(Terrain terrain)
+		{
+			SaveMongoObject(terrain, Collections.Terrain);
+		}
+
+		public long GetTemplateCount()
+		{
+			return GetMongoObjectCount<IGameObject>(Collections.Templates);
 		}
 
 		public IGameObject GetTemplate(string templateName)
@@ -92,7 +103,7 @@ namespace Beast.Data
 
 		public long GetUserCount()
 		{
-			return MongoDatabase.GetCollection<User>(Collections.Users).Count();
+			return GetMongoObjectCount<User>(Collections.Users);
 		}
 
 		public User GetUser(string username)
@@ -119,6 +130,11 @@ namespace Beast.Data
 				}
 			}
 			SaveMongoObject(user, Collections.Users);
+		}
+
+		public long GetPlaceCount()
+		{
+			return GetMongoObjectCount<Place>(Collections.Places);
 		}
 
 		public Place GetPlace(Unit location)
@@ -160,6 +176,12 @@ namespace Beast.Data
 			
 		}
 
+		protected void RegisterClassMap<T>()
+		{
+			if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
+				BsonClassMap.RegisterClassMap<T>();
+		}
+
 		#region MongoDb Methods
 		protected bool SaveMongoObject<T>(T obj, string collectionName) where T : class
 		{
@@ -177,6 +199,11 @@ namespace Beast.Data
 				Log.Error(ex);
 				return false;
 			}
+		}
+
+		protected long GetMongoObjectCount<T>(string collectionName) where T : class
+		{
+			return MongoDatabase.GetCollection<T>(collectionName).Count();
 		}
 
 		protected T GetMongoObject<T>(string collectionName, string id) where T : class
@@ -216,23 +243,6 @@ namespace Beast.Data
 			return true;
 		}
 		#endregion
-
-		public RepositoryElement ToConfig()
-		{
-			var config = new RepositoryElement
-			       	{
-						Type = GetType().AssemblyQualifiedName
-			       	};
-			config[ConfigKeyConnectionString] = ConnectionString;
-			config[ConfigKeyDatabaseName] = DatabaseName;
-			return config;
-		}
-
-		public void FromConfig(RepositoryElement config)
-		{
-			ConnectionString = (string) config[ConfigKeyConnectionString];
-			DatabaseName = (string) config[ConfigKeyDatabaseName];
-		}
 
 		#region Internal Classes
 		public class Collections

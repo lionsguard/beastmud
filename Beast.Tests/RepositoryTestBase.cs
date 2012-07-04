@@ -27,7 +27,10 @@ namespace Beast.Tests
 
 		private const string UserId = "355D7BAA-9CD6-4B5A-AA91-4486E2AF6589";
 
-		protected static IRepository Repository { get; set; }
+		protected static IUserRepository Users { get; set; }
+		protected static ITemplateRepository Templates { get; set; }
+		protected static IPlaceRepository Places { get; set; }
+		protected static ICharacterRepository Characters { get; set; }
 
 		protected void BaseSaveUserTest()
 		{
@@ -44,19 +47,19 @@ namespace Beast.Tests
 							         			}
 							         	}
 			};
-			Repository.SaveUser(user);
+			Users.SaveUser(user);
 			Assert.IsNotNull(user.Id);
 		}
 
 		protected void BaseGetUserCountTest()
 		{
-			var count = Repository.GetUserCount();
+			var count = Users.GetUserCount();
 			Assert.IsTrue(count > 0);
 		}
 		
 		protected void BaseGetUserTest()
 		{
-			var user = Repository.GetUser(UserName);
+			var user = Users.GetUser(UserName);
 			Assert.IsTrue(user.Logins.Count > 0);
 			var login = user.Logins[0] as GenericLogin;
 			Assert.IsNotNull(login);
@@ -73,14 +76,14 @@ namespace Beast.Tests
 				Name = TemplateName,
 				Description = TemplateDesc
 			};
-			Repository.SaveTemplate(template);
+			Templates.SaveTemplate(template);
 			Assert.IsNotNull(template.Id);
 
 		}
 
 		protected void BaseGetTemplateTest()
 		{
-			var template = Repository.GetTemplate(TemplateName);
+			var template = Templates.GetTemplate(TemplateName);
 			Assert.IsNotNull(template);
 			Assert.AreEqual(template.Name, TemplateName);
 			Assert.AreEqual(template.Description, TemplateDesc);
@@ -88,7 +91,7 @@ namespace Beast.Tests
 
 		protected void BaseGetPlaceTest()
 		{
-			var place = Repository.GetPlace(PlaceLocation);
+			var place = Places.GetPlace(PlaceLocation);
 			Assert.IsNotNull(place);
 			Assert.AreEqual(place.Name, PlaceName);
 			Assert.AreEqual(place.Description, PlaceDesc);
@@ -107,13 +110,13 @@ namespace Beast.Tests
 			            		Terrain = 1,
 			            		Exits = {North = true, South = true}
 			            	};
-			Repository.SavePlace(place);
+			Places.SavePlace(place);
 			Assert.IsNotNull(place.Id);
 		}
 
 		protected void BaseGetTerrainTest()
 		{
-			var terrain = Repository.GetTerrain();
+			var terrain = Places.GetTerrain();
 			Assert.IsTrue(terrain.Count() == 2);
 			Assert.IsNotNull(terrain.FirstOrDefault(t => t.Color == "Red"));
 			Assert.IsNotNull(terrain.FirstOrDefault(t => t.Color == "Green"));
@@ -135,15 +138,15 @@ namespace Beast.Tests
 								Color = "Green",
 								WalkType = WalkTypes.Fly
 							};
-			Repository.SaveTerrain(terrain1);
-			Repository.SaveTerrain(terrain2);
-			
-			Assert.IsTrue(Repository.GetTerrain().Count() == 2);
+			Places.SaveTerrain(terrain1);
+			Places.SaveTerrain(terrain2);
+
+			Assert.IsTrue(Places.GetTerrain().Count() == 2);
 		}
 
 		protected void BaseGetCharacterTest()
 		{
-			var character = Repository.GetCharacters(UserId).FirstOrDefault();
+			var character = Characters.GetCharacters(UserId).FirstOrDefault();
 			Assert.IsNotNull(character);
 		}
 
@@ -155,7 +158,7 @@ namespace Beast.Tests
 									Position = CharPosition
 			                	};
 			character[CommonProperties.UserId] = UserId;
-			Repository.SaveCharacter(character);
+			Characters.SaveCharacter(character);
 			Assert.IsNotNull(character);
 			Assert.IsNotNull(character.Id);
 
