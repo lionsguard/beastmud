@@ -45,6 +45,16 @@ namespace Beast.Net
 		}
 
 		/// <summary>
+		/// Finds a connection where the User property has been set and the User.Id value matches the specified userId.
+		/// </summary>
+		/// <param name="userId">The identifier for the user to find.</param>
+		/// <returns>An instance of an IConnection or null.</returns>
+		public static IConnection FindByUser(string userId)
+		{
+			return Connections.Values.FirstOrDefault(c => c.User != null && c.User.Id == userId);
+		}
+
+		/// <summary>
 		/// Replaces the current IConnection instance with the specified instance.
 		/// </summary>
 		/// <param name="connection">The IConnection instance that will replace the current.</param>

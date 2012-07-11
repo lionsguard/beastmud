@@ -17,25 +17,27 @@ namespace Beast.Tests
 		///</summary>
 		public TestContext TestContext { get; set; }
 
-		[AssemblyInitialize]
+		private static bool _initialized;
+
+		//[AssemblyInitialize]
 		public static void Init(TestContext context)
+		{
+			Init(context, new BeastSection());
+		}
+
+		public static void Init(TestContext context, BeastSection config)
 		{
 			TestContextLogger.TestContext = context;
 
-			var config = new BeastSection
-			             	{
-			             		Modules = new ModuleElementCollection()
-			             	};
-			config.Modules.Add(new ModuleElement
-			                   	{
-			                   		Name = "test",
-									Type = typeof(TestRepository).AssemblyQualifiedName
-			                   	});
+			if (_initialized)
+				return;
 
 			_game = Game.Current;
 			_game.Start(config);
 
 			Connection = ConnectionManager.Create(new TestContextConnectionFactory(context));
+
+			_initialized = true;
 		}
 
 		[AssemblyCleanup]

@@ -5,7 +5,7 @@ using Beast.Security;
 
 namespace Beast.Data
 {
-	public class RepositoryManager : IUserRepository, ITemplateRepository, IPlaceRepository, ICharacterRepository, IRepository
+	public class RepositoryManager : IUserRepository, ITemplateRepository, IPlaceRepository, ICharacterRepository, IWorldRepository, IRepository
 	{
 		[Import(typeof(IUserRepository))]
 		public IUserRepository Users { get; set; }
@@ -18,6 +18,9 @@ namespace Beast.Data
 
 		[Import(typeof(ICharacterRepository))]
 		public ICharacterRepository Characters { get; set; }
+
+		[Import(typeof(IWorldRepository))]
+		public IWorldRepository Worlds { get; set; }
 
 		internal RepositoryManager()
 		{
@@ -88,16 +91,6 @@ namespace Beast.Data
 
 		#region Implementation of IPlaceRepository
 
-		public IEnumerable<Terrain> GetTerrain()
-		{
-			return Places.GetTerrain();
-		}
-
-		public void SaveTerrain(Terrain terrain)
-		{
-			Places.SaveTerrain(terrain);
-		}
-
 		public long GetPlaceCount()
 		{
 			return Places.GetPlaceCount();
@@ -132,11 +125,26 @@ namespace Beast.Data
 			return Characters.GetCharacter(id);
 		}
 
+		public Character GetCharacterByName(string name)
+		{
+			return Characters.GetCharacterByName(name);
+		}
+
 		public void SaveCharacter(Character character)
 		{
 			Characters.SaveCharacter(character);
 		}
 
 		#endregion
+
+		public IWorld GetWorld()
+		{
+			return Worlds.GetWorld();
+		}
+
+		public void SaveWorld<T>(T world) where T : class, IWorld
+		{
+			Worlds.SaveWorld(world);
+		}
 	}
 }

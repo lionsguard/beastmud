@@ -14,6 +14,8 @@ namespace Beast.Data.FileSystem.Tests
 		[ClassInitialize()]
 		public static void InitTest(TestContext context)
 		{
+			Init(context);
+
 			var repo = new FileRepository
 			             	{
 			             		DirectoryPath = Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName).FullName
@@ -66,18 +68,6 @@ namespace Beast.Data.FileSystem.Tests
 		public void SavePlaceTest()
 		{
 			BaseSavePlaceTest();
-		}
-
-		[TestMethod]
-		public void GetTerrainTest()
-		{
-			BaseGetTerrainTest();
-		}
-
-		[TestMethod]
-		public void SaveTerrainTest()
-		{
-			BaseSaveTerrainTest();
 		}
 
 		[TestMethod]

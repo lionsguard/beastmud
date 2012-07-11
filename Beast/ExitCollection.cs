@@ -1,4 +1,8 @@
 ﻿
+
+using System;
+using System.Linq;
+
 namespace Beast
 {
 	public class ExitCollection : OwnedPropertyCollection<string>
@@ -74,13 +78,26 @@ namespace Beast
 		{
 		}
 
+		public bool HasExit(KnownDirection direction)
+		{
+			return !string.IsNullOrEmpty(direction.ToString());
+		}
+
+		public void ForEach(Action<Place> action)
+		{
+			foreach (var direction in Direction.Movement.Where(direction => HasExit(direction.Value)))
+			{
+				action(GetPlace(direction.Value));
+			}
+		}
+
 		private Place GetPlace(KnownDirection direction)
 		{
 			var id = Get(direction.ToString());
 			if (string.IsNullOrEmpty(id))
 				return null;
 
-			return World.GetPlace(id);
+			return Game.Current.World.GetPlace(id);
 		}
 
 		private void SetPlace(KnownDirection direction, Place value)
@@ -88,7 +105,7 @@ namespace Beast
 			if (value != null)
 			{
 				if (string.IsNullOrEmpty(value.Id))
-					World.SavePlace(value);
+					Game.Current.World.SavePlace(value);
 			}
 
 			Set(direction.ToString(), value != null ? value.Id : null);

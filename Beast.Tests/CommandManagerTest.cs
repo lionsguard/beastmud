@@ -19,10 +19,10 @@ namespace Beast.Tests
 		//
 		//Use ClassInitialize to run code before running the first test in the class
 		//[ClassInitialize()]
-		//public static void MyClassInitialize(TestContext testContext)
-		//{
-		//    Init();
-		//}
+		public static void MyClassInitialize(TestContext testContext)
+		{
+			Init(testContext);
+		}
 		//
 		//Use ClassCleanup to run code after all tests in a class have run
 		//[ClassCleanup()]

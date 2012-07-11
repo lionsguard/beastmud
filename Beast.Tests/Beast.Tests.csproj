@@ -64,7 +64,6 @@
     <Compile Include="TestContextConnectionFactory.cs" />
     <Compile Include="TestContextLogger.cs" />
     <Compile Include="TestInput.cs" />
-    <Compile Include="TestRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Beast\Beast.csproj">

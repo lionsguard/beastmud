@@ -62,7 +62,14 @@ namespace Beast.ModuleCopy
 					if (!Directory.Exists(outputPath))
 						Directory.CreateDirectory(outputPath);
 
-					File.Copy(filePath, Path.Combine(outputPath, Path.GetFileName(filePath)), true);
+					try
+					{
+						File.Copy(filePath, Path.Combine(outputPath, Path.GetFileName(filePath)), true);
+					}
+					catch (Exception fe)
+					{
+						Console.WriteLine("Error: {0}", fe);
+					}
 				}
 			}
 			catch (Exception ex)

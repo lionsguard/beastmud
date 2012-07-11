@@ -59,6 +59,18 @@ namespace Beast.Commands
 				return;
 			}
 
+			if (cmd.Value.RequiresUser && connection.User == null)
+			{
+				InvalidateResponse(input, connection, CommonResources.CommandRequiresUser);
+				return;
+			}
+
+			if (cmd.Value.RequiresCharacter && connection.Character == null)
+			{
+				InvalidateResponse(input, connection, CommonResources.CommandRequiresCharacter);
+				return;
+			}
+
 			var response = cmd.Value.Execute(input, connection);
 			connection.Write(response);
 		}

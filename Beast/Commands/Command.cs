@@ -15,6 +15,22 @@ namespace Beast.Commands
 		public const string KeyArguments = "Arguments";
 
 		/// <summary>
+		/// Gets a value indicating whether or not the command requires a valid User.
+		/// </summary>
+		public virtual bool RequiresUser
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether or not the command requires a valid Character.
+		/// </summary>
+		public virtual bool RequiresCharacter
+		{
+			get { return false; }
+		}
+
+		/// <summary>
 		/// Executes the current command.
 		/// </summary>
 		/// <param name="input">The IInput containing the command information to execute.</param>

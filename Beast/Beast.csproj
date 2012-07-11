@@ -57,6 +57,7 @@
     <Compile Include="BoundProperty.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandManager.cs" />
+    <Compile Include="Commands\CreateCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandMetadata.cs" />
     <Compile Include="Commands\StandardCommands.cs" />
@@ -73,11 +74,14 @@
     <Compile Include="Configuration\IConfigurationSource.cs" />
     <Compile Include="Configuration\ModuleElementCollection.cs" />
     <Compile Include="Configuration\ModulesDirectoryElement.cs" />
-    <Compile Include="Configuration\ModuleTypeElementCollection.cs" />
+    <Compile Include="Configuration\ModuleElement.cs" />
+    <Compile Include="DataObject.cs" />
+    <Compile Include="DataObjectJsonConverter.cs" />
     <Compile Include="Data\ICharacterRepository.cs" />
     <Compile Include="Data\IPlaceRepository.cs" />
     <Compile Include="Data\ITemplateRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
+    <Compile Include="Data\IWorldRepository.cs" />
     <Compile Include="Data\RepositoryManager.cs" />
     <Compile Include="DateTimeEx.cs" />
     <Compile Include="Diagnostics\TraceLogger.cs" />
@@ -91,15 +95,18 @@
     <Compile Include="GameObject.cs" />
     <Compile Include="GameObjectJsonConverter.cs" />
     <Compile Include="GameTime.cs" />
+    <Compile Include="IDataObject.cs" />
     <Compile Include="IGameObject.cs" />
+    <Compile Include="IGameObjectCreator.cs" />
+    <Compile Include="IKnownTypeDefinition.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="IModuleMetadata.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Items\Item.cs" />
-    <Compile Include="ITypeResolver.cs" />
     <Compile Include="IUpdatable.cs" />
     <Compile Include="KnownDirection.cs" />
+    <Compile Include="KnownTypeDefinition.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogType.cs" />
     <Compile Include="MersenneTwister.cs" />
@@ -151,10 +158,10 @@
     <Compile Include="Serializer.cs" />
     <Compile Include="Terrain.cs" />
     <Compile Include="TerrainCollection.cs" />
-    <Compile Include="BeastTypeResolver.cs" />
     <Compile Include="ValueConverter.cs" />
     <Compile Include="WalkTypes.cs" />
-    <Compile Include="World.cs" />
+    <Compile Include="IWorld.cs" />
+    <Compile Include="WorldBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommonResources.resx">

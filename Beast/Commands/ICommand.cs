@@ -8,6 +8,16 @@ namespace Beast.Commands
 	public interface ICommand
 	{
 		/// <summary>
+		/// Gets a value indicating whether or not the command requires a valid User.
+		/// </summary>
+		bool RequiresUser { get; }
+
+		/// <summary>
+		/// Gets a value indicating whether or not the command requires a valid Character.
+		/// </summary>
+		bool RequiresCharacter { get; }
+
+		/// <summary>
 		/// Executes the current command.
 		/// </summary>
 		/// <param name="input">The IInput containing the command information to execute.</param>

@@ -110,36 +110,6 @@ namespace Beast.Tests
 			Assert.IsNotNull(place.Id);
 		}
 
-		protected void BaseGetTerrainTest()
-		{
-			var terrain = Places.GetTerrain();
-			Assert.IsTrue(terrain.Count() == 2);
-			Assert.IsNotNull(terrain.FirstOrDefault(t => t.Color == "Red"));
-			Assert.IsNotNull(terrain.FirstOrDefault(t => t.Color == "Green"));
-		}
-
-		protected void BaseSaveTerrainTest()
-		{
-			var terrain1 = new Terrain
-			               	{
-			               		Id = 1,
-			               		Name = "Terrain1",
-			               		Color = "Red",
-			               		WalkType = WalkTypes.Swim
-			               	};
-			var terrain2 = new Terrain
-							{
-								Id = 2,
-								Name = "Terrain2",
-								Color = "Green",
-								WalkType = WalkTypes.Fly
-							};
-			Places.SaveTerrain(terrain1);
-			Places.SaveTerrain(terrain2);
-
-			Assert.IsTrue(Places.GetTerrain().Count() == 2);
-		}
-
 		protected void BaseGetCharacterTest()
 		{
 			var character = Characters.GetCharacters(UserId).FirstOrDefault();

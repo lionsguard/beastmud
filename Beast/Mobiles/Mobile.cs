@@ -7,11 +7,11 @@ namespace Beast.Mobiles
 	{
 		public Place Place
 		{
-			get { return World.GetPlace(Get<string>(CommonProperties.PlaceId)); }
+			get { return Game.Current.World.GetPlace(Get<string>(CommonProperties.PlaceId)); }
 			set
 			{
 				if (value != null && string.IsNullOrEmpty(value.Id))
-					World.SavePlace(value);
+					Game.Current.World.SavePlace(value);
 
 				Set(CommonProperties.PlaceId, value != null ? value.Id : null);
 			}

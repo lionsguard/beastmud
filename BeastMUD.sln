@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{33B35D55-0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.ModuleCopy", "Beast.ModuleCopy\Beast.ModuleCopy.csproj", "{CE70221E-7952-4E59-B380-C987CECDBEE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Net.Mvc", "Beast.Net.Mvc\Beast.Net.Mvc.csproj", "{9997EFE2-CD67-463B-89F5-C943F78EFD5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Web.Mvc", "Beast.Web.Mvc\Beast.Web.Mvc.csproj", "{9997EFE2-CD67-463B-89F5-C943F78EFD5A}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

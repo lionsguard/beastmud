@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using Beast.Items;
 using Beast.Mobiles;
 using Beast.Security;
 using MongoDB.Bson;
@@ -17,7 +16,8 @@ namespace Beast.Data
 	[Export(typeof(ITemplateRepository))]
 	[Export(typeof(IPlaceRepository))]
 	[Export(typeof(ICharacterRepository))]
-	public class MongoRepository : IUserRepository, ITemplateRepository, IPlaceRepository, ICharacterRepository
+	[Export(typeof(IWorldRepository))]
+	public class MongoRepository : IUserRepository, ITemplateRepository, IPlaceRepository, ICharacterRepository, IWorldRepository
 	{
 		[Import(ConfigKeys.ConnectionString)]
 		public string ConnectionString { get; set; }
@@ -33,21 +33,10 @@ namespace Beast.Data
 			Server = MongoServer.Create(ConnectionString);
 			MongoDatabase = Server.GetDatabase(DatabaseName);
 
-			BsonSerializer.RegisterSerializationProvider(new GameObjectSerializationProvider());
-
+			BsonSerializer.RegisterSerializationProvider(new DataObjectSerializationProvider());
 			BsonSerializer.RegisterIdGenerator(typeof(string), StringObjectIdGenerator.Instance);
 
-			RegisterClassMap<GameObject>();
-			RegisterClassMap<Mobile>();
-			RegisterClassMap<Character>();
-			RegisterClassMap<Item>();
-			RegisterClassMap<Terrain>();
-			RegisterClassMap<Place>();
-			RegisterClassMap<Login>();
-			RegisterClassMap<GenericLogin>();
-			RegisterClassMap<User>();
-
-			RegisterClassMaps();
+			EnsureClassMaps();
 
 			EnsureIndexes();
 		}
@@ -55,6 +44,14 @@ namespace Beast.Data
 		public void Shutdown()
 		{
 			Server.Disconnect();
+		}
+
+		private void EnsureClassMaps()
+		{
+			foreach (var type in Game.Current.GetKnownTypes())
+			{
+				RegisterClassMap(type);	
+			}
 		}
 
 		private void EnsureIndexes()
@@ -65,16 +62,10 @@ namespace Beast.Data
 
 			keys = IndexKeys.Ascending(PropertyNames.UserId.ColumnName);
 			MongoDatabase.GetCollection<Character>(Collections.Characters).EnsureIndex(keys);
-		}
 
-		public IEnumerable<Terrain> GetTerrain()
-		{
-			return GetMongoObjects<Terrain>(Collections.Terrain);
-		}
-
-		public void SaveTerrain(Terrain terrain)
-		{
-			SaveMongoObject(terrain, Collections.Terrain);
+			keys = IndexKeys.Ascending(PropertyNames.Name.ColumnName);
+			options = IndexOptions.SetUnique(true);
+			MongoDatabase.GetCollection<Character>(Collections.Characters).EnsureIndex(keys, options);
 		}
 
 		public long GetTemplateCount()
@@ -158,29 +149,35 @@ namespace Beast.Data
 			return GetMongoObject<Character>(Collections.Characters, id);
 		}
 
+		public Character GetCharacterByName(string name)
+		{
+			return GetMongoObject<Character>(Collections.Characters, Query.EQ(PropertyNames.Name.ColumnName, name));
+		}
+
 		public void SaveCharacter(Character character)
 		{
 			SaveMongoObject(character, Collections.Characters);
 		}
 
-		protected virtual void RegisterClassMaps()
+		public IWorld GetWorld()
 		{
-			
+			return MongoDatabase.GetCollection<IWorld>(Collections.World).FindOne();
 		}
 
-		protected void RegisterClassMap<T>()
+		public void SaveWorld<T>(T world) where T : class, IWorld
 		{
-			if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
-				BsonClassMap.RegisterClassMap<T>();
+			SaveMongoObject(world, Collections.World);
 		}
 
 		#region MongoDb Methods
-		protected bool SaveMongoObject<T>(T obj, string collectionName) where T : class
+
+		protected void RegisterClassMap(Type type)
 		{
-			return SaveMongoObject(obj, collectionName, o => o.EQ(PropertyNames.Id));
+			if (!BsonClassMap.IsClassMapRegistered(type))
+				BsonClassMap.RegisterClassMap(new GenericClassMap(type));
 		}
 
-		protected bool SaveMongoObject<T>(T obj, string collectionName, Func<T, QueryComplete> query) where T : class
+		protected bool SaveMongoObject<T>(T obj, string collectionName) where T : class, IDataObject
 		{
 			try
 			{
@@ -193,22 +190,35 @@ namespace Beast.Data
 			}
 		}
 
-		protected long GetMongoObjectCount<T>(string collectionName) where T : class
+		protected bool SaveMongoObject<T>(T obj, string collectionName, Func<T, IMongoQuery> query) where T : class, IDataObject
+		{
+			try
+			{
+				return MongoDatabase.GetCollection<T>(collectionName).Update(query(obj), Update.Replace(obj), UpdateFlags.Upsert, SafeMode.True).Ok;
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex);
+				return false;
+			}
+		}
+
+		protected long GetMongoObjectCount<T>(string collectionName) where T : class, IDataObject
 		{
 			return MongoDatabase.GetCollection<T>(collectionName).Count();
 		}
 
-		protected T GetMongoObject<T>(string collectionName, string id) where T : class
+		protected T GetMongoObject<T>(string collectionName, string id) where T : class, IDataObject
 		{
 			return string.IsNullOrEmpty(id) ? default(T) : MongoDatabase.GetCollection<T>(collectionName).FindOneAs<T>(Query.EQ(PropertyNames.Id.ColumnName, id));
 		}
 
-		protected T GetMongoObject<T>(string collectionName, IMongoQuery query) where T : class
+		protected T GetMongoObject<T>(string collectionName, IMongoQuery query) where T : class, IDataObject
 		{
 			return MongoDatabase.GetCollection<T>(collectionName).FindOneAs<T>(query);
 		}
 
-		protected IEnumerable<T> GetMongoObjects<T>(string collectionName, IMongoQuery query) where T : class
+		protected IEnumerable<T> GetMongoObjects<T>(string collectionName, IMongoQuery query) where T : class, IDataObject
 		{
 			IEnumerable<T> objects = null;
 			if (query == null)
@@ -218,18 +228,18 @@ namespace Beast.Data
 			return objects;
 		}
 
-		protected IEnumerable<T> GetMongoObjects<T>(string collectionName) where T : class
+		protected IEnumerable<T> GetMongoObjects<T>(string collectionName) where T : class, IDataObject
 		{
 			return GetMongoObjects<T>(collectionName, null);
 		}
 
-		protected bool DeleteMongoObject<T>(T obj, string collectionName) where T : class
+		protected bool DeleteMongoObject<T>(T obj, string collectionName) where T : class, IDataObject
 		{
 			DeleteMongoObject(obj, collectionName, obj.EQ(PropertyNames.Id));
 			return true;
 		}
 
-		protected bool DeleteMongoObject<T>(T obj, string collectionName, IMongoQuery query) where T : class
+		protected bool DeleteMongoObject<T>(T obj, string collectionName, IMongoQuery query) where T : class, IDataObject
 		{
 			MongoDatabase.GetCollection<T>(collectionName).Remove(query);
 			return true;
@@ -243,7 +253,7 @@ namespace Beast.Data
 			public const string Templates = "templates";
 			public const string Characters = "characters";
 			public const string Users = "users";
-			public const string Terrain = "terrain";
+			public const string World = "world";
 		}
 
 		public class PropertyNames
@@ -253,6 +263,14 @@ namespace Beast.Data
 			public static readonly PropertyName Logins = new PropertyName("Logins");
 			public static readonly PropertyName UserName = new PropertyName("UserName");
 			public static readonly PropertyName UserId = new PropertyName("UserId");
+		}
+
+		public class GenericClassMap : BsonClassMap
+		{
+			public GenericClassMap(Type classType) : base(classType)
+			{
+				SetIdMember(new BsonMemberMap(this, classType.GetMember("Id").FirstOrDefault()));
+			}
 		}
 		#endregion
 	}
@@ -276,7 +294,7 @@ namespace Beast.Data
 
 	public static class QueryExtensions
 	{
-		public static QueryComplete EQ<T>(this T obj, PropertyName propertyName)
+		public static IMongoQuery EQ<T>(this T obj, PropertyName propertyName)
 		{
 			return Query.EQ(propertyName.ColumnName, BsonValue.Create(obj.GetValue(propertyName.ObjectName)));
 		}

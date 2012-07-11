@@ -61,7 +61,7 @@ namespace Beast.Data {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The type &apos;{0}&apos; could not be found when attempting to deserialize an object from the repository. Ensure an Beast.ITypeResolver instance exists that can found the proper type..
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; could not be found when attempting to deserialize an object from the repository. Ensure an Beast.ITypeResolver instance exists that can find the proper type..
         /// </summary>
         internal static string DeserializeTypeNotFoundFormat {
             get {

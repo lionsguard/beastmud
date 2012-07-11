@@ -88,6 +88,24 @@ namespace Beast {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must select a character before attempting to execute this command..
+        /// </summary>
+        public static string CommandRequiresCharacter {
+            get {
+                return ResourceManager.GetString("CommandRequiresCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must login before attempting to execute this command..
+        /// </summary>
+        public static string CommandRequiresUser {
+            get {
+                return ResourceManager.GetString("CommandRequiresUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;beast&apos; configuration section was not found. Ensure the configuration section exists in the application configuration file or use an overloaded method that accepts the configuration section or file name..
         /// </summary>
         public static string ConfigBeastSectionNotFound {
@@ -97,11 +115,29 @@ namespace Beast {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The TYPE argument specified for the CREATE command is invalid..
+        /// </summary>
+        public static string CreateCommandInvalidTypeArg {
+            get {
+                return ResourceManager.GetString("CreateCommandInvalidTypeArg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The direction &apos;{0}&apos; was not a valid direction or alias..
         /// </summary>
         public static string DirectionNotFoundFormat {
             get {
                 return ResourceManager.GetString("DirectionNotFoundFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An instance of Beast.IGameObjectCreator could not be found for the type &apos;{0}&apos;..
+        /// </summary>
+        public static string GameObjectCreatorNotFoundFormat {
+            get {
+                return ResourceManager.GetString("GameObjectCreatorNotFoundFormat", resourceCulture);
             }
         }
         

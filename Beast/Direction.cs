@@ -128,5 +128,25 @@ namespace Beast
 				       	};
 			}
 		}
+
+		public static IEnumerable<Direction> Movement
+		{
+			get
+			{
+				return new[]
+				       	{
+							North,
+							South,
+							East,
+							West,
+							Northeast,
+							Northwest,
+							Southeast,
+							Southwest,
+							Up,
+							Down
+				       	};	
+			}
+		}
 	}
 }

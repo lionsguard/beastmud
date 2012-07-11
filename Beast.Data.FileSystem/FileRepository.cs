@@ -179,6 +179,11 @@ namespace Beast.Data
 			return Load<Character>(Characters, id);
 		}
 
+		public Character GetCharacterByName(string name)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void SaveCharacter(Character character)
 		{
 			var userId = character.Get<string>(CommonProperties.UserId);

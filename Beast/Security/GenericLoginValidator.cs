@@ -12,11 +12,14 @@ namespace Beast.Security
 			if (!string.IsNullOrEmpty(password))
 			{
 				var genLogin = login as GenericLogin;
-				var hashedPwd = Cryptography.ComputeHash(password, genLogin.PasswordSalt);
-				if (hashedPwd == genLogin.Password)
+				if (genLogin != null)
 				{
-					// Valid login.
-					return true;
+					var hashedPwd = Cryptography.ComputeHash(password, genLogin.PasswordSalt);
+					if (hashedPwd == genLogin.Password)
+					{
+						// Valid login.
+						return true;
+					}
 				}
 			}
 			return false;
@@ -46,6 +49,11 @@ namespace Beast.Security
 						PasswordSalt = pwdSalt,
 						Email = email
 			       	};
+		}
+
+		public void OnLoginSuccess(User user, Login login, IInput input)
+		{
+			
 		}
 	}
 }

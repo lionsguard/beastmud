@@ -25,7 +25,7 @@ namespace Beast.Security
 			// Otherwise, create a user account and add a login.
 			user = new User();
 			Login login;
-			if (!Game.Current.Users.TryAddLogin(input, out login))
+			if (!Game.Current.Users.TryCreateLogin(input, out login))
 			{
 				// User already exits.
 				response.Invalidate(CommonResources.LoginAlreadyExists);

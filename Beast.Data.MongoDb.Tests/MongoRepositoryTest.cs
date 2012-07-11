@@ -1,4 +1,5 @@
-﻿using Beast.Tests;
+﻿using Beast.Configuration;
+using Beast.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beast.Data.MongoDb.Tests
@@ -12,7 +13,14 @@ namespace Beast.Data.MongoDb.Tests
     {
     	[ClassInitialize()]
 		public static void InitTest(TestContext context)
-		{
+    	{
+    		var config = new BeastSection
+    		             	{
+    		             		Modules = new ModuleElementCollection()
+    		             	};
+			config.Modules.Add(new ModuleElement{Type = typeof(MongoRepository).AssemblyQualifiedName});
+    		Init(context, config);
+
 			var repo = new MongoRepository
 			{
 				ConnectionString = "mongodb://localhost/beast",
@@ -66,18 +74,6 @@ namespace Beast.Data.MongoDb.Tests
 		public void SavePlaceTest()
 		{
 			BaseSavePlaceTest();
-		}
-
-		[TestMethod]
-		public void GetTerrainTest()
-		{
-			BaseGetTerrainTest();
-		}
-
-		[TestMethod]
-		public void SaveTerrainTest()
-		{
-			BaseSaveTerrainTest();
 		}
 
 		[TestMethod]

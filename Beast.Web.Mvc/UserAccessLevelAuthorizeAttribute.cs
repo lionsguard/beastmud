@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using Beast.Security;
 
-namespace Beast.Net
+namespace Beast.Web
 {
 	public class UserAccessLevelAuthorizeAttribute : AuthorizeAttribute
 	{

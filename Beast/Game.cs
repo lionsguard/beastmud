@@ -57,8 +57,11 @@ namespace Beast
 		[ImportMany(typeof(ILogger), AllowRecomposition = true)]
 		private IEnumerable<ILogger> Loggers { get; set; }
 
-		[ImportMany(typeof(ITypeResolver), AllowRecomposition = true)]
-		private IEnumerable<ITypeResolver> TypeResolvers { get; set; }
+		[ImportMany(typeof(IKnownTypeDefinition), AllowRecomposition = true)]
+		private IEnumerable<IKnownTypeDefinition> TypeResolvers { get; set; }
+
+		[ImportMany(typeof(IGameObjectCreator), AllowRecomposition = true)]
+		private IEnumerable<IGameObjectCreator> ObjectCreators { get; set; }
 
 		/// <summary>
 		/// Gets or sets the current data repository.
@@ -69,6 +72,11 @@ namespace Beast
 		/// Gets a value indicating whether or not the game is currently running.
 		/// </summary>
 		public bool IsRunning { get; private set; }
+
+		/// <summary>
+		/// Gets the current world instance.
+		/// </summary>
+		public IWorld World { get; private set; }
 
 		/// <summary>
 		/// Gets the current GameTime.
@@ -203,6 +211,7 @@ namespace Beast
 				Log.Info("Initialized the connection manager.");
 
 				// Game World
+				World = Repository.GetWorld() ?? new DefaultWorld();
 				World.Initialize();
 				Log.Info("Initialized the game world.");
 
@@ -270,8 +279,21 @@ namespace Beast
 		#endregion
 
 		#region Resolve Types
-		private readonly BeastTypeResolver _baseResolver = new BeastTypeResolver();
-		private readonly Dictionary<string, Type> _cachedTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
+
+		private readonly List<Type> _resolvedTypes = new List<Type>();
+		private void EnsureResolvedTypes()
+		{
+			if (_resolvedTypes.Count != 0) 
+				return;
+			
+			lock (_resolvedTypes)
+			{
+				foreach (var resolver in TypeResolvers)
+				{
+					_resolvedTypes.AddRange(resolver.KnownTypes);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Attempts to find a System.Type with the specified name using the current TypeResolvers.
@@ -280,23 +302,39 @@ namespace Beast
 		/// <returns>The System.Type with the specified name or null if not found.</returns>
 		public Type FindType(string name)
 		{
-			Type type;
-			if (_cachedTypes.TryGetValue(name, out type))
-				return type;
+			EnsureResolvedTypes();
+			return _resolvedTypes.FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+		}
 
-			type = _baseResolver.ResolveType(name);
-			if (type == null && TypeResolvers != null)
+		/// <summary>
+		/// Attempts to find all types that derive from the specified baseType.
+		/// </summary>
+		/// <param name="baseType">The base type.</param>
+		/// <returns>A list of types that derive from the specified base type.</returns>
+		public IEnumerable<Type> FindTypes(Type baseType)
+		{
+			EnsureResolvedTypes();
+			return _resolvedTypes.Where(baseType.IsAssignableFrom);
+		}
+
+		public IEnumerable<Type> GetKnownTypes()
+		{
+			EnsureResolvedTypes();
+			return _resolvedTypes;
+		}
+		#endregion
+
+		#region Create Objects
+		public bool TryCreateObject(Type type, IInput input, out string errorMessage, out IGameObject obj)
+		{
+			var creator = ObjectCreators.FirstOrDefault(c => c.CanCreate(type));
+			if (creator != null)
 			{
-				foreach (var resolver in TypeResolvers)
-				{
-					type = resolver.ResolveType(name);
-					if (type != null)
-						break;
-				}
+				return creator.TryCreate(type, input, out errorMessage, out obj);
 			}
-
-			_cachedTypes[name] = type;
-			return type;
+			errorMessage = string.Format(CommonResources.GameObjectCreatorNotFoundFormat, type.FullName);
+			obj = null;
+			return false;
 		}
 		#endregion
 	}

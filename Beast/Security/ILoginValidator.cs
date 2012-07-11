@@ -7,5 +7,6 @@ namespace Beast.Security
 		bool ValidateLogin(IInput input, Login login);
 		bool CanValidateLogin(Login login);
 		Login CreateLogin(IInput input);
+		void OnLoginSuccess(User user, Login login, IInput input);
 	}
 }

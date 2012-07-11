@@ -29,7 +29,7 @@ namespace Beast.Security
 				return;
 			}
 
-			if (!Game.Current.Users.TryAddLogin(input, out login))
+			if (!Game.Current.Users.TryCreateLogin(input, out login))
 			{
 				response.Invalidate(CommonResources.LoginAlreadyExists);
 				return;

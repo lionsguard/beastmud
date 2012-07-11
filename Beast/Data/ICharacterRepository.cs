@@ -8,6 +8,7 @@ namespace Beast.Data
 		long GetCharacterCount();
 		IEnumerable<Character> GetCharacters(string userId);
 		Character GetCharacter(string id);
+		Character GetCharacterByName(string name);
 		void SaveCharacter(Character character);
 	}
 }

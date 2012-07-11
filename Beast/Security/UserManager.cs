@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace Beast.Security
 			return false;
 		}
 
-		public bool TryAddLogin(IInput input, out Login login)
+		public bool TryCreateLogin(IInput input, out Login login)
 		{
 			login = null;
 			foreach (var validator in LoginValidators)
@@ -47,6 +48,25 @@ namespace Beast.Security
 					return true;
 			}
 			return true;
+		}
+
+		public void OnLoginSuccess(User user, IInput input)
+		{
+			var username = input.Get<string>("username");
+			if (string.IsNullOrEmpty(username))
+				return;
+
+			var login = user.Logins.FirstOrDefault(l => l.UserName.ToLower() == username.ToLower());
+			if (login == null)
+				return;
+
+			var validator = LoginValidators.FirstOrDefault(v => v.CanValidateLogin(login));
+			if (validator != null)
+				validator.OnLoginSuccess(user, login, input);
+
+			login.DateLastLogin = DateTime.UtcNow;
+
+			Game.Current.Repository.SaveUser(user);
 		}
 	}
 }

@@ -1,11 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Beast.Mobiles;
+using Beast.Net;
 using Beast.Security;
 
-namespace Beast.Net
+namespace Beast.Web
 {
 	public class MvcConnection : IConnection
 	{
