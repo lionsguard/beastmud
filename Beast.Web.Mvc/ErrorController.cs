@@ -62,7 +62,11 @@ namespace Beast.Web
 			catch (Exception ex)
 			{
 				Log.Error(ex);
-				context.Response.TransmitFile("~/Views/Shared/Error.cshtml");
+				var msg = string.Empty;
+#if DEBUG
+				msg = ex.ToString();
+#endif
+				context.Response.Write(string.Format("<html><head><title>Error</title></head><p>Internal Error</p><p>{0}</p></html>",msg));
 			}
 		}
 	}
