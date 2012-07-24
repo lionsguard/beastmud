@@ -127,8 +127,8 @@ namespace Beast.Data
 
 					if (kvp.Value != null)
 					{
-						var serialize = BsonSerializer.LookupSerializer(kvp.Value.GetType());
-						serialize.Serialize(bsonWriter, kvp.Value.GetType(), kvp.Value, null);
+						var serializer = BsonSerializer.LookupSerializer(kvp.Value.GetType());
+						serializer.Serialize(bsonWriter, kvp.Value.GetType(), kvp.Value, null);
 					}
 					else
 					{

@@ -174,7 +174,11 @@ namespace Beast.Data
 		protected void RegisterClassMap(Type type)
 		{
 			if (!BsonClassMap.IsClassMapRegistered(type))
-				BsonClassMap.RegisterClassMap(new GenericClassMap(type));
+			{
+				var cm = new GenericClassMap(type);
+				cm.AutoMap();
+				BsonClassMap.RegisterClassMap(cm);
+			}
 		}
 
 		protected bool SaveMongoObject<T>(T obj, string collectionName) where T : class, IDataObject

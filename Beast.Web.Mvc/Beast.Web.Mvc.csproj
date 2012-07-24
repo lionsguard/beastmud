@@ -40,6 +40,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +54,7 @@
     <Compile Include="ErrorController.cs" />
     <Compile Include="ErrorInfoViewData.cs" />
     <Compile Include="HttpRequestBaseExtensions.cs" />
+    <Compile Include="LinkExtensions.cs" />
     <Compile Include="RouteDataExtensions.cs" />
     <Compile Include="UserAccessLevelAuthorizeAttribute.cs" />
     <Compile Include="BeastController.cs" />
