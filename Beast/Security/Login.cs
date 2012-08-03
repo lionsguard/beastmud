@@ -40,6 +40,15 @@ namespace Beast.Security
 		public static readonly string PropertyDateLastLogin = "DateLastLogin";
 		#endregion
 
+		#region TypeIdentifier
+		public string TypeIdentifier
+		{
+			get { return Get<string>(PropertyTypeIdentifier); }
+			set { Set(PropertyTypeIdentifier, value); }
+		}
+		public static readonly string PropertyTypeIdentifier = "Type";
+		#endregion
+
 		protected Login()
 		{
 			DateCreated = DateTime.UtcNow;

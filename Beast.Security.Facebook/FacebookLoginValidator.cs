@@ -14,6 +14,10 @@ namespace Beast.Security
 
 		public bool ValidateLogin(IInput input, Login login)
 		{
+			var type = input.Get<string>(Login.PropertyTypeIdentifier);
+			if (string.IsNullOrEmpty(type) || string.Compare(type, FacebookLogin.FacebookTypeIdentifier, true) != 0)
+				return false;
+
 			if (string.IsNullOrEmpty(input.Get<string>("username")) || !(login is FacebookLogin))
 				return false;
 			var client = new FacebookClient(input.Get<string>("access_token"));
@@ -29,6 +33,9 @@ namespace Beast.Security
 
 		public Login CreateLogin(IInput input)
 		{
+			var type = input.Get<string>(Login.PropertyTypeIdentifier);
+			if (string.IsNullOrEmpty(type) || string.Compare(type, FacebookLogin.FacebookTypeIdentifier, true) != 0)
+				return null;
 			return new FacebookLogin
 			       	{
 						UserName = input.Get<string>("username"),
@@ -36,6 +43,7 @@ namespace Beast.Security
 						LastName = input.Get<string>("last_name"),
 						Gender = input.Get<string>("gender"),
 						AccessToken = input.Get<string>("access_token"),
+						TypeIdentifier = type
 			       	};
 		}
 

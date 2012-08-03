@@ -95,5 +95,32 @@ namespace Beast.Web {
                 return ResourceManager.GetString("HttpErrorDefaultMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is required..
+        /// </summary>
+        public static string LoginData_Password_Required {
+            get {
+                return ResourceManager.GetString("LoginData_Password_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username is required..
+        /// </summary>
+        public static string LoginData_UserName_Required {
+            get {
+                return ResourceManager.GetString("LoginData_UserName_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A valid email address is required..
+        /// </summary>
+        public static string RegisterData_Email {
+            get {
+                return ResourceManager.GetString("RegisterData_Email", resourceCulture);
+            }
+        }
     }
 }

@@ -2,6 +2,8 @@
 {
 	public class FacebookLogin : Login
 	{
+		public const string FacebookTypeIdentifier = "facebook";
+
 		#region FirstName
 		public string FirstName
 		{	

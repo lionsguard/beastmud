@@ -162,6 +162,7 @@
     <Compile Include="WalkTypes.cs" />
     <Compile Include="IWorld.cs" />
     <Compile Include="WorldBase.cs" />
+    <Compile Include="XExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommonResources.resx">

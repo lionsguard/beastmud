@@ -129,4 +129,13 @@
   <data name="HttpErrorDefaultMessage" xml:space="preserve">
     <value>The forces of are darkness are at work again! An internal error has occured in the application. The guard has been notified and will take the appropriate measures to win back the day!</value>
   </data>
+	<data name="RegisterData_Email">
+		<value xml:space="preserve">A valid email address is required.</value>
+	</data>
+	<data name="LoginData_UserName_Required">
+		<value xml:space="preserve">Username is required.</value>
+	</data>
+	<data name="LoginData_Password_Required">
+		<value xml:space="preserve">Password is required.</value>
+	</data>
 </root>
