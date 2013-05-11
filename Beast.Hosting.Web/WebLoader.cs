@@ -1,6 +1,6 @@
 ﻿using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
-namespace Beast.Web
+namespace Beast.Hosting.Web
 {
     public class WebLoader
     {

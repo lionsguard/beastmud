@@ -78,11 +78,11 @@ namespace Beast
             }
         }
 
-        public void Update(ApplicationTime gameTime)
+        public void Update(ApplicationTime time)
         {
             foreach (var updatable in _updatables)
             {
-                updatable.Update(gameTime);
+                updatable.Update(time);
             }
         }
     }

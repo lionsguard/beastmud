@@ -4,7 +4,7 @@
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("BeastMUD")]
-[assembly: AssemblyDescription("Web based game engine")]
+[assembly: AssemblyDescription("Framework for building text based games or applications.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Lionsguard Technologies, LLC")]
 [assembly: AssemblyProduct("BeastMUD")]

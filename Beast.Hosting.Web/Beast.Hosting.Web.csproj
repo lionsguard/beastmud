@@ -7,8 +7,8 @@
     <ProjectGuid>{1B19C75F-FB4A-40EF-9857-115B7106C8F0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Beast.Web</RootNamespace>
-    <AssemblyName>Beast.Web</AssemblyName>
+    <RootNamespace>Beast.Hosting.Web</RootNamespace>
+    <AssemblyName>Beast.Hosting.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

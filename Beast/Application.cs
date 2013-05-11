@@ -1,4 +1,5 @@
-﻿using Beast.IO;
+﻿using Beast.Commands;
+using Beast.IO;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel.Composition;
@@ -42,12 +43,12 @@ namespace Beast
         /// <summary>
         /// An event that is raised when processing input fails.
         /// </summary>
-        public event EventHandler<ProcessInputEventArgs> ProcessInputFailed = delegate { };
+        public event EventHandler<InputEventArgs> ProcessInputFailed = delegate { };
 
         /// <summary>
         /// An event that is raised when a module could not be found to process the specified input.
         /// </summary>
-        public event EventHandler<ProcessInputEventArgs> ProcessInputModuleNotFound = delegate { };
+        public event EventHandler<InputEventArgs> ProcessInputModuleNotFound = delegate { };
 
         /// <summary>
         /// An event that is raised when a new connection is added.
@@ -58,9 +59,25 @@ namespace Beast
         /// An event that is raised when a new connection is removed.
         /// </summary>
         public event EventHandler<ConnectionEventArgs> ConnectionRemoved = delegate { };
+		
+        /// <summary>
+        /// An event that is raised when an error occurs within the application.
+        /// </summary>
+		public event EventHandler<ApplicationErrorEventArgs> Error = delegate{};
+
+        /// <summary>
+        /// An event that is raised when a command name could not be determined from an IInput instance.
+        /// </summary>
+        public event EventHandler<InputEventArgs> CommandNameNotFound = delegate { };
+
+        /// <summary>
+        /// An event that is raised when a command cannot be located from an IInput instance.
+        /// </summary>
+        public event EventHandler<CommandNotFoundEventArgs> CommandNotFound = delegate { };
         #endregion
 
         private readonly ComponentContainer _components = new ComponentContainer();
+		private CommandManager _commands;
         private ConnectionManager _connections;
         private CompositionContainer _container;
         private System.Timers.Timer _timer;
@@ -77,6 +94,7 @@ namespace Beast
             Settings = settings;
 
             _connections = new ConnectionManager(settings.ConnectionTimeout);
+			_commands = new CommandManager();
         }
 
         /// <summary>
@@ -84,20 +102,28 @@ namespace Beast
         /// </summary>
         public void Run()
         {
-            Trace.TraceInformation("Starting the BeastMUD Application...");
+            try
+            {
+                Trace.TraceInformation("Starting the BeastMUD Application...");
 
-            ComposeParts();
+                ComposeParts();
 
-            Trace.TraceInformation("Module initialization started");
-            _components.Initialize();
-            Trace.TraceInformation("Module initialization complete");
+                Trace.TraceInformation("Module initialization started");
+                _components.Initialize();
+                Trace.TraceInformation("Module initialization complete");
 
-            if (_connections == null)
-                _connections = new ConnectionManager(Settings.ConnectionTimeout);
+                if (_connections == null)
+                    _connections = new ConnectionManager(Settings.ConnectionTimeout);
 
-            HookEvents();
+                HookEvents();
 
-            StartMainLoop();
+                StartMainLoop();
+            }
+            catch (Exception ex)
+            {
+                OnError(this, new ApplicationErrorEventArgs(ex));
+            }
+            
         }
 
         /// <summary>
@@ -105,25 +131,81 @@ namespace Beast
         /// </summary>
         public void Dispose()
         {
-            Trace.TraceInformation("Stopping the BeastMUD Application...");
-
-            StopMainLoop();
-
-            UnHookEvents();
-
-            _connections.Dispose();
-            _connections = null;
-
-            Trace.TraceInformation("Modules shutdown started");
-            _components.Shutdown();
-            Trace.TraceInformation("Modules shutdown complete");
-
-            if (_container != null)
+            try
             {
-                _container.Dispose();
-                _container = null;
+                Trace.TraceInformation("Stopping the BeastMUD Application...");
+
+                StopMainLoop();
+
+                UnHookEvents();
+
+                _connections.Dispose();
+                _connections = null;
+
+                Trace.TraceInformation("Modules shutdown started");
+                _components.Shutdown();
+                Trace.TraceInformation("Modules shutdown complete");
+
+                if (_container != null)
+                {
+                    _container.Dispose();
+                    _container = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError(this, new ApplicationErrorEventArgs(ex));
+            }
+            
+        }
+		
+		private void OnError(object sender, ApplicationErrorEventArgs e)
+		{
+			Error(sender, e);
+		}
+		
+		#region Commands
+        /// <summary>
+        /// Executes a command for the specified input.
+        /// </summary>
+        /// <param name="connection">The connection requesting the execution of the command.</param>
+        /// <param name="input">The input to process as a command.</param>
+        public void ExecuteCommand(IConnection connection, IInput input)
+        {
+            try
+            {
+                var cmdName = GetCommandName(input);
+                if (string.IsNullOrEmpty(cmdName))
+                {
+                    CommandNameNotFound(this, new InputEventArgs(connection, input));
+                    return;
+                }
+
+                var cmd = _commands.GetCommand(cmdName);
+                if (cmd == null)
+                {
+                    CommandNotFound(this, new CommandNotFoundEventArgs(cmdName, connection, input));
+                    return;
+                }
+
+                cmd.Execute(connection, input);
+            }
+            catch (Exception ex)
+            {
+                OnError(this, new ApplicationErrorEventArgs(ex));
             }
         }
+
+        /// <summary>
+        /// Gets the command name from the specified input.
+        /// </summary>
+        /// <param name="input">The input containing the command name.</param>
+        /// <returns>The command name if found; otherwise null.</returns>
+        public string GetCommandName(IInput input)
+        {
+            return input.Get<string>(Settings.GetValue(CommandSettingsKeys.CommandNameKey, CommandSettingsKeys.DefaultCommandNameValue));
+        }
+		#endregion
 
         #region Connections
         /// <summary>
@@ -170,29 +252,36 @@ namespace Beast
                 {
                     Trace.TraceInformation("Processing input for connection '{0}'", connection.Id);
 
-                    var processed = 0;
-                    foreach (var module in _components.Modules)
+                    try
                     {
-                        if (module.CanProcessInput(input))
+                        var processed = 0;
+                        foreach (var module in _components.Modules)
                         {
-                            processed++;
-                            try
+                            if (module.CanProcessInput(input))
                             {
-                                connection.LastActivityTick = Time.Ticks;
-                                module.ProcessInput(connection, input);
-                            }
-                            catch (Exception ex)
-                            {
-                                Trace.TraceError("ERROR PROCESSING INPUT ON MODULE '{0}': {1}", module, ex);
-                                ProcessInputFailed(this, new ProcessInputEventArgs(connection, input));
+                                processed++;
+                                try
+                                {
+                                    connection.LastActivityTick = Time.Ticks;
+                                    module.ProcessInput(connection, input);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Trace.TraceError("ERROR PROCESSING INPUT ON MODULE '{0}': {1}", module, ex);
+                                    ProcessInputFailed(this, new InputEventArgs(connection, input));
+                                }
                             }
                         }
-                    }
 
-                    if (processed == 0)
+                        if (processed == 0)
+                        {
+                            Trace.TraceWarning("NO MODULES FOUND TO PROCESS '{0}'", input);
+                            ProcessInputModuleNotFound(this, new InputEventArgs(connection, input));
+                        }
+                    }
+                    catch (Exception e)
                     {
-                        Trace.TraceWarning("NO MODULES FOUND TO PROCESS '{0}'", input);
-                        ProcessInputModuleNotFound(this, new ProcessInputEventArgs(connection, input));
+                        OnError(this, new ApplicationErrorEventArgs(e));
                     }
                 });
         }
@@ -205,37 +294,51 @@ namespace Beast
         /// <param name="output">The output to broadcast.</param>
         public void Broadcast(IOutput output)
         {
-            _connections.Broadcast(output);
+            try
+            {
+                _connections.Broadcast(output);
+            }
+            catch (Exception ex)
+            {
+                OnError(this, new ApplicationErrorEventArgs(ex));
+            }
         }
         #endregion
 
         #region ComposeParts
         private void ComposeParts()
         {
-            var catalog = new AggregateCatalog(new AssemblyCatalog(typeof(Application).Assembly));
-
-            foreach (var asm in Settings.ComponentAssemblies)
+            try
             {
-                Trace.TraceInformation("COMPOSITION: Adding assembly '{0}'", asm.FullName);
-                catalog.Catalogs.Add(new AssemblyCatalog(asm));
-            }
+                var catalog = new AggregateCatalog(new AssemblyCatalog(typeof(Application).Assembly));
 
-            foreach (var dir in Settings.ComponentDirectories)
+                foreach (var asm in Settings.ComponentAssemblies)
+                {
+                    Trace.TraceInformation("COMPOSITION: Adding assembly '{0}'", asm.FullName);
+                    catalog.Catalogs.Add(new AssemblyCatalog(asm));
+                }
+
+                foreach (var dir in Settings.ComponentDirectories)
+                {
+                    var cat = new DirectoryCatalog(dir);
+                    Trace.TraceInformation("COMPOSITION: Adding directory '{0}'", cat.Path);
+                    catalog.Catalogs.Add(cat);
+                }
+
+                _container = new CompositionContainer(catalog);
+
+                // Compose the modules, initializables and updatables.
+                Trace.TraceInformation("COMPOSITION: Composing Application");
+                _container.ComposeParts(this, _components, _commands);
+
+                // Compose the module instances themselves to allow modules to have parts.
+                Trace.TraceInformation("COMPOSITION: Composing Modules");
+                _components.Compose(this, _container);
+            }
+            catch (Exception ex)
             {
-                var cat = new DirectoryCatalog(dir);
-                Trace.TraceInformation("COMPOSITION: Adding directory '{0}'", cat.Path);
-                catalog.Catalogs.Add(cat);
+                OnError(this, new ApplicationErrorEventArgs(ex));
             }
-
-            _container = new CompositionContainer(catalog);
-
-            // Compose the modules, initializables and updatables.
-            Trace.TraceInformation("COMPOSITION: Composing Application");
-            _container.ComposeParts(this, _components);
-
-            // Compose the module instances themselves to allow modules to have parts.
-            Trace.TraceInformation("COMPOSITION: Composing Modules");
-            _components.Compose(this, _container);
         }
         #endregion
 
@@ -244,7 +347,14 @@ namespace Beast
         {
             Trace.TraceInformation("Server update started");
             Time.Update();
-            _components.Update(Time);
+            try
+            {
+                _components.Update(Time);
+            }
+            catch (Exception ex)
+            {
+                OnError(this, new ApplicationErrorEventArgs(ex));
+            }
             Trace.TraceInformation("Server update complete. Time: {0}", Time.Elapsed);
         }
         #endregion
@@ -283,12 +393,16 @@ namespace Beast
         {
             _connections.ConnectionAdded += OnConnectionAdded;
             _connections.ConnectionRemoved += OnConnectionRemoved;
+			
+			_commands.Error += OnError;
         }
 
         private void UnHookEvents()
         {
             _connections.ConnectionAdded -= OnConnectionAdded;
             _connections.ConnectionRemoved -= OnConnectionRemoved;
+			
+			_commands.Error -= OnError;
         }
         #endregion
     }

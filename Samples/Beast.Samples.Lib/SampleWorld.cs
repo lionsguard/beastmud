@@ -28,7 +28,7 @@ namespace Beast.Samples.Lib
         {
         }
 
-        public void Update(ApplicationTime gameTime)
+        public void Update(ApplicationTime time)
         {
         }
     }

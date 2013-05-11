@@ -5,9 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast", "Beast\Beast.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{A49FB14A-E350-4A44-B0F0-C0BEB486E540}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Web", "Beast.Web\Beast.Web.csproj", "{1B19C75F-FB4A-40EF-9857-115B7106C8F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Hosting.Web", "Beast.Hosting.Web\Beast.Hosting.Web.csproj", "{1B19C75F-FB4A-40EF-9857-115B7106C8F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Server", "Beast.Server\Beast.Server.csproj", "{72E87F1E-5E73-4C00-B84E-161B4B73AA06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Hosting.Self", "Beast.Hosting.Self\Beast.Hosting.Self.csproj", "{72E87F1E-5E73-4C00-B84E-161B4B73AA06}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D1E1CD59-07C4-4BCB-A1C8-9377A2211D86}"
 EndProject

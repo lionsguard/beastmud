@@ -1,15 +1,8 @@
-﻿using Beast.Web;
-using Microsoft.AspNet.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNet.SignalR;
 using System.Web;
-using System.Web.Http;
 using System.Web.Routing;
 
-namespace Beast.Web
+namespace Beast.Hosting.Web
 {
     public class WebHost : IHost, IHttpModule
     {

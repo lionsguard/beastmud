@@ -156,9 +156,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Beast.Web\Beast.Web.csproj">
+    <ProjectReference Include="..\..\Beast.Hosting.Web\Beast.Hosting.Web.csproj">
       <Project>{1b19c75f-fb4a-40ef-9857-115b7106c8f0}</Project>
-      <Name>Beast.Web</Name>
+      <Name>Beast.Hosting.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Beast\Beast.csproj">
       <Project>{fc0b789b-f7df-483e-bb91-1899d7739c8b}</Project>

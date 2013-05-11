@@ -21,19 +21,7 @@ namespace Beast.IO
 		{
 			Id = Guid.NewGuid().ToString();
 
-			if (values != null && values.Length > 0)
-			{
-				foreach (var value in values)
-				{
-					if (string.Equals(value.Key, "Id", StringComparison.InvariantCultureIgnoreCase))
-					{
-						Id = (string)value.Value;
-						continue;
-					}
-
-					_values.Add(value.Key, value.Value);
-				}
-			}
+            Load(values);
 		}
 
         /// <summary>
@@ -53,6 +41,27 @@ namespace Beast.IO
 			: this(collection.AllKeys.ToDictionary(k => k, k => (object)collection[k]).ToArray())
 		{
 		}
+
+        /// <summary>
+        /// Loads the collection of values into the input.
+        /// </summary>
+        /// <param name="values">The values to load.</param>
+        protected void Load(params KeyValuePair<string, object>[] values)
+        {
+            if (values != null && values.Length > 0)
+            {
+                foreach (var value in values)
+                {
+                    if (string.Equals(value.Key, "Id", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Id = (string)value.Value;
+                        continue;
+                    }
+
+                    _values.Add(value.Key, value.Value);
+                }
+            }
+        }
 
         /// <summary>
         /// Adds a new entry into the input collection.

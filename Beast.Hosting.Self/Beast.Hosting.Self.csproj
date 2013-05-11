@@ -7,8 +7,8 @@
     <ProjectGuid>{72E87F1E-5E73-4C00-B84E-161B4B73AA06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Beast</RootNamespace>
-    <AssemblyName>Beast.Server</AssemblyName>
+    <RootNamespace>Beast.Hosting.Self</RootNamespace>
+    <AssemblyName>Beast.Hosting.Self</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -47,9 +47,9 @@ namespace Beast
             }
         }
 
-        public void Update(ApplicationTime gameTime)
+        public void Update(ApplicationTime time)
         {
-            var connections = _connections.Values.Where(c => (gameTime.Ticks - c.LastActivityTick) > _timeout.Ticks).ToArray();
+            var connections = _connections.Values.Where(c => (time.Ticks - c.LastActivityTick) > _timeout.Ticks).ToArray();
             Task.Run(() =>
                 {
                     foreach (var conn in connections)
