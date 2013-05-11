@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Web
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast", "Beast\Beast.csproj", "{FC0B789B-F7DF-483E-BB91-1899D7739C8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{A49FB14A-E350-4A44-B0F0-C0BEB486E540}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Web", "Beast.Web\Beast.Web.csproj", "{1B19C75F-FB4A-40EF-9857-115B7106C8F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Server", "Beast.Server\Beast.Server.csproj", "{72E87F1E-5E73-4C00-B84E-161B4B73AA06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D1E1CD59-07C4-4BCB-A1C8-9377A2211D86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Samples.Lib", "Samples\Beast.Samples.Lib\Beast.Samples.Lib.csproj", "{3A343E05-4911-45D4-AF1C-B63C4E4135D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Samples.WebMud", "Samples\Beast.Samples.WebMud\Beast.Samples.WebMud.csproj", "{336089BA-0CDF-4A34-BCB9-836A09A6AB96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7D46EC5E-4282-4436-8F39-2FE60C9A07DE}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC0B789B-F7DF-483E-BB91-1899D7739C8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0B789B-F7DF-483E-BB91-1899D7739C8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0B789B-F7DF-483E-BB91-1899D7739C8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0B789B-F7DF-483E-BB91-1899D7739C8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B19C75F-FB4A-40EF-9857-115B7106C8F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B19C75F-FB4A-40EF-9857-115B7106C8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B19C75F-FB4A-40EF-9857-115B7106C8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B19C75F-FB4A-40EF-9857-115B7106C8F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E87F1E-5E73-4C00-B84E-161B4B73AA06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E87F1E-5E73-4C00-B84E-161B4B73AA06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E87F1E-5E73-4C00-B84E-161B4B73AA06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E87F1E-5E73-4C00-B84E-161B4B73AA06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A343E05-4911-45D4-AF1C-B63C4E4135D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A343E05-4911-45D4-AF1C-B63C4E4135D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A343E05-4911-45D4-AF1C-B63C4E4135D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A343E05-4911-45D4-AF1C-B63C4E4135D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{336089BA-0CDF-4A34-BCB9-836A09A6AB96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{336089BA-0CDF-4A34-BCB9-836A09A6AB96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{336089BA-0CDF-4A34-BCB9-836A09A6AB96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{336089BA-0CDF-4A34-BCB9-836A09A6AB96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FC0B789B-F7DF-483E-BB91-1899D7739C8B} = {A49FB14A-E350-4A44-B0F0-C0BEB486E540}
+		{1B19C75F-FB4A-40EF-9857-115B7106C8F0} = {A49FB14A-E350-4A44-B0F0-C0BEB486E540}
+		{72E87F1E-5E73-4C00-B84E-161B4B73AA06} = {A49FB14A-E350-4A44-B0F0-C0BEB486E540}
+		{3A343E05-4911-45D4-AF1C-B63C4E4135D6} = {D1E1CD59-07C4-4BCB-A1C8-9377A2211D86}
+		{336089BA-0CDF-4A34-BCB9-836A09A6AB96} = {D1E1CD59-07C4-4BCB-A1C8-9377A2211D86}
+	EndGlobalSection
+EndGlobal
