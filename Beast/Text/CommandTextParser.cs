@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Beast.Commands;
 
 namespace Beast.Text
@@ -16,9 +12,9 @@ namespace Beast.Text
             App = app;
         }
 
-        public TextInput Parse(string input)
+        public IEnumerable<KeyValuePair<string, object>> Parse(string input)
         {
-            var result = new TextInput();
+            var result = new Dictionary<string, object>();
 
             var words = input.Split(' ');
             if (words.Length > 0)

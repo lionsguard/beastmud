@@ -17,7 +17,9 @@ namespace Beast.Commands
             App.ExecuteCommand(connection, input);
         }
 
-        public abstract void Initialize();
+        public virtual void Initialize()
+        {
+        }
 
         public abstract void Shutdown();
 

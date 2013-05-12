@@ -1,34 +1,27 @@
-﻿using Beast.IO;
+﻿using Beast;
+using Beast.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Beast.Commands;
+using System.ComponentModel.Composition;
 
 namespace Beast.Samples.Lib
 {
-    public class SampleWorld : IModule
+    [ExportModule("Sample World")]
+    public class SampleWorld : CommandModuleBase
     {
-        public Application App { get; set; }
-
-        public bool CanProcessInput(IInput input)
-        {
-            return true;
-        }
-
-        public void ProcessInput(IConnection connection, IInput input)
+        public override void Initialize()
         {
         }
 
-        public void Initialize()
+        public override void Shutdown()
         {
         }
 
-        public void Shutdown()
-        {
-        }
-
-        public void Update(ApplicationTime time)
+        public override void Update(ApplicationTime time)
         {
         }
     }

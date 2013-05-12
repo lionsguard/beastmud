@@ -20,6 +20,7 @@ namespace Beast
         /// </summary>
         /// <param name="name">The name of the module.</param>
         public ExportModuleAttribute(string name)
+            : base(typeof(IModule))
         {
             Name = name;
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
+using Beast.Json;
+using Beast.IO;
 
 namespace Beast.Hosting.Web
 {
@@ -8,11 +10,11 @@ namespace Beast.Hosting.Web
         public const string DefaultSignalRRouteName = "beast_signalr";
         public const string DefaultSignalRUrl = "/server";
 
-        private Application _app;
+        protected Application App { get; private set; }
 
         public WebHostConnection(Application app)
         {
-            _app = app;
+            App = app;
         }
 
         protected override Task OnConnected(IRequest request, string connectionId)
@@ -21,6 +23,8 @@ namespace Beast.Hosting.Web
             {
                 Id = connectionId
             };
+
+            App.AddConnection(conn);
 
             return base.OnConnected(request, connectionId);
         }
@@ -37,6 +41,11 @@ namespace Beast.Hosting.Web
 
         protected override Task OnReceived(IRequest request, string connectionId, string data)
         {
+            var conn = App.FindConnection(connectionId);
+            if (conn != null)
+            {
+                App.ProcessInput(conn, InputResolver.Resolve(data));
+            }
             return base.OnReceived(request, connectionId, data);
         }
     }

@@ -132,6 +132,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="css\reset.css" />
+    <Content Include="css\site.css" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.0.js" />

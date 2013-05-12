@@ -10,9 +10,9 @@ namespace Beast.Commands
     internal class CommandManager : IPartImportsSatisfiedNotification
     {
 		public event EventHandler<ApplicationErrorEventArgs> Error = delegate{};
-	
-        [ImportMany(AllowRecomposition=true)]
-        private IEnumerable<Lazy<ICommand, ICommandMetadata>> ImportedCommands {get;set;}
+
+        [ImportMany(AllowRecomposition = true)]
+        private IEnumerable<Lazy<ICommand, ICommandMetadata>> ImportedCommands { get; set; }
 
         private readonly CommandCollection Commands = new CommandCollection();
 

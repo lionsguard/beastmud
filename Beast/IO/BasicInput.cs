@@ -3,21 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Beast.IO
 {
     /// <summary>
-    /// Provides an abstract implementation of the IInput interface.
+    /// Provides an implementation of the IInput interface.
     /// </summary>
-    public abstract class InputBase : IInput
+    public class BasicInput : IInput
     {
 		private readonly Dictionary<string, object> _values = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>
-        /// Initializes a new instance of the InputBase class.
+        /// Initializes a new instance of the BasicInput class.
         /// </summary>
         /// <param name="values">An array of values for the input.</param>
-		protected InputBase(params KeyValuePair<string, object>[] values)
+        public BasicInput(params KeyValuePair<string, object>[] values)
 		{
 			Id = Guid.NewGuid().ToString();
 
@@ -25,22 +27,40 @@ namespace Beast.IO
 		}
 
         /// <summary>
-        /// Initializes a new instance of the InputBase class.
+        /// Initializes a new instance of the BasicInput class.
         /// </summary>
         /// <param name="values">An array of values for the input.</param>
-        protected InputBase(IEnumerable<KeyValuePair<string, object>> values)
+        public BasicInput(IEnumerable<KeyValuePair<string, object>> values)
 			: this(values.ToArray())
 		{
 		}
 
         /// <summary>
-        /// Initializes a new instance of the InputBase class.
+        /// Initializes a new instance of the BasicInput class.
         /// </summary>
         /// <param name="values">An array of values for the input.</param>
-        protected InputBase(NameValueCollection collection)
+        public BasicInput(NameValueCollection collection)
 			: this(collection.AllKeys.ToDictionary(k => k, k => (object)collection[k]).ToArray())
 		{
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the BasicInput class.
+        /// </summary>
+        /// <param name="data">The byet array to convert to input.</param>
+        public BasicInput(byte[] data)
+        {
+            FromBytes(data);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the BasicInput class.
+        /// </summary>
+        /// <param name="data">The string value to convert to input.</param>
+        public BasicInput(string data)
+        {
+            FromString(data);
+        }
 
         /// <summary>
         /// Loads the collection of values into the input.
@@ -189,6 +209,44 @@ namespace Beast.IO
         /// Creates an IOutput instance intended to be the response to the current input.
         /// </summary>
         /// <returns>An IOutput instance representing the response to the current input.</returns>
-        public abstract IOutput CreateOutput();
+        public virtual IOutput CreateOutput()
+        {
+            return new BasicOutput(Id);
+        }
+
+        /// <summary>
+        /// Loads the input from the specified byte array.
+        /// </summary>
+        /// <param name="data">The byte array containing the key/value pairs to load.</param>
+        public virtual void FromBytes(byte[] data)
+        {
+            FromString(Encoding.ASCII.GetString(data));
+        }
+
+        /// <summary>
+        /// Loads the input from the specified string.
+        /// </summary>
+        /// <param name="data">The string containing the key/value pairs to load.</param>
+        public virtual void FromString(string data)
+        {
+            var pairs = data.Split('&');
+            foreach (var pair in pairs)
+            {
+                var parts = pair.Split('=');
+                if (parts.Length == 2)
+                {
+                    Add(parts[0], parts[1]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads the input from the specified JSON string.
+        /// </summary>
+        /// <param name="data">The JSON string containing the key/value pairs to load.</param>
+        public virtual void FromJson(string json)
+        {
+            Load(JsonConvert.DeserializeObject<Dictionary<string, object>>(json).ToArray());
+        }
     }
 }

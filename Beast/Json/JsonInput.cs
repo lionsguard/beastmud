@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Beast.Json
 {
-    public class JsonInput : InputBase
+    public class JsonInput : BasicInput
     {
         public JsonInput()
         {
@@ -22,11 +22,6 @@ namespace Beast.Json
         public JsonInput(string json)
         {
             Load(JsonConvert.DeserializeObject<Dictionary<string, object>>(json).ToArray());
-        }
-
-        public override IOutput CreateOutput()
-        {
-            throw new NotImplementedException();
         }
     }
 }

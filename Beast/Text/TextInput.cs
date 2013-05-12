@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Beast.Text
 {
-    public class TextInput : InputBase
+    public class TextInput : BasicInput
     {
         public TextInput()
         {
@@ -18,21 +18,40 @@ namespace Beast.Text
             Parse(input);
         }
 
+        public TextInput(byte[] input)
+        {
+            FromBytes(input);
+        }
+
         public void Parse(string input)
         {
-            var words = input.Split(' ');
-            if (words.Length > 0)
+            var parser = DependencyResolver.Resolve<ITextParser>() ?? new BasicTextParser();
+
+            var values = parser.Parse(input);
+            foreach (var item in values)
             {
-                for (int i = 0; i < words.Length; i++)
-                {
-                    Add(i.ToString(), words[i]);
-                }
+                Add(item.Key, item.Value);
             }
         }
 
         public override IOutput CreateOutput()
         {
             throw new NotImplementedException();
+        }
+
+        public override void FromBytes(byte[] data)
+        {
+            Parse(Encoding.ASCII.GetString(data));
+        }
+
+        public override void FromString(string data)
+        {
+            Parse(data);
+        }
+
+        public override void FromJson(string json)
+        {
+            Parse(json);
         }
     }
 }

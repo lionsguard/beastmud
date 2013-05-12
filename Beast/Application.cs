@@ -19,7 +19,7 @@ namespace Beast
         /// <summary>
         /// Gets the IHost instance running the current application.
         /// </summary>
-        public IHost Host { get; private set; }
+        public IHost Host { get; private set; } 
 
         /// <summary>
         /// Gets the current settings.
@@ -76,7 +76,7 @@ namespace Beast
         public event EventHandler<CommandNotFoundEventArgs> CommandNotFound = delegate { };
         #endregion
 
-        private readonly ComponentContainer _components = new ComponentContainer();
+        private readonly ComponentContainer _components;
 		private CommandManager _commands;
         private ConnectionManager _connections;
         private CompositionContainer _container;
@@ -93,6 +93,7 @@ namespace Beast
             Host = host;
             Settings = settings;
 
+            _components = new ComponentContainer(this);
             _connections = new ConnectionManager(settings.ConnectionTimeout);
 			_commands = new CommandManager();
         }
@@ -106,7 +107,7 @@ namespace Beast
             {
                 Trace.TraceInformation("Starting the BeastMUD Application...");
 
-                ComposeParts();
+                ComposeParts(); 
 
                 Trace.TraceInformation("Module initialization started");
                 _components.Initialize();
@@ -175,8 +176,11 @@ namespace Beast
             try
             {
                 var cmdName = GetCommandName(input);
+                Trace.TraceInformation("Attempting to find the '{0}' command for '{1}'", cmdName, connection.Id);
                 if (string.IsNullOrEmpty(cmdName))
                 {
+                    Trace.TraceWarning("COMMAND NAME NOT FOUND ON INPUT CommandName:'{0}'", 
+                        Settings.GetValue(CommandSettingsKeys.CommandNameKey, CommandSettingsKeys.DefaultCommandNameValue));
                     CommandNameNotFound(this, new InputEventArgs(connection, input));
                     return;
                 }
@@ -184,10 +188,17 @@ namespace Beast
                 var cmd = _commands.GetCommand(cmdName);
                 if (cmd == null)
                 {
-                    CommandNotFound(this, new CommandNotFoundEventArgs(cmdName, connection, input));
-                    return;
+                    // Check for a catch all command.
+                    cmd = _commands.GetCommand(CommandSettingsKeys.CatchAllCommandName);
+                    if (cmd == null)
+                    {
+                        Trace.TraceWarning("COMMAND NOT FOUND '{0}'", cmdName);
+                        CommandNotFound(this, new CommandNotFoundEventArgs(cmdName, connection, input));
+                        return;
+                    }
                 }
 
+                Trace.TraceInformation("Executing the '{0}' command for '{1}'", cmdName, connection.Id);
                 cmd.Execute(connection, input);
             }
             catch (Exception ex)
@@ -340,10 +351,6 @@ namespace Beast
                 // Compose the modules, initializables and updatables.
                 Trace.TraceInformation("COMPOSITION: Composing Application");
                 _container.ComposeParts(this, _components, _commands);
-
-                // Compose the module instances themselves to allow modules to have parts.
-                Trace.TraceInformation("COMPOSITION: Composing Modules");
-                _components.Compose(this, _container);
             }
             catch (Exception ex)
             {

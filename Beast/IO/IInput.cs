@@ -53,5 +53,23 @@ namespace Beast.IO
         /// </summary>
         /// <returns>An IOutput instance representing the response to the current input.</returns>
         IOutput CreateOutput();
+
+        /// <summary>
+        /// Loads the input from the specified byte array.
+        /// </summary>
+        /// <param name="data">The byte array containing the key/value pairs to load.</param>
+        void FromBytes(byte[] data);
+
+        /// <summary>
+        /// Loads the input from the specified string.
+        /// </summary>
+        /// <param name="data">The string containing the key/value pairs to load.</param>
+        void FromString(string data);
+
+        /// <summary>
+        /// Loads the input from the specified JSON string.
+        /// </summary>
+        /// <param name="data">The JSON string containing the key/value pairs to load.</param>
+        void FromJson(string json);
     }
 }

@@ -8,19 +8,51 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>BeastMUD Sample Game</title>
+    <link href="~/css/reset.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-2.0.0.min.js"></script>
     <script src="~/Scripts/jquery.signalR-1.0.1.min.js"></script>
 </head>
 <body>
-    <div>
-        
-    </div>
+    <header></header>
+    <div id="main"></div>
+    <footer><input id="cmd" type="text" /></footer>
     <script type="text/javascript">
+        var conn = null;
+
+        function onResize() {
+            var padding = $('#main').outerHeight(true) - $('#main').height();
+            $('#main').height($(document).outerHeight(true) - $('header').outerHeight(true) - $('footer').outerHeight(true) - padding);
+        }
+
+        function write(msg) {
+            var div = $('<div></div>').html(msg);
+            var container = $('#main');
+            container.append(div);
+            container.scrollTop(container[0].scrollHeight);
+        }
+
         $(function () {
-            var conn = $.connection('/server');
+
+            $(window).resize(onResize);
+            onResize();
+
+            $('#cmd').keydown(function (e) {
+                if (event.which == 13) {
+                    e.preventDefault();
+                    var txt = $('#cmd').val();
+                    $('#cmd').val('');
+                    conn.send(txt);
+                }
+            });
+
+            conn = $.connection('/server');
+
+            conn.received(write);
 
             conn.start().done(function () {
                 console.log('connected');
+                write('Connected');
             });
         });
     </script>

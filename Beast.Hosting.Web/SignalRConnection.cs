@@ -1,17 +1,28 @@
-﻿using Beast.IO;
+﻿using System.Threading.Tasks;
+using Beast.IO;
+using Beast.Net.Http;
 using Microsoft.AspNet.SignalR;
 
 namespace Beast.Hosting.Web
 {
-    public class SignalRConnection : ConnectionBase
+    public class SignalRConnection : HttpConnection
     {
         public override void Write(IOutput output)
         {
-            var ctx = GlobalHost.ConnectionManager.GetConnectionContext<WebHostConnection>();
-            if (ctx == null)
-                return;
+            base.Write(output);
 
-            ctx.Connection.Send(Id, output);
+            Task.Run(() =>
+                {
+                    var ctx = GlobalHost.ConnectionManager.GetConnectionContext<WebHostConnection>();
+                    if (ctx == null)
+                        return;
+
+                    var msgs = Read();
+                    foreach (var msg in msgs)
+                    {
+                        ctx.Connection.Send(Id, msg);
+                    }
+                });
         }
     }
 }

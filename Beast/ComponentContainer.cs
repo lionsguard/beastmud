@@ -9,57 +9,31 @@ using System.Threading.Tasks;
 
 namespace Beast
 {
-    internal class ComponentContainer : IInitializable, IUpdatable
+    internal class ComponentContainer : IInitializable, IUpdatable, IPartImportsSatisfiedNotification
     {
-        [ImportMany(typeof(IModule))]
-        private IEnumerable<Lazy<IModule, IModuleMetadata>> _modules;
+        [ImportMany(AllowRecomposition = true)]
+        private IEnumerable<Lazy<IModule, IModuleMetadata>> ImportedModules { get; set; }
 
-        [ImportMany(typeof(IInitializable))]
-        private IEnumerable<IInitializable> _initializables;
+        [ImportMany(AllowRecomposition = true)]
+        private IEnumerable<IInitializable> ImportedInitializables { get; set; }
 
-        [ImportMany(typeof(IUpdatable))]
-        private IEnumerable<IUpdatable> _updatables;
+        [ImportMany(AllowRecomposition = true)]
+        private IEnumerable<IUpdatable> ImportedUpdatables { get; set; }
 
-        private List<IModule> _innerModules = new List<IModule>();
+        private readonly List<IUpdatable> _updatables = new List<IUpdatable>();
+        private readonly List<IInitializable> _initializables = new List<IInitializable>();
+
+        private List<IModule> _modules = new List<IModule>();
         public IEnumerable<IModule> Modules
         {
-            get { return _innerModules; }
+            get { return _modules; }
         }
 
-        private void InitCollections()
+        private Application _app;
+
+        public ComponentContainer(Application app)
         {
-            if (_modules == null)
-                _modules = new List<Lazy<IModule, IModuleMetadata>>();
-            if (_initializables == null)
-                _initializables = new List<IInitializable>();
-            if (_updatables == null)
-                _updatables = new List<IUpdatable>();
-        }
-
-        public void Compose(Application app, CompositionContainer container)
-        {
-            InitCollections();
-
-            foreach (var mod in _modules)
-            {
-                try
-                {
-                    var module = mod.Value;
-                    if (module == null)
-                        continue;
-
-                    Trace.TraceInformation("COMPOSITION: Module '{0}'", mod.Metadata.Name);
-
-                    module.App = app;
-                    container.ComposeParts(module);
-
-                    _innerModules.Add(module);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError("COMPOSITION ERROR: [{0}] {1}", mod.Metadata.Name, ex);
-                }
-            }
+            _app = app;
         }
 
         public void Initialize()
@@ -83,6 +57,32 @@ namespace Beast
             foreach (var updatable in _updatables)
             {
                 updatable.Update(time);
+            }
+        }
+
+        public void OnImportsSatisfied()
+        {
+            _initializables.AddRange(ImportedInitializables);
+            _updatables.AddRange(ImportedUpdatables);
+
+            foreach (var mod in ImportedModules)
+            {
+                try
+                {
+                    var module = mod.Value;
+                    if (module == null)
+                        continue;
+
+                    module.App = _app;
+
+                    _modules.Add(module);
+                    _initializables.Add(module);
+                    _updatables.Add(module);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("COMPOSITION ERROR: [{0}] {1}", mod.Metadata.Name, ex);
+                }
             }
         }
     }
