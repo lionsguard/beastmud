@@ -197,6 +197,16 @@ namespace Beast
         }
 
         /// <summary>
+        /// Gets an ICommand instance for the specified commandName.
+        /// </summary>
+        /// <param name="commandName">The name or alias of the command to find.</param>
+        /// <returns>An ICommand instance or null.</returns>
+        public ICommand GetCommand(string commandName)
+        {
+            return _commands.GetCommand(commandName);
+        }
+
+        /// <summary>
         /// Gets the command name from the specified input.
         /// </summary>
         /// <param name="input">The input containing the command name.</param>

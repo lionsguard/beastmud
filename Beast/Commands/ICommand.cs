@@ -1,5 +1,6 @@
 ﻿using Beast.IO;
 using System;
+using System.Collections.Generic;
 
 namespace Beast.Commands
 {
@@ -12,6 +13,12 @@ namespace Beast.Commands
         /// An event that is raised when an error occurs while executing the command.
         /// </summary>
         event EventHandler<ApplicationErrorEventArgs> Error;
+
+        /// <summary>
+        /// Gets a list of the argument names for the current command. To work well with text input these should be returned 
+        /// in the same order as they are expected to be input.
+        /// </summary>
+        IEnumerable<string> ArgumentNames { get; }
 
         /// <summary>
         /// Executes the current command.
