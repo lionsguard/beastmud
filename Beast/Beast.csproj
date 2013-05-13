@@ -101,6 +101,7 @@
     <Compile Include="Text\CommandTextParser.cs" />
     <Compile Include="Text\ITextParser.cs" />
     <Compile Include="Text\TextInput.cs" />
+    <Compile Include="Text\TextInputConverter.cs" />
     <Compile Include="ValueConverter.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -49,6 +49,7 @@ namespace Beast.IO
         /// </summary>
         /// <param name="data">The byet array to convert to input.</param>
         public BasicInput(byte[] data)
+            : this()
         {
             FromBytes(data);
         }
@@ -58,6 +59,7 @@ namespace Beast.IO
         /// </summary>
         /// <param name="data">The string value to convert to input.</param>
         public BasicInput(string data)
+            : this()
         {
             FromString(data);
         }

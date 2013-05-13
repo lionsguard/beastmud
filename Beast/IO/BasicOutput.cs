@@ -24,6 +24,11 @@ namespace Beast.IO
         public string ErrorMessage { get; set; }
 
         /// <summary>
+        /// Gets or sets the data for the output or response.
+        /// </summary>
+        public object Data { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the BasicOutput class and sets the Id to the specified input id.
         /// </summary>
         /// <param name="inputId">The id of the input.</param>
@@ -59,14 +64,9 @@ namespace Beast.IO
         /// <returns>A string representing the current output.</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
-
-            sb.AppendFormat("[{0}] {1}", Id, Ok);
-
-            if (!Ok)
-                sb.AppendFormat(" - {0}", ErrorMessage);
-
-            return sb.ToString();
+            if (Data == null)
+                return string.Empty;
+            return Data.ToString();
         }
 
         /// <summary>

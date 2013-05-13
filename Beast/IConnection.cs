@@ -1,9 +1,4 @@
 ﻿using Beast.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Beast
 {
@@ -32,5 +27,21 @@ namespace Beast
         /// Closes the connection.
         /// </summary>
         void Close();
+        
+        /// <summary>
+        /// Gets the value for the specified key.
+        /// </summary>
+        /// <typeparam name="T">The System.Type of the value to retrieve.</typeparam>
+        /// <param name="key">The key of the value to retrieve.</param>
+        /// <param name="defaultValue">A default value if a value is not found for the key.</param>
+        /// <returns>The value or default for the specified key.</returns>
+        T Get<T>(string key, T defaultValue);
+
+        /// <summary>
+        /// Sets the value for the specified key.
+        /// </summary>
+        /// <param name="key">The key for which to set the value.</param>
+        /// <param name="value">The value to set.</param>
+        void Set(string key, object value);
     }
 }

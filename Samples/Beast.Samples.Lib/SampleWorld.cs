@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Beast.Commands;
 using System.ComponentModel.Composition;
+using Beast.Text;
 
 namespace Beast.Samples.Lib
 {
@@ -15,6 +16,13 @@ namespace Beast.Samples.Lib
     {
         public override void Initialize()
         {
+            // This text parser splits a sentence into a command and arguments.
+            DependencyResolver.Register<ITextParser>(() => new CommandTextParser(App));
+
+            // Setup some input converters to convert from text to commands.
+            var inputConverter = new TextInputConverter();
+            InputResolver.Register<byte[]>(inputConverter); // This type of converter culd be used to sockets
+            InputResolver.Register<string>(inputConverter); // This one for web based text input
         }
 
         public override void Shutdown()

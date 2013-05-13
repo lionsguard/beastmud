@@ -20,7 +20,12 @@ namespace Beast.IO
         /// Gets or sets an error message associated with the output, if the Ok value is set to false.
         /// </summary>
 		string ErrorMessage {get; set;}
-		
+
+        /// <summary>
+        /// Gets or sets the data for the output or response.
+        /// </summary>
+        object Data { get; set; }
+
         /// <summary>
         /// Invaliates the output and providers an error message.
         /// </summary>
