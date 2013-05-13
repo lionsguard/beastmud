@@ -19,16 +19,7 @@ namespace Beast.Commands
         /// Gets a list of the argument names for the current command. To work well with text input these should be returned 
         /// in the same order as they are expected to be input.
         /// </summary>
-        public IEnumerable<string> ArgumentNames { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the CommandBase class and sets the argument names.
-        /// </summary>
-        /// <param name="argumentNames">The list of names for the expected arguments.</param>
-        protected CommandBase(params string[] argumentNames)
-        {
-            ArgumentNames = argumentNames;
-        }
+        public abstract IEnumerable<string> ArgumentNames { get; }
 
         /// <summary>
         /// Executes the current command.
@@ -41,35 +32,35 @@ namespace Beast.Commands
 			
 			try
 			{
-				Trace.TraceInformation("Started executing command '{0}'", cmdType);
+				Log.Info("Started executing command '{0}'", cmdType);
 				
 				var output = CreateOutput(input);
 				
 				if (!IsAuthorized(connection, input))
 				{
-					Trace.TraceWarning("Connection '{0}' not authorized for the command '{1}'", connection.Id, cmdType);
+					Log.Warn("Connection '{0}' not authorized for the command '{1}'", connection.Id, cmdType);
 					OnNotAuthorized(output);
 					return;
 				}
 				
 				if (!ValidateArguments(input))
 				{
-					Trace.TraceWarning("Invalid arguments for the command '{0}'", cmdType);
+					Log.Warn("Invalid arguments for the command '{0}'", cmdType);
 					OnInvalidArguments(output);
 					return;
 				}
 				
-				Trace.TraceInformation("Performing execution override");
+				Log.Info("Performing execution override");
                 ExecuteOverride(connection, input, output);
 				
-				Trace.TraceInformation("Writing output to connection");
+				Log.Info("Writing output to connection");
 				connection.Write(output);
 				
-				Trace.TraceInformation("Finished executing command '{0}'", cmdType);
+				Log.Info("Finished executing command '{0}'", cmdType);
 			}
 			catch (Exception ex)
 			{
-				Trace.TraceError("Error executing command '{0}': {1}", cmdType, ex);
+				Log.Error("Error executing command '{0}': {1}", cmdType, ex);
 				OnError(ex);
 			}
 		}
@@ -79,7 +70,10 @@ namespace Beast.Commands
         /// </summary>
         /// <param name="input">The input for which to create output.</param>
         /// <returns>An IOutput instance for the current command.</returns>
-		protected abstract IOutput CreateOutput(IInput input);
+        protected virtual IOutput CreateOutput(IInput input)
+        {
+            return new BasicOutput(input.Id);
+        }
 
         /// <summary>
         /// In a derived class, executes the actual command, updating the specified output as required. The specified output is 

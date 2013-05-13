@@ -8,7 +8,8 @@
         /// <summary>
         /// Initializes the object.
         /// </summary>
-		void Initialize();
+        /// <param name="app">The current Application</param>
+		void Initialize(Application app);
 
         /// <summary>
         /// Causes the object to clean up resources and shutdown.

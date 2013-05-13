@@ -2,9 +2,10 @@
 using Beast.IO;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -83,6 +84,9 @@ namespace Beast
         private System.Timers.Timer _timer;
         private volatile bool _isRunning;
 
+        [ImportMany]
+        private IEnumerable<ILogContext> LoggingContexts { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the Application class.
         /// </summary>
@@ -105,13 +109,17 @@ namespace Beast
         {
             try
             {
-                Trace.TraceInformation("Starting the BeastMUD Application...");
+                Log.Initialize();
 
-                ComposeParts(); 
+                Log.Debug("Starting the BeastMUD Application...");
 
-                Trace.TraceInformation("Module initialization started");
-                _components.Initialize();
-                Trace.TraceInformation("Module initialization complete");
+                ComposeParts();
+
+                Log.Load(LoggingContexts);
+
+                Log.Info("Module initialization started");
+                _components.Initialize(this);
+                Log.Info("Module initialization complete");
 
                 if (_connections == null)
                     _connections = new ConnectionManager(Settings.ConnectionTimeout);
@@ -134,7 +142,7 @@ namespace Beast
         {
             try
             {
-                Trace.TraceInformation("Stopping the BeastMUD Application...");
+                Log.Info("Stopping the BeastMUD Application...");
 
                 StopMainLoop();
 
@@ -143,9 +151,9 @@ namespace Beast
                 _connections.Dispose();
                 _connections = null;
 
-                Trace.TraceInformation("Modules shutdown started");
+                Log.Info("Modules shutdown started");
                 _components.Shutdown();
-                Trace.TraceInformation("Modules shutdown complete");
+                Log.Info("Modules shutdown complete");
 
                 if (_container != null)
                 {
@@ -176,10 +184,10 @@ namespace Beast
             try
             {
                 var cmdName = GetCommandName(input);
-                Trace.TraceInformation("Attempting to find the '{0}' command for '{1}'", cmdName, connection.Id);
+                Log.Info("Attempting to find the '{0}' command for '{1}'", cmdName, connection.Id);
                 if (string.IsNullOrEmpty(cmdName))
                 {
-                    Trace.TraceWarning("COMMAND NAME NOT FOUND ON INPUT CommandName:'{0}'", 
+                    Log.Warn("COMMAND NAME NOT FOUND ON INPUT CommandName:'{0}'", 
                         Settings.GetValue(CommandSettingsKeys.CommandNameKey, CommandSettingsKeys.DefaultCommandNameValue));
                     CommandNameNotFound(this, new InputEventArgs(connection, input));
                     return;
@@ -192,13 +200,13 @@ namespace Beast
                     cmd = _commands.GetCommand(CommandSettingsKeys.CatchAllCommandName);
                     if (cmd == null)
                     {
-                        Trace.TraceWarning("COMMAND NOT FOUND '{0}'", cmdName);
+                        Log.Warn("COMMAND NOT FOUND '{0}'", cmdName);
                         CommandNotFound(this, new CommandNotFoundEventArgs(cmdName, connection, input));
                         return;
                     }
                 }
 
-                Trace.TraceInformation("Executing the '{0}' command for '{1}'", cmdName, connection.Id);
+                Log.Info("Executing the '{0}' command for '{1}'", cmdName, connection.Id);
                 cmd.Execute(connection, input);
             }
             catch (Exception ex)
@@ -224,7 +232,7 @@ namespace Beast
         /// <returns>The command name if found; otherwise null.</returns>
         public string GetCommandName(IInput input)
         {
-            return input.Get<string>(Settings.GetValue(CommandSettingsKeys.CommandNameKey, CommandSettingsKeys.DefaultCommandNameValue));
+            return input.Get<string>(Settings.GetValue(CommandSettingsKeys.CommandNameKey, CommandSettingsKeys.DefaultCommandNameValue), string.Empty);
         }
 		#endregion
 
@@ -251,12 +259,12 @@ namespace Beast
 
         private void OnConnectionAdded(object sender, ConnectionEventArgs e)
         {
-            Trace.TraceInformation("Connection Added '{0}'", e.Connection.Id);
+            Log.Info("Connection Added '{0}'", e.Connection.Id);
             ConnectionAdded(this, e);
         }
         private void OnConnectionRemoved(object sender, ConnectionEventArgs e)
         {
-            Trace.TraceInformation("Connection Removed '{0}'", e.Connection.Id);
+            Log.Info("Connection Removed '{0}'", e.Connection.Id);
             ConnectionRemoved(this, e);
         }
         #endregion
@@ -271,7 +279,7 @@ namespace Beast
         {
             Task.Run(() =>
                 {
-                    Trace.TraceInformation("Processing input for connection '{0}'", connection.Id);
+                    Log.Info("Processing input for connection '{0}'", connection.Id);
 
                     try
                     {
@@ -288,7 +296,7 @@ namespace Beast
                                 }
                                 catch (Exception ex)
                                 {
-                                    Trace.TraceError("ERROR PROCESSING INPUT ON MODULE '{0}': {1}", module, ex);
+                                    Log.Error("ERROR PROCESSING INPUT ON MODULE '{0}': {1}", module, ex);
                                     ProcessInputFailed(this, new InputEventArgs(connection, input));
                                 }
                             }
@@ -296,7 +304,7 @@ namespace Beast
 
                         if (processed == 0)
                         {
-                            Trace.TraceWarning("NO MODULES FOUND TO PROCESS '{0}'", input);
+                            Log.Warn("NO MODULES FOUND TO PROCESS '{0}'", input);
                             ProcessInputModuleNotFound(this, new InputEventArgs(connection, input));
                         }
                     }
@@ -335,21 +343,21 @@ namespace Beast
 
                 foreach (var asm in Settings.ComponentAssemblies)
                 {
-                    Trace.TraceInformation("COMPOSITION: Adding assembly '{0}'", asm.FullName);
+                    Log.Info("COMPOSITION: Adding assembly '{0}'", asm.FullName);
                     catalog.Catalogs.Add(new AssemblyCatalog(asm));
                 }
 
                 foreach (var dir in Settings.ComponentDirectories)
                 {
                     var cat = new DirectoryCatalog(dir);
-                    Trace.TraceInformation("COMPOSITION: Adding directory '{0}'", cat.Path);
+                    Log.Info("COMPOSITION: Adding directory '{0}'", cat.Path);
                     catalog.Catalogs.Add(cat);
                 }
 
                 _container = new CompositionContainer(catalog);
 
                 // Compose the modules, initializables and updatables.
-                Trace.TraceInformation("COMPOSITION: Composing Application");
+                Log.Info("COMPOSITION: Composing Application");
                 _container.ComposeParts(this, _components, _commands);
             }
             catch (Exception ex)
@@ -362,7 +370,7 @@ namespace Beast
         #region Update
         private void Update()
         {
-            Trace.TraceInformation("Server update started");
+            Log.Debug("Server update started");
             Time.Update();
             try
             {
@@ -372,7 +380,7 @@ namespace Beast
             {
                 OnError(this, new ApplicationErrorEventArgs(ex));
             }
-            Trace.TraceInformation("Server update complete. Time: {0}", Time.Elapsed);
+            Log.Debug("Server update complete. Time: {0}", Time.Elapsed);
         }
         #endregion
 
@@ -382,10 +390,10 @@ namespace Beast
             _isRunning = true;
             Time = new ApplicationTime();
 
-            Trace.TraceInformation("Calling Update for the first time");
+            Log.Info("Calling Update for the first time");
             Update();
 
-            Trace.TraceInformation("Starting main loop with an interval of '{0}'", Settings.UpdateInterval);
+            Log.Info("Starting main loop with an interval of '{0}'", Settings.UpdateInterval);
             _timer = new System.Timers.Timer(Settings.UpdateInterval.TotalMilliseconds);
             _timer.Elapsed += (o, e) => Update();
             _timer.Start();

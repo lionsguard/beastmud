@@ -36,11 +36,11 @@ namespace Beast
             _app = app;
         }
 
-        public void Initialize()
+        public void Initialize(Application app)
         {
             foreach (var initializable in _initializables)
             {
-                initializable.Initialize();
+                initializable.Initialize(app);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Beast
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError("COMPOSITION ERROR: [{0}] {1}", mod.Metadata.Name, ex);
+                    Log.Error("COMPOSITION ERROR: [{0}] {1}", mod.Metadata.Name, ex);
                 }
             }
         }

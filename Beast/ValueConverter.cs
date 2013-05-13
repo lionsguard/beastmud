@@ -22,7 +22,7 @@ namespace Beast
 			}
 			catch (Exception ex)
 			{
-				Trace.TraceError(ex.ToString());
+				Log.Error(ex.ToString());
 				return default(T);
 			}
 		}

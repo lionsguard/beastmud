@@ -118,7 +118,7 @@ namespace Beast
                     }
                     catch (Exception ex)
                     {
-                        Trace.TraceError("Failed to load assembly for file '{0}': {1}", element.File, ex);
+                        Log.Error("Failed to load assembly for file '{0}': {1}", element.File, ex);
                     }
                 }
 

@@ -2,27 +2,17 @@
 
 namespace Beast.Commands
 {
-    public abstract class CommandModuleBase : IModule
+    public abstract class CommandModuleBase : ModuleBase
     {
-        public Application App { get; set; }
-
-        public bool CanProcessInput(IInput input)
+        public override bool CanProcessInput(IInput input)
         {
             var cmdName = App.GetCommandName(input);
             return !string.IsNullOrEmpty(cmdName);
         }
 
-        public void ProcessInput(IConnection connection, IInput input)
+        public override void ProcessInput(IConnection connection, IInput input)
         {
             App.ExecuteCommand(connection, input);
         }
-
-        public virtual void Initialize()
-        {
-        }
-
-        public abstract void Shutdown();
-
-        public abstract void Update(ApplicationTime time);
     }
 }

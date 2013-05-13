@@ -14,10 +14,12 @@ namespace Beast.Samples.Lib
     [ExportModule("Sample World")]
     public class SampleWorld : CommandModuleBase
     {
-        public override void Initialize()
+        public override void Initialize(Application app)
         {
+            base.Initialize(app);
+
             // This text parser splits a sentence into a command and arguments.
-            DependencyResolver.Register<ITextParser>(() => new CommandTextParser(App));
+            DependencyResolver.Register<ITextParser>(() => new CommandTextParser(app));
 
             // Setup some input converters to convert from text to commands.
             var inputConverter = new TextInputConverter();

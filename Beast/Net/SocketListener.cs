@@ -23,7 +23,7 @@ namespace Beast.Net
             _listener.Listen(100);
             _listener.BeginAccept(OnAcceptCompleted, _listener);
 
-            Trace.TraceInformation("Started SocketListener on {0}", endPoint);
+            Log.Info("Started SocketListener on {0}", endPoint);
         }
 
         public void Stop()

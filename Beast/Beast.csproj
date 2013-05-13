@@ -77,6 +77,7 @@
     <Compile Include="IDependencyResolver.cs" />
     <Compile Include="IHost.cs" />
     <Compile Include="IInitializable.cs" />
+    <Compile Include="ILogContext.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="IModuleMetadata.cs" />
     <Compile Include="IO\BasicOutput.cs" />
@@ -91,6 +92,11 @@
     <Compile Include="IO\OutputResolver.cs" />
     <Compile Include="IUpdatable.cs" />
     <Compile Include="Json\JsonInput.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LogType.cs" />
+    <Compile Include="ModuleBase.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="Security\Cryptography.cs" />
     <Compile Include="Text\BasicTextParser.cs" />
     <Compile Include="Net\ByteExtensions.cs" />
     <Compile Include="Net\Http\Formatting\JsonCamelCaseFormatter.cs" />

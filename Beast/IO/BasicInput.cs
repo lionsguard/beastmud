@@ -149,15 +149,16 @@ namespace Beast.IO
         /// </summary>
         /// <typeparam name="T">The type of the value to return.</typeparam>
         /// <param name="key">The key used to locate the value.</param>
+        /// <param name="defaultValue">The default value to return if a value was not found for the specified key.</param>
         /// <returns>The value of the specified key cast as T.</returns>
-        public T Get<T>(string key)
+        public T Get<T>(string key, T defaultValue)
 		{
 			object value;
 			if (_values.TryGetValue(key, out value))
 			{
 				return ValueConverter.Convert<T>(value);
 			}
-			return default(T);
+			return defaultValue;
 		}
 
         /// <summary>
