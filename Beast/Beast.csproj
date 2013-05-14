@@ -97,6 +97,7 @@
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Security\Cryptography.cs" />
+    <Compile Include="Serialization\FilteredCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Text\BasicTextParser.cs" />
     <Compile Include="Net\ByteExtensions.cs" />
     <Compile Include="Net\Http\Formatting\JsonCamelCaseFormatter.cs" />

@@ -23,8 +23,9 @@ namespace Beast.Commands
         /// <summary>
         /// Executes the current command.
         /// </summary>
+        /// <param name="alias">The alias used for executing the command.</param>
         /// <param name="connection">The connection executing the command.</param>
         /// <param name="input">The input for the command.</param>
-        void Execute(IConnection connection, IInput input);
+        void Execute(string alias, IConnection connection, IInput input);
 	}
 }

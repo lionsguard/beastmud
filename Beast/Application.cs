@@ -207,7 +207,7 @@ namespace Beast
                 }
 
                 Log.Info("Executing the '{0}' command for '{1}'", cmdName, connection.Id);
-                cmd.Execute(connection, input);
+                cmd.Execute(cmdName, connection, input);
             }
             catch (Exception ex)
             {
@@ -306,6 +306,7 @@ namespace Beast
                         {
                             Log.Warn("NO MODULES FOUND TO PROCESS '{0}'", input);
                             ProcessInputModuleNotFound(this, new InputEventArgs(connection, input));
+                            connection.Write(input.CreateOutput().Invalidate("The specified input was not understood or processed by the application."));
                         }
                     }
                     catch (Exception e)
@@ -428,6 +429,17 @@ namespace Beast
             _connections.ConnectionRemoved -= OnConnectionRemoved;
 			
 			_commands.Error -= OnError;
+        }
+        #endregion
+
+        #region Modules
+        /// <summary>
+        /// Gets a list of modules currently registered with the application.
+        /// </summary>
+        /// <returns>A list of modules currently registered with the application.</returns>
+        public IEnumerable<IModule> GetModules()
+        {
+            return _components.Modules;
         }
         #endregion
     }

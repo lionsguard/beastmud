@@ -24,6 +24,11 @@ namespace Beast.IO
         public string ErrorMessage { get; set; }
 
         /// <summary>
+        /// Gets or sets the command this output is in response to, if using commands.
+        /// </summary>
+        public string Command { get; set; }
+
+        /// <summary>
         /// Gets or sets the data for the output or response.
         /// </summary>
         public object Data { get; set; }
@@ -35,6 +40,7 @@ namespace Beast.IO
         public BasicOutput(string inputId)
         {
             Id = Id;
+            Ok = true;
         }
 
         /// <summary>

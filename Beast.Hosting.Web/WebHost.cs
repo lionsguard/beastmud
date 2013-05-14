@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Routing;
+using Beast.Serialization;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Json;
+using Newtonsoft.Json;
 
 namespace Beast.Hosting.Web
 {
@@ -59,6 +65,8 @@ namespace Beast.Hosting.Web
 
             GlobalHost.DependencyResolver.Register(typeof(WebHostConnection), () => new WebHostConnection(_app));
 
+            GlobalHost.DependencyResolver.Register(typeof(IJsonSerializer), CreateJsonSerializer);
+
             var route = RouteTable.Routes.MapConnection<WebHostConnection>(name, url);
 
             RouteTable.Routes.Remove(route);
@@ -71,6 +79,21 @@ namespace Beast.Hosting.Web
                     break;
                 }
             }
+        }
+
+        private IJsonSerializer CreateJsonSerializer()
+        {
+            var assemList = new List<Assembly>();
+            foreach (var mod in _app.GetModules())
+            {
+                assemList.Add(mod.GetType().Assembly);
+            }
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new FilteredCamelCasePropertyNamesContractResolver(assemList.Distinct().ToArray())
+            };
+
+            return new JsonNetSerializer(settings);
         }
 
         protected virtual void OnStarted(HttpApplication context)

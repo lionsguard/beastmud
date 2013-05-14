@@ -13,7 +13,7 @@ namespace Beast.Commands
         /// <summary>
         /// An event that is raised when an error occurs while executing the command.
         /// </summary>
-		public event EventHandler<ApplicationErrorEventArgs> Error = delegate{};
+        public event EventHandler<ApplicationErrorEventArgs> Error = delegate { };
 
         /// <summary>
         /// Gets a list of the argument names for the current command. To work well with text input these should be returned 
@@ -24,9 +24,10 @@ namespace Beast.Commands
         /// <summary>
         /// Executes the current command.
         /// </summary>
+        /// <param name="alias">The alias used for executing the command.</param>
         /// <param name="connection">The connection executing the command.</param>
         /// <param name="input">The input for the command.</param>
-		public void Execute(IConnection connection, IInput input)
+		public void Execute(string alias, IConnection connection, IInput input)
 		{
 			var cmdType = GetType().FullName;
 			
@@ -34,7 +35,7 @@ namespace Beast.Commands
 			{
 				Log.Info("Started executing command '{0}'", cmdType);
 				
-				var output = CreateOutput(input);
+				var output = CreateOutput(alias, input);
 				
 				if (!IsAuthorized(connection, input))
 				{
@@ -68,11 +69,12 @@ namespace Beast.Commands
         /// <summary>
         /// Creates an output instance for the current command.
         /// </summary>
+        /// <param name="alias">The alias of the current command.</param>
         /// <param name="input">The input for which to create output.</param>
         /// <returns>An IOutput instance for the current command.</returns>
-        protected virtual IOutput CreateOutput(IInput input)
+        protected virtual IOutput CreateOutput(string alias, IInput input)
         {
-            return new BasicOutput(input.Id);
+            return new BasicOutput(input.Id) { Command = alias };
         }
 
         /// <summary>

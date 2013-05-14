@@ -22,6 +22,11 @@ namespace Beast.IO
 		string ErrorMessage {get; set;}
 
         /// <summary>
+        /// Gets or sets the command this output is in response to, if using commands.
+        /// </summary>
+        string Command { get; set; }
+
+        /// <summary>
         /// Gets or sets the data for the output or response.
         /// </summary>
         object Data { get; set; }

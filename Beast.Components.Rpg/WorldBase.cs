@@ -3,20 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Beast.Commands;
 
 namespace Beast
 {
-    public abstract class WorldBase : ModuleBase
+    public abstract class WorldBase : CommandModuleBase
     {
-        public override bool CanProcessInput(IO.IInput input)
-        {
-            return false;
-        }
-
-        public override void ProcessInput(IConnection connection, IO.IInput input)
-        {
-        }
-
         public override void Initialize(Application app)
         {
             base.Initialize(app);
