@@ -44,6 +44,17 @@ namespace Beast.IO
         }
 
         /// <summary>
+        /// Initializes a new instance of the BasicOutput class and sets the Id to the specified input id.
+        /// </summary>
+        /// <param name="inputId">The id of the input.</param>
+        /// <param name="data">The data for the output.</param>
+        public BasicOutput(string inputId, object data)
+            : this(inputId)
+        {
+            Data = data;
+        }
+
+        /// <summary>
         /// Invaliates the output and providers an error message.
         /// </summary>
         /// <param name="errorMessage">The text containing the reason for the invalid output.</param>

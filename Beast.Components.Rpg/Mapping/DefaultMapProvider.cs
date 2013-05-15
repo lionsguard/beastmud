@@ -5,7 +5,9 @@ namespace Beast.Mapping
 {
     public class DefaultMapProvider : DefaultDataProvider, IMapProvider
     {
-        public Map GetMap(string name)
+        public const string MapsDirectoryName = "maps";
+
+        public virtual Map GetMap(string name)
         {
             return GetMapFromFile(GetFileName(name));
         }
@@ -17,7 +19,7 @@ namespace Beast.Mapping
             return file.GetMap();
         }
 
-        public void SaveMap(Map map)
+        public virtual void SaveMap(Map map)
         {
             SaveMapToFile(map, GetFileName(map.Name));
         }
@@ -29,7 +31,7 @@ namespace Beast.Mapping
 
         private string GetFileName(string name)
         {
-            return GetPath("maps", string.Concat(name, ".json"));
+            return GetPath(MapsDirectoryName, string.Concat(name, ".json"));
         }
 
         private class MapFile

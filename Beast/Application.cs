@@ -97,6 +97,8 @@ namespace Beast
             Host = host;
             Settings = settings;
 
+            Time = new ApplicationTime();
+
             _components = new ComponentContainer(this);
             _connections = new ConnectionManager(settings.ConnectionTimeout);
 			_commands = new CommandManager();

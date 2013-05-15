@@ -8,7 +8,7 @@ namespace Beast.Items
 {
     public enum EquipLocation
     {
-        None,
+        None = -1,
         Head,
         Eyes,
         Ears,

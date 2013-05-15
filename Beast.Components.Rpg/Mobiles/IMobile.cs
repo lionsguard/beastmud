@@ -1,4 +1,5 @@
-﻿using Beast.Skills;
+﻿using Beast.Items;
+using Beast.Skills;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,18 @@ namespace Beast.Mobiles
         BoundProperty<int> Health { get; set; }
         BoundProperty<int> Mana { get; set; }
 
+        Unit Position { get; set; }
+
+        int Level { get; set; }
+
         SkillValueCollection Skills { get; set; }
 
         IMobile GetTarget();
         void SetTarget(IMobile mobile);
+
+        IWeapon GetWeapon();
+        IArmor GetArmor();
+
+        bool IsDead();
     }
 }

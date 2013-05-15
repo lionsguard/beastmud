@@ -36,6 +36,7 @@
       <HintPath>..\..\..\lionsguard\software\games\perenthia\v20130512\Perenthia MUD\packages\Newtonsoft.Json.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,13 +50,17 @@
     </Compile>
     <Compile Include="AStarSearch.cs" />
     <Compile Include="BoundProperty.cs" />
+    <Compile Include="Commands\MoveCommandBase.cs" />
     <Compile Include="Data\DataSettingsKeys.cs" />
     <Compile Include="Data\DefaultDataProvider.cs" />
     <Compile Include="Data\InMemoryProvider.cs" />
     <Compile Include="Dice.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="IGameObject.cs" />
+    <Compile Include="IO\NotificationOutput.cs" />
+    <Compile Include="IO\PropertyOutput.cs" />
     <Compile Include="ISearchContext.cs" />
+    <Compile Include="Items\Backpack.cs" />
     <Compile Include="Items\Body.cs" />
     <Compile Include="Items\EquipLocation.cs" />
     <Compile Include="Items\IArmor.cs" />

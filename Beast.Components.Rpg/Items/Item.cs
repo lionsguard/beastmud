@@ -13,5 +13,11 @@ namespace Beast.Items
         public int RequiredExperience { get; set; }
         public int RequiredSkill { get; set; }
         public int RequiredSkillValue { get; set; }
+        public EquipLocation EquipLocation { get; set; }
+
+        protected Item()
+        {
+            EquipLocation = Items.EquipLocation.None;
+        }
     }
 }

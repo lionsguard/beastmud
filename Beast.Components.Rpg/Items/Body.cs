@@ -35,22 +35,22 @@ namespace Beast.Items
         /// <summary>
         /// Equips the specified item to the specified location and removes from the container.
         /// </summary>
-        /// <param name="location"></param>
         /// <param name="item"></param>
         /// <param name="container"></param>
-        public void Equip(EquipLocation location, IItem item, IItemContainer container)
+        public void Equip(IItem item, IItemContainer container)
         {
-            var index = (int)location;
-            if (index == 0)
+            var index = (int)item.EquipLocation;
+            if (index < 0)
                 return;
 
             // Remove the item from the container
-            container.Remove(item);
+            if (container != null)
+                container.Remove(item);
 
             // if the slot is equipped, unequp it, adding the item to the current container.
             if (!Contains(index))
             {
-                Unequip(location, _items[index], container);
+                Unequip(_items[index], container);
             }
 
             _items[index] = item;
@@ -59,13 +59,15 @@ namespace Beast.Items
         /// <summary>
         /// Unequips the specified item from the specified location and adds it to the container.
         /// </summary>
-        /// <param name="location"></param>
         /// <param name="item"></param>
         /// <param name="container"></param>
-        public void Unequip(EquipLocation location, IItem item, IItemContainer container)
+        public void Unequip(IItem item, IItemContainer container)
         {
-            var index = (int)location;
-            if (index == 0)
+            if (item == null)
+                return;
+
+            var index = (int)item.EquipLocation;
+            if (index < 0)
                 return;
 
             if (!Contains(index))
@@ -73,7 +75,8 @@ namespace Beast.Items
 
             try
             {
-                container.Add(item);
+                if (container != null)
+                    container.Add(item);
             }
             catch (ItemContainerFullException)
             {
@@ -85,6 +88,9 @@ namespace Beast.Items
 
         public bool Contains(int index)
         {
+            if (index < 0)
+                return false;
+
             try
             {
                 return _items[index] != null;

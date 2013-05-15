@@ -8,11 +8,16 @@ namespace Beast.Data
     {
         protected Application App { get; private set; }
         protected string RootPath { get; set; }
+        protected JsonSerializerSettings SerializerSettings { get; set; }
 
         public void Initialize(Application app)
         {
             App = app;
             RootPath = Path.Combine(App.Settings.RootPath, App.Settings.GetValue(DataSettingsKeys.DataDirectoryKey, "App_Data"));
+            SerializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
             OnInitialized();
         }
         protected virtual void OnInitialized()
@@ -41,7 +46,7 @@ namespace Beast.Data
 
             using (var reader = new StreamReader(fileName))
             {
-                return JsonConvert.DeserializeObject<T>(reader.ReadToEnd());
+                return JsonConvert.DeserializeObject<T>(reader.ReadToEnd(), SerializerSettings);
             }
         }
 
@@ -50,7 +55,7 @@ namespace Beast.Data
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             using (var writer = new StreamWriter(fileName, false))
             {
-                writer.Write(JsonConvert.SerializeObject(obj));
+                writer.Write(JsonConvert.SerializeObject(obj, SerializerSettings));
             }
         }
     }

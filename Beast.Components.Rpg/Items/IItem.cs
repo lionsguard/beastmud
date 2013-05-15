@@ -13,5 +13,6 @@ namespace Beast.Items
         int RequiredExperience { get; set; }
         int RequiredSkill { get; set; }
         int RequiredSkillValue { get; set; }
+        EquipLocation EquipLocation { get; set; }
     }
 }

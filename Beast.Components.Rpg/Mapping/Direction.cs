@@ -62,7 +62,7 @@ namespace Beast.Mapping
 		}
 		public static Direction Northwest
 		{
-			get { return new Direction(KnownDirection.Northwest, new Unit(-1, -1, 0), "northwest", "ne"); }
+			get { return new Direction(KnownDirection.Northwest, new Unit(-1, -1, 0), "northwest", "nw"); }
 		}
 		public static Direction Southeast
 		{

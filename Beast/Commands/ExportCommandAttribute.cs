@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace Beast.Commands
 {
     [MetadataAttribute]
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class ExportCommandAttribute : ExportAttribute
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public class ExportCommandAttribute : InheritedExportAttribute
     {
         public string[] Aliases { get; set; }
 
