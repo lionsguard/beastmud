@@ -83,14 +83,9 @@ namespace Beast.Hosting.Web
 
         private IJsonSerializer CreateJsonSerializer()
         {
-            var assemList = new List<Assembly>();
-            foreach (var mod in _app.GetModules())
-            {
-                assemList.Add(mod.GetType().Assembly);
-            }
             var settings = new JsonSerializerSettings
             {
-                ContractResolver = new FilteredCamelCasePropertyNamesContractResolver(assemList.Distinct().ToArray())
+                ContractResolver = new FilteredCamelCasePropertyNamesContractResolver()
             };
 
             return new JsonNetSerializer(settings);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Beast.Commands;
+using Beast.Serialization;
 
 namespace Beast
 {
@@ -12,6 +13,8 @@ namespace Beast
         public override void Initialize(Application app)
         {
             base.Initialize(app);
+
+            JsonSerialization.AddAssemblies(typeof(WorldBase).Assembly);
 
             OnInitialized(app);
         }

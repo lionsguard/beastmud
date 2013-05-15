@@ -17,6 +17,15 @@ namespace Beast.Serialization
         {
             AssembliesToInclude = new HashSet<Assembly>();
             TypesToInclude = new HashSet<Type>();
+
+            foreach (var type in JsonSerialization.GetTypes())
+            {
+                TypesToInclude.Add(type);
+            }
+            foreach (var asm in JsonSerialization.GetAssemblies())
+            {
+                AssembliesToInclude.Add(asm);
+            }
         }
         public FilteredCamelCasePropertyNamesContractResolver(params Type[] types)
             : this(types, null)
@@ -43,7 +52,6 @@ namespace Beast.Serialization
                     AssembliesToInclude.Add(asm);
                 }
             }
-            AssembliesToInclude.Add(typeof(Application).Assembly);
         }
 
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)

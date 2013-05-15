@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Beast.Commands;
 using System.ComponentModel.Composition;
 using Beast.Text;
+using Beast.Serialization;
 
 namespace Beast.Samples.Lib
 {
@@ -17,6 +18,10 @@ namespace Beast.Samples.Lib
         public override void Initialize(Application app)
         {
             base.Initialize(app);
+
+            // Adding assemblies to the JsonSerialization class will cause them to be included in the
+            // JSON camel case serialization when running a web host.
+            JsonSerialization.AddAssemblies(typeof(SampleWorld).Assembly);
 
             // This text parser splits a sentence into a command and arguments.
             DependencyResolver.Register<ITextParser>(() => new CommandTextParser(app));
