@@ -68,7 +68,7 @@ namespace Beast.Serialization
             return jsonProperty;
         }
 
-        private static string ToCamelCase(string value)
+        public static string ToCamelCase(string value)
         {
             if (string.IsNullOrEmpty(value))
             {

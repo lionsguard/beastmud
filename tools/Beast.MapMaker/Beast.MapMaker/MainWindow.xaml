@@ -1,0 +1,142 @@
+﻿<Controls:MetroWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:ViewModel="clr-namespace:Beast.MapMaker.ViewModel"
+        xmlns:local="clr-namespace:Beast.MapMaker"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        x:Class="Beast.MapMaker.MainWindow"
+        Title="Beast Map Maker" WindowState="Maximized" Background="{x:Null}" Icon="icon.ico">
+    <Controls:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ToolbarButton" TargetType="{x:Type ButtonBase}">
+                <Setter Property="Width" Value="32"/>
+                <Setter Property="Height" Value="32"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+            </Style>
+            <ItemsPanelTemplate x:Key="FlagsPanelTemplate">
+                <WrapPanel/>
+            </ItemsPanelTemplate>
+            <DataTemplate x:Key="FlagItemTemplate">
+                <Grid d:DesignWidth="241" d:DesignHeight="32">
+                    <CheckBox Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="TerrainItemTemplate">
+                <Grid d:DesignWidth="298" d:DesignHeight="32">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="32"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Grid.Column="1"/>
+                    <Border BorderThickness="1" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" CornerRadius="4" Margin="2">
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="{DynamicResource BorderColor}"/>
+                        </Border.BorderBrush>
+                    </Border>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Controls:MetroWindow.Resources>
+    <Controls:MetroWindow.DataContext>
+        <Binding Mode="OneWay" Path="Main" Source="{StaticResource Locator}"/>
+    </Controls:MetroWindow.DataContext>
+    <DockPanel>
+        <DockPanel.Background>
+            <SolidColorBrush Color="{DynamicResource BackgroundColor}"/>
+        </DockPanel.Background>
+        <ToolBarPanel VerticalAlignment="Top" DockPanel.Dock="Top">
+            <ToolBarPanel.Background>
+                <SolidColorBrush Color="{DynamicResource BorderColor}"/>
+            </ToolBarPanel.Background>
+            <ToolBar HorizontalAlignment="Left" Background="{x:Null}">
+                <Button ToolTip="New Map" Style="{StaticResource ToolbarButton}">
+                    <Image Source="Assets/appbar.page.new.png" Stretch="UniformToFill"/>
+                </Button>
+                <Button ToolTip="Open Map" Style="{StaticResource ToolbarButton}">
+                    <Image Source="Assets/appbar.folder.open.png" Stretch="UniformToFill"/>
+                </Button>
+                <Button ToolTip="Save Map" Style="{StaticResource ToolbarButton}">
+                    <Image Source="Assets/appbar.disk.png" Stretch="UniformToFill"/>
+                </Button>
+                <Separator/>
+                <ToggleButton ToolTip="Select" Style="{StaticResource ToolbarButton}">
+                    <Image Source="Assets/appbar.cusor.pointer.png" Stretch="UniformToFill"/>
+                </ToggleButton>
+                <ToggleButton ToolTip="Draw" Style="{StaticResource ToolbarButton}">
+                    <Image Source="Assets/appbar.draw.pencil.png" Stretch="UniformToFill"/>
+                </ToggleButton>
+                <ToggleButton ToolTip="Exits" Style="{StaticResource ToolbarButton}">
+                    <Image Source="Assets/appbar.diagram.png" Stretch="UniformToFill"/>
+                </ToggleButton>
+            </ToolBar>
+        </ToolBarPanel>
+        <StatusBar VerticalAlignment="Top" DockPanel.Dock="Bottom" Height="24">
+            <StatusBar.Background>
+                <SolidColorBrush Color="{DynamicResource BorderColor}"/>
+            </StatusBar.Background>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.4*"/>
+            </Grid.ColumnDefinitions>
+
+            <ItemsControl>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type ContentPresenter}">
+                        <Setter Property="Canvas.Left" Value="{Binding WorldX}"/>
+                        <Setter Property="Canvas.Left" Value="{Binding WorldY}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:Tile/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+            <GridSplitter HorizontalAlignment="Left" Width="3" Grid.Column="1">
+                <GridSplitter.Background>
+                    <SolidColorBrush Color="{DynamicResource BorderColor}"/>
+                </GridSplitter.Background>
+            </GridSplitter>
+            <Border BorderThickness="0" Grid.Column="1">
+                <Border.Background>
+                    <SolidColorBrush Color="{DynamicResource BorderColor}"/>
+                </Border.Background>
+                <Grid Margin="4,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="PLACE DETAILS" VerticalAlignment="Top" FontSize="14" Margin="0,0,0,8"/>
+                    <CheckBox Content="Is Dungeon Entrance" Grid.Row="1" Margin="0,0,4,4"/>
+                    <StackPanel Grid.Row="2" VerticalAlignment="Top" Margin="4">
+                        <TextBlock TextWrapping="Wrap" Text="Terrain"/>
+                        <ComboBox Margin="0,0,0,4" ItemTemplate="{DynamicResource TerrainItemTemplate}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Flags"/>
+                        <ListBox Margin="0,0,0,4" ItemsPanel="{DynamicResource FlagsPanelTemplate}" ItemTemplate="{DynamicResource FlagItemTemplate}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Name"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="TextBox" Margin="0,0,0,4"/>
+                        <TextBlock TextWrapping="Wrap" Text="Description"/>
+                        <TextBox Height="105" TextWrapping="Wrap" Text="TextBox" VerticalScrollBarVisibility="Auto"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Controls:MetroWindow>

@@ -5,7 +5,8 @@ namespace Beast.Mapping
     {
         public Unit Location { get; set; }
         public ExitCollection Exits { get; set; }
-        public int Terrain { get; set; }    
+        public int Terrain { get; set; }
+        public int Flags { get; set; }
 
         public Place()
         {

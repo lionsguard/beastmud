@@ -10,6 +10,7 @@ namespace Beast.Mapping
     {
         Unit Location { get; set; }
         ExitCollection Exits { get; set; }
-        int Terrain { get; set; }   
+        int Terrain { get; set; }
+        int Flags { get; set; }
     }
 }

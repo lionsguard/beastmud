@@ -12,6 +12,11 @@ namespace Beast
         private static readonly MersenneTwister Rnd = new MersenneTwister();
 
         /// <summary>
+        /// An array of common dice sides.
+        /// </summary>
+        public static readonly int[] DiceSides = new[] { 2, 3, 4, 6, 8, 10, 12, 20, 100 };
+
+        /// <summary>
         /// Gets a random value within the specified minValue and maxValue range.
         /// </summary>
         /// <param name="minValue">The starting value of the range.</param>
@@ -105,6 +110,29 @@ namespace Beast
                 final += modifier;
             }
             return final;
+        }
+
+        /// <summary>
+        /// Formats the specified dice count and sides into a string the Dice class can parse into a dice roll.
+        /// </summary>
+        /// <param name="diceCount">The number of dice.</param>
+        /// <param name="sideCount">The number of sides per die.</param>
+        /// <returns>A string the Dice class can parse into a dice roll.</returns>
+        public static string Format(int diceCount, int sideCount)
+        {
+            return string.Format("{0}d{1}", diceCount, sideCount);
+        }
+
+        /// <summary>
+        /// Formats the specified dice count and sides into a string the Dice class can parse into a dice roll.
+        /// </summary>
+        /// <param name="diceCount">The number of dice.</param>
+        /// <param name="sideCount">The number of sides per die.</param>
+        /// <param name="modifier">An additional modifier added onto the end of the roll.</param>
+        /// <returns>A string the Dice class can parse into a dice roll.</returns>
+        public static string Format(int diceCount, int sideCount, int modifier)
+        {
+            return string.Format("{0}d{1}+{2}", diceCount, sideCount, modifier);
         }
     }
 }

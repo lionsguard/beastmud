@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Beast.Mapping
@@ -11,7 +12,18 @@ namespace Beast.Mapping
         public int Width { get; set; }
         public int Height { get; set; }
         public int MinLevel { get; set; }
-        public int MaxLevel { get; set; }   
+        public int MaxLevel { get; set; }
+
+        public Range<int> Depth
+        {
+            get 
+            {
+                var min = this.Min(p => p.Location.Z);
+                var max = this.Max(p => p.Location.Z);
+
+                return new Range<int>(min, max);
+            }
+        }
 
         public List<Terrain> Terrain { get; set; }
 

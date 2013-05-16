@@ -95,6 +95,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="LogType.cs" />
     <Compile Include="ModuleBase.cs" />
+    <Compile Include="Range.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Security\Cryptography.cs" />
     <Compile Include="Serialization\FilteredCamelCasePropertyNamesContractResolver.cs" />
