@@ -3,7 +3,7 @@ beastmud
 
 BeastMUD - A basic text based game framework in C#
 
-The core Beast library implements the basic framework for running modules. Modules are a way to provide game functionality. Within the core library is an Application class. This class is the kernel for the game engine and handles processing of input and amanging connections.
+The core Beast library implements the basic framework for running modules. Modules are a way to provide game functionality. Within the core library is an Application class. This class is the kernel for the game engine and handles processing of input and manging connections.
 
 This is a work in progress but is currently functional. The goal is to make it hands free as possible to start but allow pieces to be swapped out, overridden or replaced for the purpose of your game or application. The core library contains the basics for running modules so it can host any kind of game.
 
