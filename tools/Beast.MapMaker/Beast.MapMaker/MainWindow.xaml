@@ -4,19 +4,18 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:ViewModel="clr-namespace:Beast.MapMaker.ViewModel"
         xmlns:local="clr-namespace:Beast.MapMaker"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:Converter="clr-namespace:Beast.MapMaker.Converter" 
+        xmlns:zc="clr-namespace:System.Windows.Controls;assembly=ZoomableCanvas"
+        mc:Ignorable="d"
         x:Class="Beast.MapMaker.MainWindow"
         Title="Beast Map Maker" WindowState="Maximized" Background="{x:Null}" Icon="icon.ico">
     <Controls:MetroWindow.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            <Converter:InverseBooleanVisiblityConverter x:Key="InverseBooleanVisiblityConverter"/>
+            <Converter:TerrainBrushConverter x:Key="TerrainBrushConverter"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
             <Style x:Key="ToolbarButton" TargetType="{x:Type ButtonBase}">
                 <Setter Property="Width" Value="32"/>
@@ -39,19 +38,67 @@
                         <ColumnDefinition Width="32"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Grid.Column="1"/>
-                    <Border BorderThickness="1" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" CornerRadius="4" Margin="2">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Center" Grid.Column="1"/>
+                    <Border BorderThickness="1" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" CornerRadius="4" Margin="2" Background="{Binding Id, Converter={StaticResource TerrainBrushConverter}}">
                         <Border.BorderBrush>
                             <SolidColorBrush Color="{DynamicResource BorderColor}"/>
                         </Border.BorderBrush>
                     </Border>
                 </Grid>
             </DataTemplate>
+            <Style x:Key="TileItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Canvas.Left" Value="{Binding ScreenX}"/>
+                <Setter Property="Canvas.Top" Value="{Binding ScreenY}"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Background" TargetName="Bd">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{StaticResource HighlightColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{StaticResource HighlightColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.DataContext>
         <Binding Mode="OneWay" Path="Main" Source="{StaticResource Locator}"/>
     </Controls:MetroWindow.DataContext>
+    <Controls:MetroWindow.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenMapCommand}"/>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewMapCommand}"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveMapCommand}"/>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}"/>
+    </Controls:MetroWindow.InputBindings>
     <DockPanel>
         <DockPanel.Background>
             <SolidColorBrush Color="{DynamicResource BackgroundColor}"/>
@@ -61,25 +108,31 @@
                 <SolidColorBrush Color="{DynamicResource BorderColor}"/>
             </ToolBarPanel.Background>
             <ToolBar HorizontalAlignment="Left" Background="{x:Null}">
-                <Button ToolTip="New Map" Style="{StaticResource ToolbarButton}">
+                <Button ToolTip="New Map" Style="{StaticResource ToolbarButton}" Command="{Binding NewMapCommand}">
                     <Image Source="Assets/appbar.page.new.png" Stretch="UniformToFill"/>
                 </Button>
-                <Button ToolTip="Open Map" Style="{StaticResource ToolbarButton}">
+                <Button ToolTip="Open Map" Style="{StaticResource ToolbarButton}" Command="{Binding OpenMapCommand}">
                     <Image Source="Assets/appbar.folder.open.png" Stretch="UniformToFill"/>
                 </Button>
-                <Button ToolTip="Save Map" Style="{StaticResource ToolbarButton}">
+                <Button ToolTip="Save Map" Style="{StaticResource ToolbarButton}" Command="{Binding SaveMapCommand}">
                     <Image Source="Assets/appbar.disk.png" Stretch="UniformToFill"/>
                 </Button>
                 <Separator/>
-                <ToggleButton ToolTip="Select" Style="{StaticResource ToolbarButton}">
+                <ToggleButton ToolTip="Select" Style="{StaticResource ToolbarButton}" IsChecked="{Binding IsEditorActionSelect}">
                     <Image Source="Assets/appbar.cusor.pointer.png" Stretch="UniformToFill"/>
                 </ToggleButton>
-                <ToggleButton ToolTip="Draw" Style="{StaticResource ToolbarButton}">
+                <ToggleButton ToolTip="Draw" Style="{StaticResource ToolbarButton}" IsChecked="{Binding IsEditorActionDraw}">
                     <Image Source="Assets/appbar.draw.pencil.png" Stretch="UniformToFill"/>
                 </ToggleButton>
-                <ToggleButton ToolTip="Exits" Style="{StaticResource ToolbarButton}">
+                <ToggleButton ToolTip="Exits" Style="{StaticResource ToolbarButton}" IsChecked="{Binding IsTunneling}">
                     <Image Source="Assets/appbar.diagram.png" Stretch="UniformToFill"/>
                 </ToggleButton>
+                <Separator/>
+                <Button ToolTip="Edit Terrain" Style="{StaticResource ToolbarButton}" Command="{Binding EditTerrainCommand}">
+                    <Image Source="Assets/appbar.tree.pine.png" Stretch="UniformToFill"/>
+                </Button>
+                <Separator/>
+                <ComboBox ItemTemplate="{DynamicResource TerrainItemTemplate}" ItemsSource="{Binding Map.Terrain}" MinWidth="120" SelectedValue="{Binding SelectedTerrain}"/>
             </ToolBar>
         </ToolBarPanel>
         <StatusBar VerticalAlignment="Top" DockPanel.Dock="Bottom" Height="24">
@@ -93,19 +146,22 @@
                 <ColumnDefinition Width="0.4*"/>
             </Grid.ColumnDefinitions>
 
-            <ItemsControl>
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="{x:Type ContentPresenter}">
-                        <Setter Property="Canvas.Left" Value="{Binding WorldX}"/>
-                        <Setter Property="Canvas.Left" Value="{Binding WorldY}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
+            <ListBox ItemsSource="{Binding Tiles}" SelectedValue="{Binding SelectedTile}" ItemContainerStyle="{DynamicResource TileItemContainerStyle}" Background="{x:Null}">
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:Tile/>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <zc:ZoomableCanvas Background="#02000000" 
+                                           IsVirtualizing="True"
+                                           RealizationRate="20"
+                                           RealizationPriority="Background"
+                                           IsItemsHost="true"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
 
 
             <GridSplitter HorizontalAlignment="Left" Width="3" Grid.Column="1">
@@ -117,23 +173,40 @@
                 <Border.Background>
                     <SolidColorBrush Color="{DynamicResource BorderColor}"/>
                 </Border.Background>
-                <Grid Margin="4,0,0,0">
+                <Grid Margin="4,0,0,0" IsEnabled="{Binding SelectedTile.HasPlace, FallbackValue=false, Mode=OneWay}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="PLACE DETAILS" VerticalAlignment="Top" FontSize="14" Margin="0,0,0,8"/>
-                    <CheckBox Content="Is Dungeon Entrance" Grid.Row="1" Margin="0,0,4,4"/>
-                    <StackPanel Grid.Row="2" VerticalAlignment="Top" Margin="4">
+                    <StackPanel Margin="4" Orientation="Vertical" Grid.Row="1">
+                        <CheckBox Content="Is Dungeon Entrance" Height="17" IsChecked="{Binding SelectedTile.IsMapStart}"/>
+                        <StackPanel Visibility="{Binding IsMapStart, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=False}" Margin="0,4" DataContext="{Binding SelectedTile}">
+                            <TextBlock TextWrapping="Wrap" Text="Width"/>
+                            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Width}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Height"/>
+                            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Height}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Depth"/>
+                            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Depth}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Random Seed"/>
+                            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Seed}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Min Level"/>
+                            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding MinLevel}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Max Level"/>
+                            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding MaxLevel}"/>
+                            <CheckBox Content="Generate Z-Index Up? (z > 0)" IsChecked="{Binding ZIndexUp}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" VerticalAlignment="Top" Margin="4" Visibility="{Binding SelectedTile.IsMapStart, Converter={StaticResource InverseBooleanVisiblityConverter}}">
                         <TextBlock TextWrapping="Wrap" Text="Terrain"/>
-                        <ComboBox Margin="0,0,0,4" ItemTemplate="{DynamicResource TerrainItemTemplate}"/>
+                        <ComboBox Margin="0,0,0,4" ItemTemplate="{DynamicResource TerrainItemTemplate}" ItemsSource="{Binding Map.Terrain}" SelectedValue="{Binding SelectedTile.Terrain}"/>
                         <TextBlock TextWrapping="Wrap" Text="Flags"/>
-                        <ListBox Margin="0,0,0,4" ItemsPanel="{DynamicResource FlagsPanelTemplate}" ItemTemplate="{DynamicResource FlagItemTemplate}"/>
+                        <ListBox Margin="0,0,0,4" ItemsPanel="{DynamicResource FlagsPanelTemplate}" ItemTemplate="{DynamicResource FlagItemTemplate}" Background="{x:Null}" BorderBrush="{x:Null}"/>
                         <TextBlock TextWrapping="Wrap" Text="Name"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="TextBox" Margin="0,0,0,4"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="{Binding SelectedTile.Name}" Margin="0,0,0,4"/>
                         <TextBlock TextWrapping="Wrap" Text="Description"/>
-                        <TextBox Height="105" TextWrapping="Wrap" Text="TextBox" VerticalScrollBarVisibility="Auto"/>
+                        <TextBox Height="105" TextWrapping="Wrap" Text="{Binding SelectedTile.Description}" VerticalScrollBarVisibility="Auto"/>
                     </StackPanel>
                 </Grid>
             </Border>

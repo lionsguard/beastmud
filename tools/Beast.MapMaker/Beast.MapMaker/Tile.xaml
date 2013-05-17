@@ -1,77 +1,94 @@
-﻿<UserControl x:Class="Beast.MapMaker.Tile"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Converter="clr-namespace:Beast.MapMaker.Converter" x:Class="Beast.MapMaker.Tile" 
              mc:Ignorable="d" 
              Width="32" Height="32">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Converter:TerrainBrushConverter x:Key="TerrainBrushConverter"/>
+    </UserControl.Resources>
     <Border BorderThickness="0">
         <Grid>
-            <Line StrokeThickness="2" X2="16" Y2="16">
+            <Line StrokeThickness="2" X2="16" Y2="16" Visibility="{Binding Exits[5], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Line StrokeThickness="2" X2="32" Y2="32" X1="16" Y1="16">
+            <Line StrokeThickness="2" X2="32" Y2="32" X1="16" Y1="16" Visibility="{Binding Exits[6], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Line StrokeThickness="2" X2="16" Y2="16" X1="32">
+            <Line StrokeThickness="2" X2="16" Y2="16" X1="32" Visibility="{Binding Exits[4], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Line StrokeThickness="2" X2="0" Y2="32" X1="16" Y1="16">
+            <Line StrokeThickness="2" X2="0" Y2="32" X1="16" Y1="16" Visibility="{Binding Exits[7], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Line StrokeThickness="2" X2="0" Y2="16" X1="16" Y1="16">
+            <Line StrokeThickness="2" X2="0" Y2="16" X1="16" Y1="16" Visibility="{Binding Exits[3], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Line StrokeThickness="2" X2="32" Y2="16" X1="16" Y1="16">
+            <Line StrokeThickness="2" X2="32" Y2="16" X1="16" Y1="16" Visibility="{Binding Exits[2], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Line StrokeThickness="2" X2="16" X1="16" Y1="16">
+            <Line StrokeThickness="2" X2="16" X1="16" Y1="16" Visibility="{Binding Exits[0], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Line StrokeThickness="2" X2="16" X1="16" Y1="16" Y2="32">
+            <Line StrokeThickness="2" X2="16" X1="16" Y1="16" Y2="32" Visibility="{Binding Exits[1], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Line.Stroke>
                     <SolidColorBrush Color="{DynamicResource ExitColor}"/>
                 </Line.Stroke>
             </Line>
-            <Border BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="2" Width="20" Height="20">
-                <Border.Background>
-                    <SolidColorBrush Color="{DynamicResource BackgroundColor}"/>
-                </Border.Background>
+            <Border BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="2" Width="20" Height="20" Background="{Binding Terrain.Id, Converter={StaticResource TerrainBrushConverter}, FallbackValue=#FF1c1c1c}">
                 <Border.BorderBrush>
                     <SolidColorBrush Color="{DynamicResource BorderColor}"/>
                 </Border.BorderBrush>
                 <Border.ContextMenu>
                     <ContextMenu>
+                        <MenuItem Header="Create Place"/>
                         <MenuItem Header="Make Dungeon Entrance"/>
                         <MenuItem Header="Delete"/>
                     </ContextMenu>
                 </Border.ContextMenu>
             </Border>
-            <!--<Path Data="M16,12 L12,15.5 20.083034,15.499667 z" Fill="#FF1F990E" Margin="18.743,10.792,18.211,0" Stretch="Fill" Stroke="#FF1F990E" Height="6.583" VerticalAlignment="Top" Visibility="{Binding Up, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Path Data="M16,12 L12,15.5 20.083034,15.499667 z" Fill="#FF1F990E" Margin="17.875,0,17.628,10.868" Stretch="Fill" Stroke="#FF1F990E" RenderTransformOrigin="0.5,0.5" Height="7.721" VerticalAlignment="Bottom" Visibility="{Binding Down, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <Path Width="16.125" Height="8" Canvas.Left="2.0125" Canvas.Top="1.225" Stretch="Fill" 
+                  Data="F1 M 2.0125,9.19375L 10.0437,1.225L 18.1375,9.225L 2.0125,9.19375 Z " 
+                  Margin="8.437,7.875,7.437,16.125"
+                  Visibility="{Binding Exits[8], Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Path.Fill>
+                    <SolidColorBrush Color="{DynamicResource ExitColor}"/>
+                </Path.Fill>
+            </Path>
+            <Path Width="16.125" Height="8" Stretch="Fill" 
+                  Data="F1 M 2.0125,9.19375L 10.0437,1.225L 18.1375,9.225L 2.0125,9.19375 Z " 
+                  Margin="8.437,15.875,7.437,8.125" 
+                  RenderTransformOrigin="0.5,0.5"
+                  Visibility="{Binding Exits[9], Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Path.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform ScaleY="-1" ScaleX="1"/>
-                        <SkewTransform AngleY="0" AngleX="0"/>
-                        <RotateTransform Angle="0"/>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
                         <TranslateTransform/>
                     </TransformGroup>
                 </Path.RenderTransform>
-            </Path>-->
+                <Path.Fill>
+                    <SolidColorBrush Color="{DynamicResource DownColor}"/>
+                </Path.Fill>
+            </Path>
         </Grid>
     </Border>
 </UserControl>

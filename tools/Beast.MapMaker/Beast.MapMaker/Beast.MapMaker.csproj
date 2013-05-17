@@ -68,17 +68,39 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ZoomableCanvas">
+      <HintPath>..\..\..\lib\ZoomableCanvas.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\InverseBooleanVisiblityConverter.cs" />
+    <Compile Include="Converter\TerrainBrushConverter.cs" />
+    <Compile Include="Dialogs\NewMapDialog.xaml.cs">
+      <DependentUpon>NewMapDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\IFileService.cs" />
+    <Compile Include="Services\IMapService.cs" />
+    <Compile Include="Services\IPlaceService.cs" />
+    <Compile Include="Services\IShutdownService.cs" />
+    <Compile Include="Services\ITerrainService.cs" />
     <Compile Include="Tile.xaml.cs">
       <DependentUpon>Tile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\BackingObjectViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MapViewModel.cs" />
+    <Compile Include="ViewModel\TerrainViewModel.cs" />
+    <Compile Include="ViewModel\TileViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="Dialogs\NewMapDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -159,6 +181,20 @@
   <ItemGroup>
     <Resource Include="Assets\appbar.draw.pencil.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.tree.pine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Beast.Components.Rpg\Beast.Components.Rpg.csproj">
+      <Project>{4ab23d7f-5ba3-496a-aff9-14be19fe65ce}</Project>
+      <Name>Beast.Components.Rpg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Beast\Beast.csproj">
+      <Project>{fc0b789b-f7df-483e-bb91-1899d7739c8b}</Project>
+      <Name>Beast</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

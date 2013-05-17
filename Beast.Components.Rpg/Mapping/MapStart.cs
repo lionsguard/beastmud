@@ -11,7 +11,17 @@ namespace Beast.Mapping
         public int MinLevel { get; set; }
         public int MaxLevel { get; set; }
 
-        public static MapStart FromPlace(Place place)
+        public IPlace ToPlace()
+        {
+            return new Place
+            {
+                Location = Location,
+                Exits = Exits,
+                Terrain = Terrain
+            };
+        }
+
+        public static MapStart FromPlace(IPlace place)
         {
             return new MapStart
             {

@@ -10,7 +10,7 @@ namespace Beast.Mapping
 
         public List<MapTile> Tiles { get; set; }
 
-        public MapLevel(int width, int height, int z, IDictionary<Unit, Place> places)
+        public MapLevel(int width, int height, int z, IDictionary<Unit, IPlace> places)
         {
             Width = width;
             Height = height;

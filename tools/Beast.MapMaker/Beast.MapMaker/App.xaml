@@ -9,10 +9,21 @@
              StartupUri="MainWindow.xaml" >
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
             <Color x:Key="BorderColor">#FF2D2D30</Color>
             <Color x:Key="ExitColor">#FF25611C</Color>
             <Color x:Key="BackgroundColor">#FF1C1C1C</Color>
+            <Color x:Key="DownColor">#FF611C1C</Color>
+            <Color x:Key="HighlightColor">#99B49016</Color>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -4,7 +4,7 @@ namespace Beast.Mapping
 {
     public class Terrain
     {
-        public static readonly Terrain Empty = new Terrain { Id = 0, Name = "None", Color = "000000" };
+        public static readonly Terrain Empty = new Terrain { Id = 0, Name = "None", Color = "1C1C1C" };
 
         #region Default Terrain
         public static readonly IEnumerable<Terrain> DefaultTerrain = new[]
@@ -13,7 +13,7 @@ namespace Beast.Mapping
             new Terrain{Id = 2, Name = "Desert", Color = "bf8f30"},
             new Terrain{Id = 3, Name = "Urban", Color = "8c8c8c"},
             new Terrain{Id = 4, Name = "Jungle", Color = "539700"},
-            new Terrain{Id = 5, Name = "Forest", Color = "820900"},
+            new Terrain{Id = 5, Name = "Forest", Color = "008209"},
             new Terrain{Id = 6, Name = "Fresh Water", Color = "0058c7"},
             new Terrain{Id = 7, Name = "Sea Water", Color = "00b361"},
             new Terrain{Id = 8, Name = "River", Color = "0000c7"},

@@ -79,17 +79,7 @@ namespace Beast
 		public Unit MoveTowards(Unit destination)
 		{
 			var edge = destination - this;
-			//int x = 0, y = 0;
 			edge.Normalize();
-			//if (edge.X != 0)
-			//{
-			//    x = edge.X > 0 ? 1 : -1;
-			//}
-			//if (edge.Y != 0)
-			//{
-			//    y = edge.Y > 0 ? 1 : -1;
-			//}
-			//return new Unit(x, y, 0);
 			return edge;
 		}
 

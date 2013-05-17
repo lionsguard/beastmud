@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Beast.Mapping
 {
-    public class Map : ICollection<Place>
+    public class Map : ICollection<IPlace>
     {
-        private readonly Dictionary<Unit, Place> _places = new Dictionary<Unit, Place>();
+        private readonly Dictionary<Unit, IPlace> _places = new Dictionary<Unit, IPlace>();
 
         public string Name { get; set; }
         public int Width { get; set; }
@@ -27,13 +27,13 @@ namespace Beast.Mapping
 
         public List<Terrain> Terrain { get; set; }
 
-        public Place Start { get; set; }
+        public IPlace Start { get; set; }
 
-        public Place this[Unit unit]
+        public IPlace this[Unit unit]
         {
             get 
             {
-                Place place;
+                IPlace place;
                 _places.TryGetValue(unit, out place);
                 return place; 
             }
@@ -45,12 +45,12 @@ namespace Beast.Mapping
             Terrain = new List<Terrain>(Beast.Mapping.Terrain.DefaultTerrain);
         }
 
-        public void Add(Place place)
+        public void Add(IPlace place)
         {
             this[place.Location] = place;
         }
 
-        public void AddRange(IEnumerable<Place> places)
+        public void AddRange(IEnumerable<IPlace> places)
         {
             foreach (var place in places)
             {
@@ -68,12 +68,12 @@ namespace Beast.Mapping
             _places.Clear();
         }
 
-        public bool Contains(Place item)
+        public bool Contains(IPlace item)
         {
             return _places.ContainsKey(item.Location);
         }
 
-        public void CopyTo(Place[] array, int arrayIndex)
+        public void CopyTo(IPlace[] array, int arrayIndex)
         {
             _places.Values.CopyTo(array, arrayIndex);
         }
@@ -88,12 +88,12 @@ namespace Beast.Mapping
             get { return false; }
         }
 
-        public bool Remove(Place item)
+        public bool Remove(IPlace item)
         {
             return _places.Remove(item.Location);
         }
 
-        public IEnumerator<Place> GetEnumerator()
+        public IEnumerator<IPlace> GetEnumerator()
         {
             return _places.Values.GetEnumerator();
         }

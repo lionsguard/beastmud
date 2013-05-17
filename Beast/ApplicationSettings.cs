@@ -139,6 +139,15 @@ namespace Beast
         }
 
         /// <summary>
+        /// Creates an ApplicationSettings instance from configuration or uses the default settings if configuration information is not present.
+        /// </summary>
+        /// <returns>An ApplicationSettings instance from configuration.</returns>
+        public static ApplicationSettings FromConfigOrDefault()
+        {
+            return FromConfig() ?? Default;
+        }
+
+        /// <summary>
         /// Adds all the configuration appSettings to the specified settings instance.
         /// </summary>
         /// <param name="settings">The ApplicationSettings to load.</param>

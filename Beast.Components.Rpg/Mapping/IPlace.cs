@@ -12,5 +12,7 @@ namespace Beast.Mapping
         ExitCollection Exits { get; set; }
         int Terrain { get; set; }
         int Flags { get; set; }
+
+        bool HasExit(KnownDirection direction);
     }
 }
