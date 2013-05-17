@@ -61,6 +61,17 @@
                     </ContextMenu>
                 </Border.ContextMenu>
             </Border>
+            <!--<Path Data="M16,12 L12,15.5 20.083034,15.499667 z" Fill="#FF1F990E" Margin="18.743,10.792,18.211,0" Stretch="Fill" Stroke="#FF1F990E" Height="6.583" VerticalAlignment="Top" Visibility="{Binding Up, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Path Data="M16,12 L12,15.5 20.083034,15.499667 z" Fill="#FF1F990E" Margin="17.875,0,17.628,10.868" Stretch="Fill" Stroke="#FF1F990E" RenderTransformOrigin="0.5,0.5" Height="7.721" VerticalAlignment="Bottom" Visibility="{Binding Down, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                        <SkewTransform AngleY="0" AngleX="0"/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>-->
         </Grid>
     </Border>
 </UserControl>
