@@ -79,6 +79,9 @@
     </ApplicationDefinition>
     <Compile Include="Converter\InverseBooleanVisiblityConverter.cs" />
     <Compile Include="Converter\TerrainBrushConverter.cs" />
+    <Compile Include="Dialogs\NewDungeonDialog.xaml.cs">
+      <DependentUpon>NewDungeonDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\NewMapDialog.xaml.cs">
       <DependentUpon>NewMapDialog.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
     <Compile Include="ViewModel\TerrainViewModel.cs" />
     <Compile Include="ViewModel\TileViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="Dialogs\NewDungeonDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\NewMapDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

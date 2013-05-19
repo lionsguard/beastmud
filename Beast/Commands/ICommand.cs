@@ -21,6 +21,11 @@ namespace Beast.Commands
         IEnumerable<string> ArgumentNames { get; }
 
         /// <summary>
+        /// Gets the help text for current command.
+        /// </summary>
+        string HelpText { get; }
+
+        /// <summary>
         /// Executes the current command.
         /// </summary>
         /// <param name="alias">The alias used for executing the command.</param>

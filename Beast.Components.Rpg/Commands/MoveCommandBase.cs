@@ -12,7 +12,7 @@ namespace Beast.Commands
             get { return new []{"direction"}; }
         }
 
-        protected override void ExecuteOverride(IConnection connection, IInput input, IOutput output)
+        protected override void ExecuteOverride(string alias, IConnection connection, IInput input, IOutput output)
         {
             output.Command = "move";
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Beast.Mapping
@@ -145,5 +146,27 @@ namespace Beast.Mapping
 				       	};
 			}
 		}
+
+        public static bool TryGetDirection(string nameOrValue, out Direction direction)
+        {
+            KnownDirection dir;
+            if (Enum.TryParse(nameOrValue, true, out dir))
+            {
+                direction = FromKnownDirection(dir);
+                return true;
+            }
+
+            foreach (var d in All)
+            {
+                if (d.Aliases.Contains(nameOrValue))
+                {
+                    direction = d;
+                    return true;
+                }
+            }
+
+            direction = North;
+            return false;
+        }
 	}
 }

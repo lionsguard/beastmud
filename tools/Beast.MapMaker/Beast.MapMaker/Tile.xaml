@@ -58,11 +58,12 @@
                 </Border.BorderBrush>
                 <Border.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Create Place"/>
+                        <MenuItem Header="Generate Map" Command="{Binding GenerateMapCommand}"/>
+                        <!--<MenuItem Header="Create Place"/>
                         <MenuItem Header="Tunnel Down"/>
                         <MenuItem Header="Tunnel Up"/>
                         <MenuItem Header="Make Dungeon Entrance"/>
-                        <MenuItem Header="Delete"/>
+                        <MenuItem Header="Delete"/>-->
                     </ContextMenu>
                 </Border.ContextMenu>
             </Border>

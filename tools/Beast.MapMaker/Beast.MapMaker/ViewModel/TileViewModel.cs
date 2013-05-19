@@ -1,10 +1,12 @@
 ﻿using Beast.MapMaker.Services;
 using Beast.Mapping;
+using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Windows.Input;
 
 namespace Beast.MapMaker.ViewModel
 {
@@ -243,11 +245,17 @@ namespace Beast.MapMaker.ViewModel
         
         public ObservableCollection<bool> Exits { get; set; }
 
-        private TileViewModel()
+        public ICommand GenerateMapCommand { get; set; }
+
+        public TileViewModel()
         {
             Exits = new ObservableCollection<bool>(new[]
             {
                 false, false, false, false, false, false, false, false, false, false
+            });
+
+            GenerateMapCommand = new RelayCommand(() =>
+            {
             });
         }
 

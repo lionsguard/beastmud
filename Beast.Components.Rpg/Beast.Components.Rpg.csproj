@@ -50,6 +50,8 @@
     </Compile>
     <Compile Include="AStarSearch.cs" />
     <Compile Include="BoundProperty.cs" />
+    <Compile Include="Commands\HelpCommandBase.cs" />
+    <Compile Include="Commands\LookCommandBase.cs" />
     <Compile Include="Commands\MoveCommandBase.cs" />
     <Compile Include="Data\DataSettingsKeys.cs" />
     <Compile Include="Data\DefaultDataProvider.cs" />

@@ -22,6 +22,11 @@ namespace Beast.Commands
         public abstract IEnumerable<string> ArgumentNames { get; }
 
         /// <summary>
+        /// Gets the help text for current command.
+        /// </summary>
+        public abstract string HelpText { get; }
+
+        /// <summary>
         /// Executes the current command.
         /// </summary>
         /// <param name="alias">The alias used for executing the command.</param>
@@ -52,7 +57,7 @@ namespace Beast.Commands
 				}
 				
 				Log.Info("Performing execution override");
-                ExecuteOverride(connection, input, output);
+                ExecuteOverride(alias, connection, input, output);
 				
 				Log.Info("Writing output to connection");
 				connection.Write(output);
@@ -81,10 +86,11 @@ namespace Beast.Commands
         /// In a derived class, executes the actual command, updating the specified output as required. The specified output is 
         /// written to the connection by the calling method.
         /// </summary>
+        /// <param name="alias">The alias used for executing the command.</param>
         /// <param name="connection">The connection executing the command.</param>
         /// <param name="input">The input for the command.</param>
         /// <param name="output">The output for the current command.</param>
-		protected abstract void ExecuteOverride(IConnection connection, IInput input, IOutput output);
+        protected abstract void ExecuteOverride(string alias, IConnection connection, IInput input, IOutput output);
 		
         /// <summary>
         /// Validates the arguments for the command, checking for number of arguments and data types. Default implementation is empty.
