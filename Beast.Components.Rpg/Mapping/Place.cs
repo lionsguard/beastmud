@@ -1,6 +1,7 @@
 ﻿
 namespace Beast.Mapping
 {
+    [System.Diagnostics.DebuggerDisplay("{Location} : [{Terrain}] - {Name}")]
     public class Place : GameObject, IPlace
     {
         public Unit Location { get; set; }
@@ -17,6 +18,16 @@ namespace Beast.Mapping
         public bool HasExit(KnownDirection direction)
         {
             return Exits.HasExit(direction);
+        }
+
+        public bool HasFlag(PlaceFlag flag)
+        {
+            return HasFlag(flag.Value);
+        }
+
+        public virtual bool HasFlag(int flag)
+        {
+            return (Flags & flag) == flag;
         }
     }
 }

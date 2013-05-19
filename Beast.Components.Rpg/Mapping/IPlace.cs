@@ -14,5 +14,7 @@ namespace Beast.Mapping
         int Flags { get; set; }
 
         bool HasExit(KnownDirection direction);
+        bool HasFlag(PlaceFlag flag);
+        bool HasFlag(int flag);
     }
 }

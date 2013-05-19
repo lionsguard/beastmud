@@ -1,6 +1,7 @@
 ﻿using Beast.MapMaker.Services;
 using Microsoft.Practices.ServiceLocation;
 using System;
+using System.Linq;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -15,12 +16,11 @@ namespace Beast.MapMaker.Converter
             if (value == null || !(value is int))
                 return defaultBrush;
 
-            var id = (int)value;
-            var service = ServiceLocator.Current.GetInstance<ITerrainService>();
-            if (service == null)
+            var world = DependencyResolver.Resolve<IWorld>();
+            if (world == null)
                 return defaultBrush;
 
-            var terrain = service.GetTerrain(id);
+            var terrain = world.Terrain.FirstOrDefault(t => t.Id == (int)value);
             if (terrain == null)
                 return defaultBrush;
 

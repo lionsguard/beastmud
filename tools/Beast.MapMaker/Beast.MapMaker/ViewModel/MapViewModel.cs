@@ -1,6 +1,7 @@
 ﻿using Beast.Mapping;
 using GalaSoft.MvvmLight;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Beast.MapMaker.ViewModel
 {
@@ -17,8 +18,6 @@ namespace Beast.MapMaker.ViewModel
                     return;
 
                 _backingMap = value;
-
-                LoadTerrain();
 
                 RaisePropertyChanged(PropertyNameBackingMap);
                 RaisePropertyChanged(PropertyNameName);
@@ -85,8 +84,6 @@ namespace Beast.MapMaker.ViewModel
         }
         private const string PropertyNameMaxLevel = "MaxLevel";
 
-        public ObservableCollection<TerrainViewModel> Terrain { get; set; }
-
         public MapViewModel()
             : this(new Map
             {
@@ -100,20 +97,7 @@ namespace Beast.MapMaker.ViewModel
         
         public MapViewModel(Map map)
         {
-            Terrain = new ObservableCollection<TerrainViewModel>();
             BackingMap = map;
-        }
-
-        private void LoadTerrain()
-        {
-            if (BackingMap == null)
-                return;
-
-            Terrain.Clear();
-            foreach (var terrain in BackingMap.Terrain)
-            {
-                Terrain.Add(new TerrainViewModel(terrain));
-            }
         }
     }
 }

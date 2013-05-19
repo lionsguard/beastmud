@@ -27,7 +27,7 @@ namespace Beast.MapMaker.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase, ITerrainService, IPlaceService
+    public class MainViewModel : ViewModelBase, IPlaceService, ITerrainService
     {
         private MapViewModel _map;
         private const string PropertyNameMap = "Map";
@@ -89,9 +89,6 @@ namespace Beast.MapMaker.ViewModel
             get { return _selectedTile; }
             set
             {
-                if (value == _selectedTile)
-                    return;
-
                 TileViewModel previousTile = null;
                 if (_selectedTile != null)
                 {
@@ -200,11 +197,16 @@ namespace Beast.MapMaker.ViewModel
         public ICommand ExitCommand { get; set; }
         public ICommand EditTerrainCommand { get; set; }
 
+        public ICommand MoveCommand { get; set; }
+
         public ObservableCollection<TileViewModel> Tiles { get; set; }
+        public ObservableCollection<TerrainViewModel> Terrain { get; set; }
+        public ObservableCollection<PlaceFlagViewModel> PlaceFlags { get; set; }
 
         private IMapService _mapService;
         private IFileService _fileService;
         private IDialogService _dialogService;
+        private IWorldDataService _worldDataService;
 
         private Dispatcher _dispatcher;
 
@@ -214,52 +216,66 @@ namespace Beast.MapMaker.ViewModel
         public MainViewModel()
         {
             Tiles = new ObservableCollection<TileViewModel>();
+            Terrain = new ObservableCollection<TerrainViewModel>();
+            PlaceFlags = new ObservableCollection<PlaceFlagViewModel>();
 
-            SimpleIoc.Default.Register<ITerrainService>(() => this);
+            foreach (var terrain in DependencyResolver.Resolve<IWorld>().Terrain.OrderBy(t => t.Name))
+            {
+                Terrain.Add(new TerrainViewModel(terrain));
+            }
+            foreach (var flag in DependencyResolver.Resolve<IWorld>().PlaceFlags.Where(f => f.Value > 0).OrderBy(f => f.Value))
+            {
+                PlaceFlags.Add(new PlaceFlagViewModel
+                {
+                    Name = string.Format("{0} [{1}]", flag.Name, flag.Value),
+                    Value = flag.Value
+                });
+            }
+
             SimpleIoc.Default.Register<IPlaceService>(() => this);
+            SimpleIoc.Default.Register<ITerrainService>(() => this);
 
             _dispatcher = Dispatcher.CurrentDispatcher;
 
             _mapService = ServiceLocator.Current.GetInstance<IMapService>();
             _fileService = ServiceLocator.Current.GetInstance<IFileService>();
             _dialogService = ServiceLocator.Current.GetInstance<IDialogService>();
+            _worldDataService = ServiceLocator.Current.GetInstance<IWorldDataService>();
 
             NewMapCommand = new RelayCommand(() => 
             {
                 FileName = string.Empty;
-
+                _currentZ = 0;
+                
                 var vm = new MapViewModel();
                 if (_dialogService.ShowDialog<NewMapDialog>(vm) == true)
                 {
                     Map = vm;
                 }
             });
-            OpenMapCommand = new RelayCommand(() => 
+            OpenMapCommand = new RelayCommand(() =>
             {
-                var file = _fileService.OpenFile("Open Map", "Map files|*.json");
-                if (!string.IsNullOrEmpty(file))
-                {
-                    FileName = file;
-                    Map = new MapViewModel(_mapService.GetMap(FileName));
-                }
+                _currentZ = 0;
+                Map = new MapViewModel(_mapService.GetMap());
             });
             SaveMapCommand = new RelayCommand(() => 
             {
-                if (string.IsNullOrEmpty(FileName))
-                {
-                    FileName = _fileService.SaveFile("Save Map", "Map files|*.json", "json");
-                }
-
-                if (string.IsNullOrEmpty(FileName))
-                    return;
-
-                _mapService.SaveMap(Map.BackingMap, FileName);
+                _mapService.SaveMap(Map.BackingMap);
             }, () => Map != null);
             ExitCommand = new RelayCommand(() => ServiceLocator.Current.GetInstance<IShutdownService>().Shutdown());
 
             EditTerrainCommand = new RelayCommand(() =>
             {
             }, () => Map != null);
+
+            MoveCommand = new RelayCommand<string>(s =>
+                {
+                    KnownDirection dir;
+                    if (Enum.TryParse(s, true, out dir))
+                    {
+                        TryMoveOnZ(Direction.FromKnownDirection(dir));
+                    }
+                }, s => Map != null);
         }
 
         private void CreateTiles()
@@ -327,6 +343,12 @@ namespace Beast.MapMaker.ViewModel
             if (_selectedTile == null)
                 return;
 
+            // Flags
+            foreach (var flag in PlaceFlags)
+            {
+                flag.BackingObject = _selectedTile.BackingObject;
+            }
+
             var terrain = SelectedTerrain;
 
             switch (EditorAction)
@@ -344,6 +366,9 @@ namespace Beast.MapMaker.ViewModel
                         };
                         _selectedTile.BackingObject = place;
                         Map.BackingMap.Add(place);
+
+                        if (Map.BackingMap.Start == null)
+                            Map.BackingMap.Start = place;
                     }
                     else
                     {
@@ -362,36 +387,78 @@ namespace Beast.MapMaker.ViewModel
                 if (start == null || end == null)
                     return;
 
+                if (start.Location.Z != end.Location.Z)
+                {
+                    if (Math.Abs(start.Location.Z - end.Location.Z) == 1)
+                    {
+                        TunnelExit(Direction.FromUnit(end.Location), previousTile, _selectedTile);
+                    }
+                    return;
+                }
+
                 if (start.Location.DistanceTo(end.Location) > 1)
                     return;
 
                 var dir = Direction.FromPoints(start.Location, end.Location);
 
-                previousTile.AddExit(dir);
-                _selectedTile.AddExit(dir.Counter());
+                TunnelExit(dir, previousTile, _selectedTile);
             }
         }
 
-        #region Terrain
-        public TerrainViewModel GetTerrain(int id)
+        private void TunnelExit(Direction direction, TileViewModel start, TileViewModel end)
         {
-            if (Map == null)
-                return null;
-            return Map.Terrain.FirstOrDefault(t => t.Id == id);
+            start.AddExit(direction);
+            end.AddExit(direction.Counter());
         }
 
-        public IEnumerable<TerrainViewModel> GetAllTerrain()
+        private void TryMoveOnZ(Direction direction)
         {
-            if (Map == null)
-                return new TerrainViewModel[0];
-            return Map.Terrain;
-        }
+            var currentTile = SelectedTile ?? new TileViewModel(Unit.Zero);
 
-        public void SaveTerrain(TerrainViewModel terrain)
-        {
-            throw new System.NotImplementedException();
+            if (direction.Value == KnownDirection.Up || direction.Value == KnownDirection.Down)
+            {
+                var x = currentTile.X;
+                var y = currentTile.Y;
+
+                var z = CurrentZ + direction.Unit.Z;
+
+                // See if a place exists in the given direction.
+                var pos = new Unit(x, y, z);
+                if (IsTunneling)
+                {
+                    var dest = Map.BackingMap[pos];
+                    if (dest == null)
+                    {
+                        // Create new place
+                        dest = new Place
+                        {
+                            Location = pos
+                        };
+                        Map.BackingMap.Add(dest);
+                    }
+                }
+
+                var currentPlace = Map.BackingMap[new Unit(x, y, CurrentZ)];
+                CurrentZ = z; // Reloads the map
+
+                var wasTunneling = IsTunneling;
+
+                // Disable tunneling before selection
+                IsTunneling = false;
+                SelectedTile = Tiles.FirstOrDefault(t => t.X == pos.X && t.Y == pos.Y);
+                IsTunneling = wasTunneling;
+
+                if (IsTunneling && SelectedTile != null && currentPlace != null)
+                {
+                    IsTunneling = false;
+
+                    currentPlace.Exits[direction.Value] = true;
+                    SelectedTile.AddExit(direction.Counter());
+
+                    IsTunneling = true;
+                }
+            }
         }
-        #endregion
 
         public void SetPlace(IPlace place)
         {
@@ -399,6 +466,11 @@ namespace Beast.MapMaker.ViewModel
                 return;
 
             Map.BackingMap[place.Location] = place;
+        }
+
+        public TerrainViewModel GetTerrain(int id)
+        {
+            return Terrain.FirstOrDefault(t => t.Id == id);
         }
     }
 

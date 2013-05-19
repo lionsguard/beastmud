@@ -24,7 +24,7 @@ namespace Beast.Mapping
             {
                 if (start == null)
                 {
-                    CreateStartPosition(z, end, out start);
+                    CreateStartPosition(z, end, mapStart.Terrain, out start);
                     places.Add(start.Location, start);
                 }
 
@@ -66,7 +66,7 @@ namespace Beast.Mapping
             {
                 var node = path.Pop();
 
-                AddPlace(node, map, ref prev);
+                AddPlace(node, map, start.Terrain, ref prev);
 
                 // Randomly choose some of these nodes as an additional starting point.
                 if (_rnd.Next(0, 100) >= 50)
@@ -89,7 +89,7 @@ namespace Beast.Mapping
                 while (path.Count > 0)
                 {
                     var node = path.Pop();
-                    AddPlace(node, map, ref prev);
+                    AddPlace(node, map, start.Terrain, ref prev);
                 }
 
                 starts.RemoveAt(i);
@@ -97,12 +97,12 @@ namespace Beast.Mapping
             }
         }
 
-        private void AddPlace(Unit node, IDictionary<Unit, Place> map, ref Place prev)
+        private void AddPlace(Unit node, IDictionary<Unit, Place> map, int terrain, ref Place prev)
         {
             Place place;
             if (!map.TryGetValue(node, out place))
             {
-                place = new Place { Location = node };
+                place = new Place { Location = node, Terrain = terrain };
                 map.Add(node, place);
             }
 
@@ -135,16 +135,16 @@ namespace Beast.Mapping
             return new Stack<Direction>(Direction.All.ToList().Shuffle());
         }
 
-        private void CreateStartPosition(int z, Place previousEnd, out Place start)
+        private void CreateStartPosition(int z, Place previousEnd, int terrain, out Place start)
         {
             if (previousEnd != null)
             {
-                start = new Place { Location = new Unit(previousEnd.Location.X, previousEnd.Location.Y, z) };
+                start = new Place { Location = new Unit(previousEnd.Location.X, previousEnd.Location.Y, z), Terrain = terrain };
                 return;
             }
 
             var startEdge = _rnd.Next(0, 3);
-            start = new Place { Location = CreateUnitFromEgde(startEdge, z) };
+            start = new Place { Location = CreateUnitFromEgde(startEdge, z), Terrain = terrain };
         }
 
         private Place CreateEndPosition(Place start)
@@ -166,7 +166,7 @@ namespace Beast.Mapping
                     dest = CreateUnitFromEgde(2, start.Location.Z);
                     break;
             }
-            return new Place { Location = new Unit(dest.X, dest.Y, start.Location.Z) };
+            return new Place { Location = new Unit(dest.X, dest.Y, start.Location.Z), Terrain = start.Terrain };
         }
 
         private int FindEdge(Unit unit)

@@ -25,8 +25,6 @@ namespace Beast.Mapping
             }
         }
 
-        public List<Terrain> Terrain { get; set; }
-
         public IPlace Start { get; set; }
 
         public IPlace this[Unit unit]
@@ -38,11 +36,6 @@ namespace Beast.Mapping
                 return place; 
             }
             set { _places[unit] = value; }
-        }
-
-        public Map()
-        {
-            Terrain = new List<Terrain>(Beast.Mapping.Terrain.DefaultTerrain);
         }
 
         public void Add(IPlace place)
@@ -119,7 +112,7 @@ namespace Beast.Mapping
         /// </summary>
         public void Generate()
         {
-            var mapStarts = _places.Values.Where(p => p is MapStart).Select(p => p as MapStart);
+            var mapStarts = _places.Values.Where(p => p is MapStart).Select(p => p as MapStart).ToArray();
 
             var mapper = new Mapper();
             foreach (var start in mapStarts)

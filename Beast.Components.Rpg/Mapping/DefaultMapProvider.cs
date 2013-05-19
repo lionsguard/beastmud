@@ -1,5 +1,6 @@
 ﻿using Beast.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Beast.Mapping
 {
@@ -41,7 +42,6 @@ namespace Beast.Mapping
             public int Height { get; set; }
             public Unit Start { get; set; }
             public Map MapData { get; set; }
-            public List<Terrain> Terrain { get; set; }
 
             public MapFile()
             {
@@ -54,7 +54,6 @@ namespace Beast.Mapping
                 Height = map.Height;
                 Start = map.Start != null ? map.Start.Location : Unit.Empty;
                 MapData = map;
-                Terrain = map.Terrain;
             }
 
             public Map GetMap()
@@ -63,7 +62,6 @@ namespace Beast.Mapping
                 map.Name = Name;
                 map.Width = Width;
                 map.Height = Height;
-                map.Terrain = Terrain;
                 map.Start = map[Start];
                 return map;
             }

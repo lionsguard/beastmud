@@ -3,6 +3,7 @@ using Beast.Mapping;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Beast.MapMaker.ViewModel
@@ -52,10 +53,10 @@ namespace Beast.MapMaker.ViewModel
         private const string PropertyNameTerrain = "Terrain";
         public TerrainViewModel Terrain 
         {
-            get { return _terrainService.GetTerrain(GetPropertyValue(p => p.Terrain)); }
+            get { return ServiceLocator.Current.GetInstance<ITerrainService>().GetTerrain(GetPropertyValue(p => p.Terrain)); }
             set
             {
-                SetPropertyValue(p => p.Terrain, value.Id);
+                SetPropertyValue(p => p.Terrain, value != null ? value.Id : 0);
                 RaisePropertyChanged(PropertyNameTerrain);
             }
         }
@@ -242,12 +243,12 @@ namespace Beast.MapMaker.ViewModel
         
         public ObservableCollection<bool> Exits { get; set; }
 
-        private ITerrainService _terrainService;
-
         private TileViewModel()
         {
-            _terrainService = ServiceLocator.Current.GetInstance<ITerrainService>();
-            Exits = new ObservableCollection<bool>();
+            Exits = new ObservableCollection<bool>(new[]
+            {
+                false, false, false, false, false, false, false, false, false, false
+            });
         }
 
         public TileViewModel(Unit position)
@@ -267,14 +268,13 @@ namespace Beast.MapMaker.ViewModel
         {
             RaisePropertyChanged(PropertyNameTerrain);
 
-            if (BackingObject != null)
-            {
-                SetPosition(BackingObject.Location);
-                SetExits(BackingObject.Exits);
-                RaisePropertyChanged(PropertyNameHasPlace);
-                RaisePropertyChanged(PropertyNameTerrain);
-                RaisePropertyChanged(PropertyNameIsMapStart);
-            }
+            var exits = BackingObject != null ? BackingObject.Exits : new ExitCollection();
+
+            SetExits(exits);
+
+            RaisePropertyChanged(PropertyNameHasPlace);
+            RaisePropertyChanged(PropertyNameTerrain);
+            RaisePropertyChanged(PropertyNameIsMapStart);
         }
 
         private void SetPosition(Unit position)
@@ -287,11 +287,10 @@ namespace Beast.MapMaker.ViewModel
 
         private void SetExits(ExitCollection exits)
         {
-            Exits.Clear();
             for (int i = 0; i < 10; i++)
             {
                 var kd = (KnownDirection)i;
-                Exits.Add(exits.HasExit(kd));
+                Exits[i] = exits.HasExit(kd);
             }
         }
 

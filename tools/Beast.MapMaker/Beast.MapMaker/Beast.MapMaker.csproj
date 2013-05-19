@@ -82,16 +82,14 @@
     <Compile Include="Dialogs\NewMapDialog.xaml.cs">
       <DependentUpon>NewMapDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\IFileService.cs" />
-    <Compile Include="Services\IMapService.cs" />
+    <Compile Include="MapperWorld.cs" />
     <Compile Include="Services\IPlaceService.cs" />
     <Compile Include="Services\IShutdownService.cs" />
     <Compile Include="Services\ITerrainService.cs" />
     <Compile Include="Tile.xaml.cs">
       <DependentUpon>Tile.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\BackingObjectViewModel.cs" />
+    <Compile Include="ViewModel\PlaceFlagViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MapViewModel.cs" />
     <Compile Include="ViewModel\TerrainViewModel.cs" />
@@ -193,6 +191,14 @@
       <Project>{fc0b789b-f7df-483e-bb91-1899d7739c8b}</Project>
       <Name>Beast</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Beast.MapMaker.Contracts\Beast.MapMaker.Contracts.csproj">
+      <Project>{d4c640c8-2772-4a05-a082-e86760f829b1}</Project>
+      <Name>Beast.MapMaker.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.arrow.down.png" />
+    <Resource Include="Assets\appbar.arrow.up.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

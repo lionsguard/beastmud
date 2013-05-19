@@ -29,7 +29,7 @@
             </ItemsPanelTemplate>
             <DataTemplate x:Key="FlagItemTemplate">
                 <Grid d:DesignWidth="241" d:DesignHeight="32">
-                    <CheckBox Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <CheckBox Content="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="{Binding IsSelected}"/>
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="TerrainItemTemplate">
@@ -98,6 +98,8 @@
         <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewMapCommand}"/>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveMapCommand}"/>
         <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}"/>
+        <KeyBinding Key="U" Modifiers="Control" Command="{Binding MoveCommand}" CommandParameter="Up"/>
+        <KeyBinding Key="D" Modifiers="Control" Command="{Binding MoveCommand}" CommandParameter="Down"/>
     </Controls:MetroWindow.InputBindings>
     <DockPanel>
         <DockPanel.Background>
@@ -127,18 +129,26 @@
                 <ToggleButton ToolTip="Exits" Style="{StaticResource ToolbarButton}" IsChecked="{Binding IsTunneling}">
                     <Image Source="Assets/appbar.diagram.png" Stretch="UniformToFill"/>
                 </ToggleButton>
+                <Button ToolTip="Up" Style="{StaticResource ToolbarButton}" Command="{Binding MoveCommand}" CommandParameter="Up">
+                    <Image Source="Assets/appbar.arrow.up.png" Stretch="UniformToFill"/>
+                </Button>
+                <Button ToolTip="Down" Style="{StaticResource ToolbarButton}" Command="{Binding MoveCommand}" CommandParameter="Down">
+                    <Image Source="Assets/appbar.arrow.down.png" Stretch="UniformToFill"/>
+                </Button>
                 <Separator/>
                 <Button ToolTip="Edit Terrain" Style="{StaticResource ToolbarButton}" Command="{Binding EditTerrainCommand}">
                     <Image Source="Assets/appbar.tree.pine.png" Stretch="UniformToFill"/>
                 </Button>
                 <Separator/>
-                <ComboBox ItemTemplate="{DynamicResource TerrainItemTemplate}" ItemsSource="{Binding Map.Terrain}" MinWidth="120" SelectedValue="{Binding SelectedTerrain}"/>
+                <ComboBox ItemTemplate="{DynamicResource TerrainItemTemplate}" ItemsSource="{Binding Terrain}" MinWidth="120" SelectedValue="{Binding SelectedTerrain}"/>
             </ToolBar>
         </ToolBarPanel>
         <StatusBar VerticalAlignment="Top" DockPanel.Dock="Bottom" Height="24">
             <StatusBar.Background>
                 <SolidColorBrush Color="{DynamicResource BorderColor}"/>
             </StatusBar.Background>
+            <TextBlock TextWrapping="Wrap" Text="Z:"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding CurrentZ}"/>
         </StatusBar>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -182,7 +192,7 @@
                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="PLACE DETAILS" VerticalAlignment="Top" FontSize="14" Margin="0,0,0,8"/>
                     <StackPanel Margin="4" Orientation="Vertical" Grid.Row="1">
                         <CheckBox Content="Is Dungeon Entrance" Height="17" IsChecked="{Binding SelectedTile.IsMapStart}"/>
-                        <StackPanel Visibility="{Binding IsMapStart, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=False}" Margin="0,4" DataContext="{Binding SelectedTile}">
+                        <StackPanel Visibility="{Binding IsMapStart, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" Margin="0,4" DataContext="{Binding SelectedTile}">
                             <TextBlock TextWrapping="Wrap" Text="Width"/>
                             <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Width}"/>
                             <TextBlock TextWrapping="Wrap" Text="Height"/>
@@ -200,9 +210,22 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2" VerticalAlignment="Top" Margin="4" Visibility="{Binding SelectedTile.IsMapStart, Converter={StaticResource InverseBooleanVisiblityConverter}}">
                         <TextBlock TextWrapping="Wrap" Text="Terrain"/>
-                        <ComboBox Margin="0,0,0,4" ItemTemplate="{DynamicResource TerrainItemTemplate}" ItemsSource="{Binding Map.Terrain}" SelectedValue="{Binding SelectedTile.Terrain}"/>
+                        <ComboBox Margin="0,0,0,4" ItemTemplate="{DynamicResource TerrainItemTemplate}" ItemsSource="{Binding Terrain}" SelectedValue="{Binding SelectedTile.Terrain}"/>
                         <TextBlock TextWrapping="Wrap" Text="Flags"/>
-                        <ListBox Margin="0,0,0,4" ItemsPanel="{DynamicResource FlagsPanelTemplate}" ItemTemplate="{DynamicResource FlagItemTemplate}" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                        <ListBox Margin="0,0,0,4" ItemsPanel="{DynamicResource FlagsPanelTemplate}" ItemTemplate="{DynamicResource FlagItemTemplate}" BorderBrush="{x:Null}" ItemsSource="{Binding PlaceFlags}">
+                            <ListBox.Background>
+                                <SolidColorBrush Color="{DynamicResource BorderColor}"/>
+                            </ListBox.Background>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{DynamicResource BorderColor}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
                         <TextBlock TextWrapping="Wrap" Text="Name"/>
                         <TextBox Height="23" TextWrapping="Wrap" Text="{Binding SelectedTile.Name}" Margin="0,0,0,4"/>
                         <TextBlock TextWrapping="Wrap" Text="Description"/>

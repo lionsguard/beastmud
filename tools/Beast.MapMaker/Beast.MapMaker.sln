@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast", "..\..\Beast\Beast.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.Components.Rpg", "..\..\Beast.Components.Rpg\Beast.Components.Rpg.csproj", "{4AB23D7F-5BA3-496A-AFF9-14BE19FE65CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beast.MapMaker.Contracts", "Beast.MapMaker.Contracts\Beast.MapMaker.Contracts.csproj", "{D4C640C8-2772-4A05-A082-E86760F829B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{4AB23D7F-5BA3-496A-AFF9-14BE19FE65CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AB23D7F-5BA3-496A-AFF9-14BE19FE65CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AB23D7F-5BA3-496A-AFF9-14BE19FE65CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4C640C8-2772-4A05-A082-E86760F829B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4C640C8-2772-4A05-A082-E86760F829B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4C640C8-2772-4A05-A082-E86760F829B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4C640C8-2772-4A05-A082-E86760F829B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

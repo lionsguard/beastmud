@@ -59,6 +59,8 @@
                 <Border.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Create Place"/>
+                        <MenuItem Header="Tunnel Down"/>
+                        <MenuItem Header="Tunnel Up"/>
                         <MenuItem Header="Make Dungeon Entrance"/>
                         <MenuItem Header="Delete"/>
                     </ContextMenu>
