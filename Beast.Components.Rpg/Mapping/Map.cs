@@ -112,12 +112,23 @@ namespace Beast.Mapping
         /// </summary>
         public void Generate()
         {
+            IPlace end;
+            Generate(out end);
+        }
+
+        /// <summary>
+        /// Generates places for all MapStart locations.
+        /// </summary>
+        /// <param name="mapEnd">The end point of the last level of the map.</param>
+        public void Generate(out IPlace mapEnd)
+        {
+            mapEnd = null;
             var mapStarts = _places.Values.Where(p => p is MapStart).Select(p => p as MapStart).ToArray();
 
             var mapper = new Mapper();
             foreach (var start in mapStarts)
             {
-                AddRange(mapper.Generate(start));
+                AddRange(mapper.Generate(start, out mapEnd));
             }
         }
     }

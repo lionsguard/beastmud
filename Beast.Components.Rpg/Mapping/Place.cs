@@ -1,4 +1,5 @@
 ﻿
+using Beast.Mobiles;
 namespace Beast.Mapping
 {
     [System.Diagnostics.DebuggerDisplay("{Location} : [{Terrain}] - {Name}")]
@@ -28,6 +29,15 @@ namespace Beast.Mapping
         public virtual bool HasFlag(int flag)
         {
             return (Flags & flag) == flag;
+        }
+
+        public virtual void Enter(IMobile mobile)
+        {
+            mobile.Position = Location;
+        }
+
+        public virtual void Leave(IMobile mobile)
+        {
         }
     }
 }

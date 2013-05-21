@@ -7,6 +7,7 @@ using Beast.Commands;
 using Beast.Serialization;
 using Beast.Mapping;
 using Beast.Data;
+using Beast.Mobiles;
 
 namespace Beast
 {
@@ -86,6 +87,20 @@ namespace Beast
             obj.Initialize(app);
             return obj;
         }
-        
+
+        public override void ProcessInput(IConnection connection, IO.IInput input)
+        {
+            base.ProcessInput(connection, input);
+
+            // Write any output queued with the character.
+            var character = connection.Character<IMobile>();
+            if (character != null)
+            {
+                foreach (var output in character.DequeueOutput())
+                {
+                    connection.Write(output);
+                }
+            }
+        }
     }
 }

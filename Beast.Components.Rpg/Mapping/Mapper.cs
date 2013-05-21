@@ -11,6 +11,11 @@ namespace Beast.Mapping
 
         public IEnumerable<Place> Generate(MapStart mapStart)
         {
+            IPlace end;
+            return Generate(mapStart, out end);
+        }
+        public IEnumerable<Place> Generate(MapStart mapStart, out IPlace mapEnd)
+        {
             _mapStart = mapStart;
             _rnd = new MersenneTwister(_mapStart.Seed);
 
@@ -50,6 +55,8 @@ namespace Beast.Mapping
 
                 depth--;
             }
+
+            mapEnd = end;
 
             return places.Values;
         }

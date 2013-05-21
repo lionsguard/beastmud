@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Beast.Mobiles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,8 @@ namespace Beast.Mapping
         bool HasExit(KnownDirection direction);
         bool HasFlag(PlaceFlag flag);
         bool HasFlag(int flag);
+
+        void Enter(IMobile mobile);
+        void Leave(IMobile mobile);
     }
 }

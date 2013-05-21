@@ -7,6 +7,8 @@ namespace Beast.Commands
     [ExportCommand("move", "n", "s", "e", "w", "ne", "nw", "se", "sw", "u", "d", "north", "south", "east", "west", "northeast", "northwest", "southeast", "southwest", "up", "down")]
     public abstract class MoveCommandBase : CommandBase
     {
+        public const string OutputCommandName = "move";
+
         public override IEnumerable<string> ArgumentNames
         {
             get { return new []{"direction"}; }
@@ -14,13 +16,13 @@ namespace Beast.Commands
 
         protected override void ExecuteOverride(string alias, IConnection connection, IInput input, IOutput output)
         {
-            output.Command = "move";
+            output.Command = OutputCommandName;
 
             var cmd = input.Get(CommandSettingsKeys.DefaultCommandNameValue, string.Empty);
 
             if (!string.IsNullOrEmpty(cmd))
             {
-                if (cmd.ToLowerInvariant() == "move")
+                if (cmd.ToLowerInvariant() == OutputCommandName)
                 {
                     foreach (var arg in input)
                     {

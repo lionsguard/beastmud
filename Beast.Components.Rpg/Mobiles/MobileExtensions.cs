@@ -43,7 +43,6 @@ namespace Beast.Mobiles
         }
         #endregion
 
-
         #region The
         public static string The(this IMobile mobile)
         {
@@ -78,7 +77,6 @@ namespace Beast.Mobiles
             return mobile.Name.The(true, isSentenceStart, quantity);
         }
         #endregion
-
 
         #region Your
         public static string Your(this IMobile mobile)
