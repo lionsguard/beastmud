@@ -52,6 +52,11 @@ namespace Beast
         public event EventHandler<InputEventArgs> ProcessInputModuleNotFound = delegate { };
 
         /// <summary>
+        /// An event that is raised when a connection is received, before it is added to the tracked collection.
+        /// </summary>
+        public event EventHandler<ConnectionEventArgs> ConnectionReceived = delegate { };
+
+        /// <summary>
         /// An event that is raised when a new connection is added.
         /// </summary>
         public event EventHandler<ConnectionEventArgs> ConnectionAdded = delegate { };
@@ -245,8 +250,11 @@ namespace Beast
         /// <param name="connection">The connection to add.</param>
         public void AddConnection(IConnection connection)
         {
-            connection.LastActivityTick = Time.Ticks;
-            _connections.Add(connection);
+            var args = new ConnectionEventArgs(connection);
+            ConnectionReceived(this, args);
+
+            args.Connection.LastActivityTick = Time.Ticks;
+            _connections.Add(args.Connection);
         }
 
         /// <summary>
@@ -257,6 +265,25 @@ namespace Beast
         public IConnection FindConnection(string id)
         {
             return _connections.Get(id);
+        }
+
+        /// <summary>
+        /// Returns a list of IConnection instances for the specified predicate.
+        /// </summary>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <returns>A list of IConnection instances for the specified predicate.</returns>
+        public IEnumerable<IConnection> FindConnections(Func<IConnection, bool> predicate)
+        {
+            return _connections.Find(predicate);
+        }
+
+        /// <summary>
+        /// Removes a connection.
+        /// </summary>
+        /// <param name="connectionId">The id of the connection to remove.</param>
+        public void RemoveConnection(string connectionId)
+        {
+            _connections.Remove(connectionId);
         }
 
         private void OnConnectionAdded(object sender, ConnectionEventArgs e)

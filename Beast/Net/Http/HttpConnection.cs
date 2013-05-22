@@ -38,5 +38,19 @@ namespace Beast.Net.Http
                 }
             }
         }
+
+        public override void Copy(IConnection source)
+        {
+            base.Copy(source);
+
+            var httpConn = source as HttpConnection;
+            if (httpConn == null)
+                return;
+
+            foreach (var item in httpConn.Read())
+            {
+                Write(item);
+            }
+        }
     }
 }

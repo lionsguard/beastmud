@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+﻿using Beast.Hosting.Web.Security;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
 namespace Beast.Hosting.Web
 {
@@ -7,6 +8,7 @@ namespace Beast.Hosting.Web
         public static void Load()
         {
             DynamicModuleUtility.RegisterModule(typeof(WebHost));
+            DynamicModuleUtility.RegisterModule(typeof(SecurityModule));
         }
     }
 }

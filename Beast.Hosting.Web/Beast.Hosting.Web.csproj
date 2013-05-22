@@ -74,6 +74,11 @@
     </Compile>
     <Compile Include="Properties\PreLoadAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\BeastIdentity.cs" />
+    <Compile Include="Security\BeastPrincipal.cs" />
+    <Compile Include="Security\SecurityExtensions.cs" />
+    <Compile Include="Security\SecurityManager.cs" />
+    <Compile Include="Security\SecurityModule.cs" />
     <Compile Include="SignalRConnection.cs" />
     <Compile Include="WebHost.cs" />
     <Compile Include="WebHostConnection.cs" />

@@ -70,5 +70,21 @@ namespace Beast
         {
             InnerDictionary[key] = value;
         }
+
+        /// <summary>
+        /// Copies the values from the source connection into the current connection. All values except Id are copied.
+        /// </summary>
+        /// <param name="source">The IConnection to copy from.</param>
+        public virtual void Copy(IConnection source)
+        {
+            LastActivityTick = source.LastActivityTick;
+            var conn = source as ConnectionBase;
+            if (conn == null)
+                return;
+            foreach (var item in conn.InnerDictionary)
+            {
+                Set(item.Key, item.Value);
+            }
+        }
     }
 }

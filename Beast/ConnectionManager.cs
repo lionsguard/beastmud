@@ -32,11 +32,26 @@ namespace Beast
             ConnectionAdded(this, new ConnectionEventArgs(connection));
         }
 
+        public void Remove(string connectionId)
+        {
+            IConnection removed;
+            if (_connections.TryRemove(connectionId, out removed))
+            {
+                removed.Close();
+                ConnectionRemoved(this, new ConnectionEventArgs(removed));
+            }
+        }
+
         public IConnection Get(string id)
         {
             IConnection conn;
             _connections.TryGetValue(id, out conn);
             return conn;
+        }
+
+        public IEnumerable<IConnection> Find(Func<IConnection, bool> predicate)
+        {
+            return _connections.Values.Where(predicate);
         }
 
         public void Broadcast(IOutput output)
@@ -54,12 +69,7 @@ namespace Beast
                 {
                     foreach (var conn in connections)
                     {
-                        IConnection removed;
-                        if (_connections.TryRemove(conn.Id, out removed))
-                        {
-                            removed.Close();
-                            ConnectionRemoved(this, new ConnectionEventArgs(removed));
-                        }
+                        Remove(conn.Id);
                     }
                 });
         }

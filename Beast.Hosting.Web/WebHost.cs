@@ -15,12 +15,14 @@ namespace Beast.Hosting.Web
         private static volatile bool _initialized;
         private static readonly object _initLock = new object();
 
-        private Application _app;
+        protected Application App { get; private set; }
 
         public void Dispose()
         {
-            if (_app != null)
-                _app.Dispose();
+            if (App != null)
+            {
+                App.Dispose();
+            }
         }
 
         public void Init(HttpApplication context)
@@ -50,8 +52,8 @@ namespace Beast.Hosting.Web
             }
 
             // Start the application
-            _app = new Application(this, settings);
-            _app.Run();
+            App = new Application(this, settings);
+            App.Run();
 
             InitSignalR(context, settings);
 
@@ -63,7 +65,7 @@ namespace Beast.Hosting.Web
             var name = settings.GetValue(WebHostSettingKeys.SignalRRouteName, WebHostConnection.DefaultSignalRRouteName);
             var url = settings.GetValue(WebHostSettingKeys.SignalRUrl, WebHostConnection.DefaultSignalRUrl);
 
-            GlobalHost.DependencyResolver.Register(typeof(WebHostConnection), () => new WebHostConnection(_app));
+            GlobalHost.DependencyResolver.Register(typeof(WebHostConnection), () => new WebHostConnection(App));
 
             GlobalHost.DependencyResolver.Register(typeof(IJsonSerializer), CreateJsonSerializer);
 

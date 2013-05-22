@@ -36,6 +36,7 @@ namespace Beast.Hosting.Web
 
         protected override Task OnDisconnected(IRequest request, string connectionId)
         {
+            App.RemoveConnection(connectionId);
             return base.OnDisconnected(request, connectionId);
         }
 

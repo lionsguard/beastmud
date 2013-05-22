@@ -43,5 +43,11 @@ namespace Beast
         /// <param name="key">The key for which to set the value.</param>
         /// <param name="value">The value to set.</param>
         void Set(string key, object value);
+
+        /// <summary>
+        /// Copies the values from the source connection into the current connection. All values except Id are copied.
+        /// </summary>
+        /// <param name="source">The IConnection to copy from.</param>
+        void Copy(IConnection source);
     }
 }

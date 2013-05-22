@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -47,6 +48,24 @@ namespace Beast.Serialization
         public static IEnumerable<Assembly> GetAssemblies()
         {
             return _assemblies;
+        }
+
+        public static JsonSerializerSettings GetDefaultSettings()
+        {
+            return new JsonSerializerSettings
+            {
+                ContractResolver = new FilteredCamelCasePropertyNamesContractResolver()
+            };
+        }
+
+        public static string Serialize(object obj)
+        {
+            return JsonConvert.SerializeObject(obj, Formatting.None, GetDefaultSettings());
+        }
+
+        public static T Deserialize<T>(string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json, GetDefaultSettings());
         }
     }
 }
