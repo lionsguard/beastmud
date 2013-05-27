@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Beast.Items
 {
     public interface IItem : IGameObject
@@ -14,5 +9,7 @@ namespace Beast.Items
         int RequiredSkill { get; set; }
         int RequiredSkillValue { get; set; }
         EquipLocation EquipLocation { get; set; }
+
+        bool Equals(string alias);
     }
 }

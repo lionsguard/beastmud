@@ -17,7 +17,8 @@ namespace Beast.Mapping
             {
                 Location = Location,
                 Exits = Exits,
-                Terrain = Terrain
+                Terrain = Terrain,
+                Flags = Flags,
             };
         }
 
@@ -27,7 +28,8 @@ namespace Beast.Mapping
             {
                 Location = place.Location,
                 Exits = place.Exits,
-                Terrain = place.Terrain
+                Terrain = place.Terrain,
+                Flags = place.Flags
             };
         }
     }

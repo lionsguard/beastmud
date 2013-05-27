@@ -38,6 +38,11 @@ namespace Beast.Items
             _items.Add(item);
         }
 
+        public IItem Find(string alias)
+        {
+            return FindItem(alias, _items);
+        }
+
         public void Remove(IItem item)
         {
             _items.Remove(item);
@@ -46,6 +51,26 @@ namespace Beast.Items
         public void Clear()
         {
             _items.Clear();
+        }
+
+        internal static IItem FindItem(string alias, IEnumerable<IItem> items)
+        {
+            foreach (var item in items)
+            {
+                if (item == null)
+                    continue;
+
+                if (item is IItemContainer)
+                {
+                    var childItem = (item as IItemContainer).Find(alias);
+                    if (childItem != null)
+                        return childItem;
+                }
+
+                if (item.Equals(alias))
+                    return item;
+            }
+            return null;
         }
     }
 }

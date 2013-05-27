@@ -19,5 +19,16 @@ namespace Beast.Items
         {
             EquipLocation = Items.EquipLocation.None;
         }
+
+        public bool Equals(string alias)
+        {
+            if (string.Equals(alias, Id, StringComparison.InvariantCultureIgnoreCase))
+                return true;
+
+            var formattedName = Name.Replace(" ", string.Empty);
+            var formattedAlias = alias.Replace(" ", string.Empty);
+
+            return string.Equals(formattedAlias, formattedName, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

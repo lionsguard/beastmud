@@ -22,6 +22,11 @@ namespace Beast.Items
             }
         }
 
+        public IItem this[EquipLocation location]
+        {
+            get { return Contains((int)location) ? _items[(int)location] : null; }
+        }
+
         public Body()
         {
             _items.Initialize();
@@ -88,17 +93,15 @@ namespace Beast.Items
 
         public bool Contains(int index)
         {
-            if (index < 0)
+            if (index < 0 || index > (_items.Length - 1))
                 return false;
 
-            try
-            {
-                return _items[index] != null;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return _items[index] != null;
+        }
+
+        public IItem Find(string alias)
+        {
+            return ItemContainer.FindItem(alias, _items);
         }
     }
 }

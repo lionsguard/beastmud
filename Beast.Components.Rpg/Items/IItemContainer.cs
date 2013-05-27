@@ -13,6 +13,7 @@ namespace Beast.Items
         IEnumerable<IItem> Items { get; set; }
 
         void Add(IItem item);
+        IItem Find(string alias);
         void Remove(IItem item);
         void Clear();
     }
