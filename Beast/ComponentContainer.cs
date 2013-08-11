@@ -40,6 +40,7 @@ namespace Beast
         {
             foreach (var initializable in _initializables)
             {
+                Log.Info("Initializing Module '{0}'", initializable.GetType().FullName);
                 initializable.Initialize(app);
             }
         }
@@ -48,6 +49,7 @@ namespace Beast
         {
             foreach (var initializable in _initializables)
             {
+                Log.Info("Shutting down Module '{0}'", initializable.GetType().FullName);
                 initializable.Shutdown();
             }
         }
@@ -67,6 +69,7 @@ namespace Beast
 
             foreach (var mod in ImportedModules)
             {
+                Log.Info("COMPOSITION: Imported Module '{0}'", mod.Metadata.Name);
                 try
                 {
                     var module = mod.Value;
