@@ -47,9 +47,13 @@ namespace Beast.Hosting.Web
             if (settings == null)
             {
                 settings = ApplicationSettings.Default;
-                settings.RootPath = context.Context.Server.MapPath("/");
-                settings.ComponentDirectories.Add(context.Context.Server.MapPath("/bin"));
             }
+
+            if (string.IsNullOrEmpty(settings.RootPath))
+                settings.RootPath = context.Context.Server.MapPath("/");
+
+            if (settings.ComponentDirectories.Count == 0)
+                settings.ComponentDirectories.Add(context.Context.Server.MapPath("/bin"));
 
             // Start the application
             App = new Application(this, settings);
